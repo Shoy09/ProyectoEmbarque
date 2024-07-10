@@ -34,9 +34,8 @@ export class DiarioPescaService {
   }
 
   deleteDiarioPesca(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.url}${id}/delete`);
-  }  
-  
+    return this.http.delete<any>(`${this.url}${id}/delete/`);
+  } 
   
   putCategoria(diario: IDiarioPesca, id:any): Observable<IDiarioPesca>{
     return this.http.put<IDiarioPesca>(`${this.url}/${id}`, diario);
