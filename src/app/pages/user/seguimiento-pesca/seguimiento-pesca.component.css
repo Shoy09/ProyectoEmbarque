@@ -1,0 +1,42 @@
+.table-custom th, .table-custom td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px; /* Añade espacio interior a celdas */
+}
+
+.table-custom th {
+  background-color: #007bff; /* Azul más intenso */
+  color: #ffffff;
+}
+
+.table-custom tbody tr:nth-child(even) {
+  background-color: #f8f9fa; /* Fondo gris más suave */
+}
+
+.table-custom tbody tr:hover {
+  background-color: #e9ecef;
+}
+.agregar-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Añade espacio inferior */
+}
+
+.agregar-container h2 {
+  margin-right: 10px;
+  color: #007bff; /* Color azul para el texto */
+}
+
+.btn-celeste {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-celeste:hover {
+  background-color: #0056b3; /* Cambio de color al pasar el cursor */
+}

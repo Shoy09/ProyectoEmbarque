@@ -1,0 +1,62 @@
+
+<h1>Bienvenido a Diario de Pesca</h1>
+
+<div class="agregar-container">
+  <h2> Añade un nuevo registro</h2>
+  <button class="btn-celeste" (click)="openFomrCreate()"><i class="fas fa-plus"></i></button>
+</div>
+
+
+
+<div class="container mt-5">
+  <h1 class="h5 font-weight-semibold text-center mb-4"> Registro de Diario de Pesca</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-custom">
+      <thead>
+        <tr>
+          <th>Embarcación</th>
+          <th>Flota</th>
+          <th>Fecha</th>
+          <th>N° de alcance</th>
+          <th>Zona de Pesca</th>
+          <th>Estrato</th>
+          <th>Rango Profundidad I</th>
+          <th>Rango de Profundidad F</th>
+          <th>Tiempo Efectivo</th>
+          <th>Rango de Talla I</th>
+          <th>Rango de Talla F</th>
+          <th>Moda</th>
+          <th>%</th>
+          <th>AR</th>
+          <th>N° de</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      @for (diarios of diario; track $index){
+      <tbody>
+        <tr>
+          <td id="nombre">{{diarios.embarcacion}}</td>
+          <td id="flota">{{diarios.flota}}</td>
+          <td id="fecha">{{diarios.fecha}}</td>
+          <td id="alcance">{{diarios.numero_alcance}}</td>
+          <td id="zona">{{diarios.zona_pesca}}</td>
+          <td id="estrato">{{diarios.estrato}}</td>
+          <td id="rango-inicial">{{diarios.rango_profundidad_inicial}}</td>
+          <td id="rango-final">{{diarios.rango_profundidad_final}}</td>
+          <td id="tiempo-efectivo">{{diarios.tiempo_efectivo}}</td>
+          <td id="talla-inicial">{{diarios.rango_talla_inicial}}</td>
+          <td id="talla-final">{{diarios.rango_talla_final}}</td>
+          <td id="moda">{{diarios.moda}}</td>
+          <td id="porcentaje">{{diarios.porcentaje}}</td>
+          <td id="ar">{{diarios.ar}}</td>
+          <td id="numero">{{diarios.numero}}</td>
+          <td class="action-icons">
+            <i class="fas fa-edit" (click)="openFomrUpdate(diarios)"></i>
+            <i class="fas fa-trash" (click)="deleteDiarioPesca(diarios.id)"></i>
+          </td>
+        </tr>
+      </tbody>
+    }
+    </table>
+  </div>
+</div>

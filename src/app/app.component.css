@@ -1,0 +1,25 @@
+.cont-todo {
+  display: flex;
+  min-height: 100vh; /* Asegura que .cont-todo ocupe al menos toda la altura de la ventana */
+}
+
+.app-sidebar {
+  width: 250px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+  /* Mantenemos fijo el sidebar a la izquierda */
+  position: sticky;
+  top: 0;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+  overflow-y: auto; /* Añadimos scroll vertical si es necesario */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  /* Añadimos scroll interno solo al main-content */
+  overflow-y: auto;
+  max-height: 100vh; /* Limitamos la altura máxima para que no se desplace la barra de navegación */
+}

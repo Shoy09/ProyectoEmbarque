@@ -1,0 +1,116 @@
+.sidebar {
+  width: 270px;
+  background-color: #ffffff;
+  height: 100vh;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Estilos para el botón de hamburguesa */
+.menu-hamburger {
+  position: absolute;
+  top: 20px; /* Ajusta según sea necesario */
+  right: 20px; /* Ajusta según sea necesario */
+  cursor: pointer;
+  z-index: 10; /* Asegura que esté por encima de otros elementos */
+}
+
+
+
+/* Estilos para el botón de cerrar sesión */
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Resto de estilos de la barra lateral (previamente proporcionados) */
+.logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.logo img {
+  margin-right: 10px;
+}
+
+.menu-section {
+  margin-bottom: 30px;
+}
+
+.menu-section h3 {
+  font-size: 12px;
+  color: #8c9cad;
+  margin-bottom: 10px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.sidebar li:hover {
+  background-color: #f0f4f7;
+}
+
+.sidebar li.active {
+  background-color: #e6f2ff;
+  color: #5d87ff;
+}
+
+.sidebar li i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.sidebar li.active i {
+  color: #5d87ff;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  background-color: #f6f9fc;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.user-profile img {
+  margin-right: 10px;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #8c9cad;
+}
