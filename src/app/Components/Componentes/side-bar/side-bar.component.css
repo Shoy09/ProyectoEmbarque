@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   margin-top: auto;
-  background-color: #f6f9fc;
+
   padding: 10px;
   border-radius: 10px;
 }
@@ -127,9 +127,62 @@
 }
 
 /* Cuando la sidebar está cerrada */
+/* CSS para la barra lateral */
+/* CSS para la barra lateral */
 .sidebar:not(.open) {
-  width: 60px; /* Ancho reducido para pantallas pequeñas */
+  width: 80px; /* Ancho reducido para pantallas pequeñas */
 }
+
+/* Ocultar texto en la barra lateral cuando no está abierta */
+.sidebar:not(.open) .logo span,
+.sidebar:not(.open) .menu-section h3,
+.sidebar:not(.open) .menu-section ul li span,
+.sidebar:not(.open) .logout-btn span, /* Ocultar texto del botón de cerrar sesión */
+.sidebar:not(.open) .user-profile .user-name,
+.sidebar:not(.open) .user-profile .user-role {
+  display: none;
+}
+
+/* Asegurarse de que las imágenes y los iconos se muestren correctamente */
+.sidebar .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sidebar .menu-section ul li i {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sidebar .logout-btn i {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Estilo adicional para el botón de cerrar sesión */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.logout-btn i {
+  position: absolute;
+  left: 10px;
+}
+
+.logout-btn span {
+  flex: 1;
+  text-align: center;
+}
+
+.sidebar .user-profile img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 /* Clase adicional para aplicar cuando la sidebar está abierta */
 .open {

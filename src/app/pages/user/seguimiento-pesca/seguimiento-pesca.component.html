@@ -28,13 +28,7 @@
       <td mat-cell *matCellDef="let row"> {{row.embarcacion}} </td>
     </ng-container>
 
-    <!-- Flota Column -->
-    <ng-container matColumnDef="flota">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Flota </th>
-      <td mat-cell *matCellDef="let row"> {{row.flota}} </td>
-    </ng-container>
-
-    <!-- Fecha Column -->
+        <!-- Fecha Column -->
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
       <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
@@ -42,9 +36,16 @@
 
     <!-- Rango Profundidad Inicial Column -->
     <ng-container matColumnDef="numero_alcance">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>N° A</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Lance</th>
       <td mat-cell *matCellDef="let row"> {{row.numero_alcance}} </td>
     </ng-container>
+
+    <!-- Flota Column -->
+    <ng-container matColumnDef="flota">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Especie</th>
+      <td mat-cell *matCellDef="let row"> {{row.flota}} </td>
+    </ng-container>
+
 
     <!-- Rango Profundidad Final Column -->
     <ng-container matColumnDef="zona_pesca">
@@ -72,18 +73,18 @@
 
     <!-- AR Column -->
     <ng-container matColumnDef="tiempo_efectivo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo Efectivo</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo Efectivo A</th>
       <td mat-cell *matCellDef="let row"> {{row.tiempo_efectivo}} </td>
     </ng-container>
 
     <!-- Número Column -->
     <ng-container matColumnDef="rango_talla_inicial">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango TI</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Talla mínima</th>
       <td mat-cell *matCellDef="let row"> {{row.rango_talla_inicial}} </td>
     </ng-container>
 
     <ng-container matColumnDef="rango_talla_final">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango TF</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Talla máxima</th>
       <td mat-cell *matCellDef="let row"> {{row.rango_talla_final}} </td>
     </ng-container>
 
@@ -93,17 +94,17 @@
     </ng-container>
 
     <ng-container matColumnDef="porcentaje">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> % </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>% Juvenil</th>
       <td mat-cell *matCellDef="let row"> {{row.porcentaje}} </td>
     </ng-container>
 
     <ng-container matColumnDef="ar">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>AR</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Act. R</th>
       <td mat-cell *matCellDef="let row"> {{row.ar}} </td>
     </ng-container>
 
     <ng-container matColumnDef="numero">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Captura (kg)</th>
       <td mat-cell *matCellDef="let row"> {{row.numero}} </td>
     </ng-container>
 

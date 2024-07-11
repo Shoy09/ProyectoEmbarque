@@ -1,25 +1,31 @@
-<nav class="sidebar" [ngClass]="{'open': isSidebarOpen}" >
+<nav class="sidebar" [ngClass]="{'open': isSidebarOpen}">
     <div class="logo">
         <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md" (click)="toggleSidebar()">
         <span>Santa Monica</span>
     </div>
       
     <div class="menu-section">
+        <ul>
+            <div class="user-profile">
+                <img src="/pp.jpeg" width="40px" alt="User" class="avatar-md">
+                <div>
+                    <span class="user-name">Patsy Delgado</span>
+                </div>
+            </div>
+        </ul>
         <h3>SECCIONES</h3>
         <ul>
-            <li routerLink="ss" routerLinkActive="active"><i class="fas fa-fish custom-icon"></i>Seguimiento de Pesca</li>
+            <li routerLink="ss" routerLinkActive="active">
+                <i class="fas fa-fish custom-icon"></i>
+                <span>Seguimiento de Pesca</span>
+            </li>
         </ul>
     </div>
-    <button class="logout-btn" routerLink="/login">Cerrar sesión</button>
-    <div class="user-profile">
-        <img src="/logo_santa.png" width="40px" alt="User" class="avatar-md">
-        <div>
-            <span class="user-name">Santa Monica</span>
-            <span class="user-role">Admin</span>
-        </div>
-    </div>
+    <button class="logout-btn" routerLink="/login">
+        <i class="fas fa-sign-out-alt"></i> <!-- Icono de cerrar sesión -->
+        <span>Cerrar sesión</span>
+    </button>
 </nav>
 
 <!-- Asegúrate de incluir jQuery en tu página -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
