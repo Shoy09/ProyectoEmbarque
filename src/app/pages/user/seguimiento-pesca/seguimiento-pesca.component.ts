@@ -31,7 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class SeguimientoPescaComponent {
   
   readonly dialog = inject(MatDialog);
-  displayedColumns: string[] = [ 'embarcacion', 'fecha', 'numero_alcance','flota', 'zona_pesca', 'estrato', 'rango_profundidad_inicial', 'rango_profundidad_final', 'tiempo_efectivo', 'rango_talla_inicial', 'rango_talla_final','moda', 'porcentaje', 'ar', 'numero', 'acciones'];
+  displayedColumns: string[] = [ 'embarcacion', 'fecha', 'numero_alcance','especie', 'zona_pesca', 'estrato', 'profundidad', 'tiempo_efectivo', 'rango_talla_inicial', 'rango_talla_final','moda', 'porcentaje', 'ar', 'numero', 'acciones'];
   dataSource: MatTableDataSource<IDiarioPesca>;
   diario: IDiarioPesca[] = []
 

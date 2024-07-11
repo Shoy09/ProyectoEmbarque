@@ -41,9 +41,9 @@
     </ng-container>
 
     <!-- Flota Column -->
-    <ng-container matColumnDef="flota">
+    <ng-container matColumnDef="especie">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Especie</th>
-      <td mat-cell *matCellDef="let row"> {{row.flota}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.especie}} </td>
     </ng-container>
 
 
@@ -60,15 +60,9 @@
     </ng-container>
 
     <!-- Moda Column -->
-    <ng-container matColumnDef="rango_profundidad_inicial">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango PI </th>
-      <td mat-cell *matCellDef="let row"> {{row.rango_profundidad_inicial}} </td>
-    </ng-container>
-
-    <!-- Porcentaje Column -->
-    <ng-container matColumnDef="rango_profundidad_final">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango PF</th>
-      <td mat-cell *matCellDef="let row"> {{row.rango_profundidad_final}} </td>
+    <ng-container matColumnDef="profundidad">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Profundidad </th>
+      <td mat-cell *matCellDef="let row"> {{row.profundidad}} </td>
     </ng-container>
 
     <!-- AR Column -->
