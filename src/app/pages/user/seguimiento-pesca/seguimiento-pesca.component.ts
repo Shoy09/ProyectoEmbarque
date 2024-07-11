@@ -1,37 +1,70 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
 import { CreateDiarioComponent } from './create-diario/create-diario.component';
 import { EditDiarioComponent } from './edit-diario/edit-diario.component';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-seguimiento-pesca',
   standalone: true,
-  imports: [MatDialogModule],
+  imports: [CommonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule ],
   templateUrl: './seguimiento-pesca.component.html',
   styleUrl: './seguimiento-pesca.component.css'
 })
 export class SeguimientoPescaComponent {
   
   readonly dialog = inject(MatDialog);
-
+  displayedColumns: string[] = [ 'embarcacion', 'flota', 'fecha', 'numero_alcance', 'zona_pesca', 'estrato', 'rango_profundidad_inicial', 'rango_profundidad_final', 'tiempo_efectivo', 'rango_talla_inicial', 'rango_talla_final','moda', 'porcentaje', 'ar', 'numero', 'acciones'];
+  dataSource: MatTableDataSource<IDiarioPesca>;
   diario: IDiarioPesca[] = []
 
-  constructor(
-    private diarioPescaService: DiarioPescaService
-  ){}
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnInit(): void{
-    this.diarioPescaService.getDiarioPesca().subscribe((data) => {
-      console.log('data :' ,data);
-      this.diario = data;
-    })
+  constructor(private diarioPescaService: DiarioPescaService, private changeDetector: ChangeDetectorRef) {
+    this.dataSource = new MatTableDataSource<IDiarioPesca>();
+  }
+  
+
+  ngOnInit(): void {
+    this.diarioPescaService.getDiarioPesca().subscribe(data => {
+      this.dataSource = new MatTableDataSource<IDiarioPesca>(data);
+      // Configura el paginador y el ordenamiento aquí si es necesario
+    });
   }
 
-  getDiarioPesca(){
-    this.diarioPescaService.getDiarioPesca().subscribe(diario => this.diario = diario );
+  getDiarioPesca() {
+    this.diarioPescaService.getDiarioPesca().subscribe(
+      data => {
+        this.diario = data;
+        this.dataSource.data = this.diario;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.changeDetector.detectChanges(); // Notifica a Angular sobre los cambios
+      },
+      error => {
+        console.error('Error al obtener el diario de pesca:', error);
+      }
+    );
   }
+  
 
   openFomrCreate(): void {
     const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
@@ -72,4 +105,22 @@ export class SeguimientoPescaComponent {
     }
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.getDiarioPesca(); // Asegúrate de llamar a getDiarioPesca aquí para cargar los datos
+  }
+  
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  
+  
 }

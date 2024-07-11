@@ -1,62 +1,141 @@
+<div class="dd">
+<div class="hero-section">
+  <h1>Bienvenido a Diario de Pesca</h1>
+</div>
 
-<h1>Bienvenido a Diario de Pesca</h1>
+<div class="agregar-container" style="margin-top: 25px; display: flex; align-items: center;">
+  <h3 style="margin: 0; margin-right: 10px;"> Añade un nuevo registro</h3> 
+  <span><button class="btn-celeste" (click)="openFomrCreate()"><i class="fas fa-plus"></i></button></span>
+</div>
 
-<div class="agregar-container">
-  <h2> Añade un nuevo registro</h2>
-  <button class="btn-celeste" (click)="openFomrCreate()"><i class="fas fa-plus"></i></button>
+<div class="container" style="display: flex; justify-content: center;">
+  <h3>Registro Diario de Pesca</h3>
+</div>
+
+<mat-form-field>
+  <mat-label>Filtra por Embarcación o Flota</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Santa Monica I" #input>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+
+    <!-- Embarcación Column -->
+    <ng-container matColumnDef="embarcacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Embarcación </th>
+      <td mat-cell *matCellDef="let row"> {{row.embarcacion}} </td>
+    </ng-container>
+
+    <!-- Flota Column -->
+    <ng-container matColumnDef="flota">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Flota </th>
+      <td mat-cell *matCellDef="let row"> {{row.flota}} </td>
+    </ng-container>
+
+    <!-- Fecha Column -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+      <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Rango Profundidad Inicial Column -->
+    <ng-container matColumnDef="numero_alcance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>N° A</th>
+      <td mat-cell *matCellDef="let row"> {{row.numero_alcance}} </td>
+    </ng-container>
+
+    <!-- Rango Profundidad Final Column -->
+    <ng-container matColumnDef="zona_pesca">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Zona Pesca</th>
+      <td mat-cell *matCellDef="let row"> {{row.zona_pesca}} </td>
+    </ng-container>
+
+    <!-- Tiempo Efectivo Column -->
+    <ng-container matColumnDef="estrato">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estrato</th>
+      <td mat-cell *matCellDef="let row"> {{row.estrato}} </td>
+    </ng-container>
+
+    <!-- Moda Column -->
+    <ng-container matColumnDef="rango_profundidad_inicial">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango PI </th>
+      <td mat-cell *matCellDef="let row"> {{row.rango_profundidad_inicial}} </td>
+    </ng-container>
+
+    <!-- Porcentaje Column -->
+    <ng-container matColumnDef="rango_profundidad_final">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango PF</th>
+      <td mat-cell *matCellDef="let row"> {{row.rango_profundidad_final}} </td>
+    </ng-container>
+
+    <!-- AR Column -->
+    <ng-container matColumnDef="tiempo_efectivo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo Efectivo</th>
+      <td mat-cell *matCellDef="let row"> {{row.tiempo_efectivo}} </td>
+    </ng-container>
+
+    <!-- Número Column -->
+    <ng-container matColumnDef="rango_talla_inicial">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango TI</th>
+      <td mat-cell *matCellDef="let row"> {{row.rango_talla_inicial}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rango_talla_final">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Rango TF</th>
+      <td mat-cell *matCellDef="let row"> {{row.rango_talla_final}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="moda">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Moda</th>
+      <td mat-cell *matCellDef="let row"> {{row.moda}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="porcentaje">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> % </th>
+      <td mat-cell *matCellDef="let row"> {{row.porcentaje}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ar">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>AR</th>
+      <td mat-cell *matCellDef="let row"> {{row.ar}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+      <td mat-cell *matCellDef="let row"> {{row.numero}} </td>
+    </ng-container>
+
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button color="warn" (click)="deleteDiarioPesca(row.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="openFomrUpdate(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td mat-cell *matCellDef="let row; columns: displayedColumns;">
+        <span>No data matching the filter "{{input.value}}" </span>
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>  
 </div>
 
 
 
-<div class="container mt-5">
-  <h1 class="h5 font-weight-semibold text-center mb-4"> Registro de Diario de Pesca</h1>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover table-custom">
-      <thead>
-        <tr>
-          <th>Embarcación</th>
-          <th>Flota</th>
-          <th>Fecha</th>
-          <th>N° de alcance</th>
-          <th>Zona de Pesca</th>
-          <th>Estrato</th>
-          <th>Rango Profundidad I</th>
-          <th>Rango de Profundidad F</th>
-          <th>Tiempo Efectivo</th>
-          <th>Rango de Talla I</th>
-          <th>Rango de Talla F</th>
-          <th>Moda</th>
-          <th>%</th>
-          <th>AR</th>
-          <th>N° de</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      @for (diarios of diario; track $index){
-      <tbody>
-        <tr>
-          <td id="nombre">{{diarios.embarcacion}}</td>
-          <td id="flota">{{diarios.flota}}</td>
-          <td id="fecha">{{diarios.fecha}}</td>
-          <td id="alcance">{{diarios.numero_alcance}}</td>
-          <td id="zona">{{diarios.zona_pesca}}</td>
-          <td id="estrato">{{diarios.estrato}}</td>
-          <td id="rango-inicial">{{diarios.rango_profundidad_inicial}}</td>
-          <td id="rango-final">{{diarios.rango_profundidad_final}}</td>
-          <td id="tiempo-efectivo">{{diarios.tiempo_efectivo}}</td>
-          <td id="talla-inicial">{{diarios.rango_talla_inicial}}</td>
-          <td id="talla-final">{{diarios.rango_talla_final}}</td>
-          <td id="moda">{{diarios.moda}}</td>
-          <td id="porcentaje">{{diarios.porcentaje}}</td>
-          <td id="ar">{{diarios.ar}}</td>
-          <td id="numero">{{diarios.numero}}</td>
-          <td class="action-icons">
-            <i class="fas fa-edit" (click)="openFomrUpdate(diarios)"></i>
-            <i class="fas fa-trash" (click)="deleteDiarioPesca(diarios.id)"></i>
-          </td>
-        </tr>
-      </tbody>
-    }
-    </table>
-  </div>
-</div>
+

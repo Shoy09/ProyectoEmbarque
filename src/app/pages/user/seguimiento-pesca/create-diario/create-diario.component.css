@@ -1,249 +1,53 @@
-/* Estilos Generales */
-body {
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    background-color: #f5f5f5; /* Fondo suave para mejor contraste */
+/* Ajuste para tres columnas */
+@media (min-width: 992px) {
+  .col-md-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+}
+
+/* Estilos para los botones */
+.button-group {
+  display: flex;
+  gap: 10px; /* Espacio entre botones */
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  margin-top: 1rem;
+}
+
+.btn-contact {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4a90e2;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-contact:hover {
+  background-color: #357ab8;
+}
+
+.btn-contact:active {
+  background-color: #2b5a84;
+  transform: scale(0.98);
+}
+
+/* Habilitar el desplazamiento en dispositivos móviles */
+@media (max-width: 576px) {
+  .form-container {
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    max-height: 80vh; /* Limita la altura máxima del contenedor del formulario */
   }
 
-  .main-content {
-    padding-left: 270px; /* Ancho de la barra lateral */
+  .btn-contact {
+    padding: 8px 16px;
+    font-size: 0.875rem;
   }
-  
-  .custom-focus-ring:focus {
-    outline: none;
-    border-color: #326DE7; /* Actualiza el borde al color deseado */
-    box-shadow: 0 0 0 3px rgba(50, 109, 231, 0.5); /* Añade un anillo de enfoque */
-  }
-  
-  .ccontainer-contact {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
 
-  }
-  
-  h1 {
-    font-family: "Poppins", sans-serif;
-  }
-  
-  .shadow {
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .rounded-start {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  
-  .rounded-end {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
-  
-  .bg-white {
-    background-color: #ffffff;
-  }
-  
-  .p-4 {
-    padding: 1rem;
-  }
-  
-  .w-100 {
-    width: 100%;
-  }
-  
-  .max-w-4xl {
-    max-width: 40rem;
-  }
-  
-  /* Formulario */
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    font-size: 1rem;
-    font-family: "Poppins", sans-serif;
-  }
-  
-  .form-control:focus {
-    outline: none;
-    border-color: #326de7;
-    box-shadow: 0 0 0 3px rgba(50, 109, 231, 0.5);
-  }
-  
-  .custom-focus-ring {
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .btn-primary {
-    background-color: #4a90e2;
-    color: #ffffff;
-  }
-  
-  .btn-primary:hover {
-    background-color: #357ab8;
-  }
-  
-  .btn-primary:active {
-    background-color: #2b5a84;
-    transform: scale(0.98);
-  }
-  
-  /* Estilos Responsive */
-  @media (max-width: 992px) {
-    .shadow {
-      flex-direction: column;
-      width: 90%; /* Ajusta el ancho para pantallas medianas */
-    }
-  
-    .rounded-start, .rounded-end {
-      border-radius: 10px; /* Ajusta el borde para pantallas más pequeñas */
-    }
-  
-    .d-none.d-lg-flex {
-      display: none; /* Esconde la imagen en pantallas medianas */
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .p-4 {
-      padding: 0.5rem; /* Ajusta el padding para pantallas pequeñas */
-    }
-  
-    .max-w-4xl {
-      max-width: 100%; /* Ajusta el ancho máximo del contenedor principal para pantallas pequeñas */
-    }
-  
-    .form-control {
-      font-size: 0.875rem; /* Ajusta el tamaño de fuente para pantallas pequeñas */
-    }
-  
-    .btn {
-      padding: 8px 16px; /* Ajusta el padding del botón para pantallas pequeñas */
-      font-size: 0.875rem; /* Ajusta el tamaño de fuente del botón para pantallas pequeñas */
-    }
-  
-    .d-flex.flex-wrap.align-items-center.justify-content-center.rounded-end.bg-white.p-4 {
-      height: auto; /* Ajusta la altura del formulario para pantallas pequeñas */
-    }
-  
-    .img-contact {
-      width: 100%; /* Ajusta el ancho de la imagen para pantallas pequeñas */
-      height: auto;
-    }
-  }
-  
-  /* Estilos para la imagen */
-  .img-contact {
-    width: 440px;
-    height: 480px;
-    object-fit: cover;
-    border-radius: 10px; /* Añade un borde redondeado */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animaciones de transición */
-  }
-  
-  /* Animación al pasar el ratón sobre la imagen */
-  .img-contact:hover {
-    transform: scale(1.05); /* Escala la imagen */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Añade sombra */
-  }
-  
-  /* Animación al cargar la página */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .img-contact {
-    animation: fadeIn 1s ease-in-out; /* Aplica la animación de entrada */
-  }
-  
-  /* Estilos para los botones */
   .button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1px; /* Separación de 1px entre los botones */
+    justify-content: center; /* Alinea los botones al centro en pantallas pequeñas */
   }
-  
-  .btn-contact {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #4a90e2;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .btn-contact:hover {
-    background-color: #357ab8;
-  }
-  
-  .btn-contact:active {
-    background-color: #2b5a84;
-    transform: scale(0.98);
-  }
-  
-  /* Respondividad */
-  @media (max-width: 576px) {
-    .btn-contact {
-      padding: 8px 16px;
-      font-size: 0.875rem;
-    }
-  }
-  /* Estilos para el contenedor de los botones y mapa */
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra horizontalmente */
-    justify-content: center; /* Centra verticalmente */
-    margin-top: 1rem; /* Margen superior ajustado para pantallas pequeñas */
-  }
-  
-  @media (min-width: 576px) {
-    .container {
-      margin-top: 2rem; /* Ajuste de margen para pantallas medianas y grandes */
-    }
-  }
-  
-  /* Estilos para los botones */
-  .button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Separación entre los botones */
-    justify-content: center; /* Centra los botones horizontalmente */
-  }
-  
-  .btn-contact {
-    padding: 8px 16px; /* Ajusta el padding para pantallas pequeñas */
-    font-size: 0.875rem; /* Ajusta el tamaño de fuente para pantallas pequeñas */
-  }
-  
-  @media (min-width: 576px) {
-    .btn-contact {
-      padding: 10px 20px; /* Ajusta el padding para pantallas medianas y grandes */
-      font-size: 1rem; /* Ajusta el tamaño de fuente para pantallas medianas y grandes */
-    }
-  }
+}

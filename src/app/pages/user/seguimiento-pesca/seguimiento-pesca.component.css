@@ -1,42 +1,102 @@
-.table-custom th, .table-custom td {
-  vertical-align: middle;
+/* Contenedor de la sección de héroe */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Ajusta la altura según tus necesidades */
+  background-image: url(../../../../../public/fondo-em.jpg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilo del h1 */
+.hero-section h1 {
+  position: relative;
+  z-index: 1; /* Asegura que el texto esté delante del fondo */
+  color: hsl(0, 100%, 100%); /* Color del texto */
+  padding: 10px 20px;
+  border-radius: 10px; /* Bordes redondeados */
+  font-family: "Poppins", sans-serif;
   text-align: center;
-  padding: 10px; /* Añade espacio interior a celdas */
+  font-weight: bold;
 }
 
-.table-custom th {
-  background-color: #007bff; /* Azul más intenso */
-  color: #ffffff;
+/* Asegurarse de que el contenedor ocupe todo el ancho */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Fondo negro semi-transparente adicional */
+  z-index: 0; /* Debajo del h1 */
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
-.table-custom tbody tr:nth-child(even) {
-  background-color: #f8f9fa; /* Fondo gris más suave */
-}
+/**/
 
-.table-custom tbody tr:hover {
-  background-color: #e9ecef;
-}
+
 .agregar-container {
   display: flex;
   align-items: center;
   margin-bottom: 20px; /* Añade espacio inferior */
 }
 
-.agregar-container h2 {
+.agregar-container h3 {
   margin-right: 10px;
-  color: #007bff; /* Color azul para el texto */
+  color: #0A4F81; /* Color azul para el texto */
+  line-height: 1; /* Asegura que el texto del h3 tenga la misma altura que el botón */
 }
 
 .btn-celeste {
-  background-color: #007bff;
+  background-color: #0A4F81;
   color: white;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
+  line-height: 1; /* Asegura que el botón tenga la misma altura que el texto del h3 */
+  display: flex;
+  align-items: center; /* Centra el contenido del botón verticalmente */
 }
+
+
 
 .btn-celeste:hover {
   background-color: #0056b3; /* Cambio de color al pasar el cursor */
 }
+
+/*tabla ng material*/
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Asegura que los bordes de las celdas se fusionen correctamente */
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  padding: 8px; /* Ajusta el padding según sea necesario */
+  border: 1px solid #ddd; /* Define un borde para las celdas */
+}
+
+.mat-elevation-z8 {
+  overflow-x: auto; /* Permite desplazamiento horizontal cuando el contenido es más ancho */
+  max-width: 100%; /* Asegura que la tabla no sea más ancha que su contenedor */
+}
+
+.dd{
+  background-color: white;
+}
+body {
+  background-color: white;
+}
+
+
+

@@ -1,11 +1,9 @@
-<nav class="sidebar">
+<nav class="sidebar" [ngClass]="{'open': isSidebarOpen}" >
     <div class="logo">
-        <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md">
+        <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md" (click)="toggleSidebar()">
         <span>Santa Monica</span>
     </div>
-    <button class="menu-hamburger">
-        <i class="fas fa-bars"></i>
-    </button>
+      
     <div class="menu-section">
         <h3>SECCIONES</h3>
         <ul>

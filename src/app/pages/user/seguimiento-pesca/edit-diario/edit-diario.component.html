@@ -1,1 +1,84 @@
-<p>edit-diario works!</p>
+<div class="ccontainer-contact">
+    <div class="d-flex flex-wrap align-items-center justify-content-center rounded-end bg-white p-4 form-container">
+      <div class="w-100">
+        <h1 class="h5 font-weight-semibold text-center mb-4">Diario de Pesca</h1>
+        <form [formGroup]="formEDP" (ngSubmit)="save()">
+          <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
+              <input type="text" placeholder="Embarcación" class="form-control custom-focus-ring" formControlName="embarcacion">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Flota</label>
+              <input type="text" placeholder="Flota" class="form-control custom-focus-ring" formControlName="flota">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Fecha</label>
+              <input type="date" class="form-control custom-focus-ring" formControlName="fecha">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">N° de alcance</label>
+              <input type="number" placeholder="N° de alcance" class="form-control custom-focus-ring" formControlName="numero_alcance">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
+              <input type="text" placeholder="Zona" class="form-control custom-focus-ring" formControlName="zona_pesca">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Estrato</label>
+              <input type="text" placeholder="Estrato" class="form-control custom-focus-ring" formControlName="estrato">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Rango PI</label>
+              <input type="number" placeholder="Rango Inicial" class="form-control custom-focus-ring" formControlName="rango_profundidad_inicial">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Rango PF</label>
+              <input type="number" placeholder="Rango Final" class="form-control custom-focus-ring" formControlName="rango_profundidad_final">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Tiempo Efectivo</label>
+              <input type="time" placeholder="Rango Inicial" class="form-control custom-focus-ring" formControlName="tiempo_efectivo">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Rango de Talla I</label>
+              <input type="number" placeholder="Talla inicial" class="form-control custom-focus-ring" formControlName="rango_talla_inicial">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Rango de Talla F</label>
+              <input type="number" placeholder="Talla final" class="form-control custom-focus-ring" formControlName="rango_talla_final">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">Moda</label>
+              <input type="number" placeholder="Moda" class="form-control custom-focus-ring" formControlName="moda">
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">%</label>
+              <input type="number" placeholder="%" class="form-control custom-focus-ring" formControlName="porcentaje">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">AR</label>
+              <input type="number" placeholder="AR" class="form-control custom-focus-ring" formControlName="ar">
+            </div>
+            <div class="col-md-4 mb-2">
+              <label class="mb-1 d-block text-xs font-weight-semibold">N° de</label>
+              <input type="number" class="form-control custom-focus-ring" formControlName="numero">
+            </div>
+          </div>
+          <div class="button-group">
+            <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Cancelar</button>
+            <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

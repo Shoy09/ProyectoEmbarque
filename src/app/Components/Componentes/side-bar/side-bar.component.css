@@ -114,3 +114,36 @@
   font-size: 12px;
   color: #8c9cad;
 }
+
+@media (max-width: 768px) { /* Ajusta este valor según tus necesidades */
+  .menu-hamburger {
+    display: block;
+  }
+}
+
+.sidebar {
+  width: 270px;
+  transition: transform 0.3s ease, width 0.3s ease-in-out;
+}
+
+/* Cuando la sidebar está cerrada */
+.sidebar:not(.open) {
+  width: 60px; /* Ancho reducido para pantallas pequeñas */
+}
+
+/* Clase adicional para aplicar cuando la sidebar está abierta */
+.open {
+  width: 270px; /* Ancho completo */
+}
+
+.layout-container {
+  display: flex;
+}
+
+.sidebar-open .main-content {
+  margin-left: 270px; /* Ancho de la sidebar abierta */
+}
+
+.sidebar-closed .main-content {
+  margin-left: 60px; /* Ancho de la sidebar cerrada */
+}
