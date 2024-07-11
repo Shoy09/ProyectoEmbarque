@@ -20,7 +20,7 @@
         <div class="row mb-2">
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
-            <input type="text" placeholder="Flota" class="form-control custom-focus-ring" formControlName="flota">
+            <input type="text" placeholder="Flota" class="form-control custom-focus-ring" formControlName="especie">
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
@@ -28,8 +28,13 @@
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Estrato</label>
-            <input type="text" placeholder="Estrato" class="form-control custom-focus-ring" formControlName="estrato">
-          </div>
+            <select class="form-control custom-focus-ring" formControlName="estrato">
+              <option value="">Seleccione Estrato</option>
+              <option value="I">I</option>
+              <option value="II">II</option>
+              <option value="III">III</option>
+            </select>
+          </div>          
         </div>
         <div class="row mb-2">
           <div class="col-md-4 mb-2">

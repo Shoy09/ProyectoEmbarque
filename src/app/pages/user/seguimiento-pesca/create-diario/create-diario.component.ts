@@ -25,7 +25,7 @@ export class CreateDiarioComponent {
   ){
     this.formCDP = this.formBuilder.group({
       embarcacion: ['', [Validators.required]],
-      flota: ['', [Validators.required]],
+      especie: ['', [Validators.required]],
       fecha: ['', [Validators.required]],
       numero_alcance: ['', [Validators.required]],
       zona_pesca: ['', [Validators.required]],
