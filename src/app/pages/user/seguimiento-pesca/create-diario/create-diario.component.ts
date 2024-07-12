@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
+import { Especies } from 'app/core/models/especie.model';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 
 
 @Component({
@@ -13,13 +15,15 @@ import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
   templateUrl: './create-diario.component.html',
   styleUrl: './create-diario.component.css'
 })
-export class CreateDiarioComponent {
+export class CreateDiarioComponent implements OnInit{
 
   diario : IDiarioPesca[] = [];
   formCDP: FormGroup;
+  especies: Especies[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
+    private especiesService: EspeciesService,
     private diarioPescaService: DiarioPescaService,
     public dialogRef: MatDialogRef<CreateDiarioComponent>,
   ){
@@ -41,6 +45,10 @@ export class CreateDiarioComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.getEspecies();
+  }
+  
   getDiarioPesca(){
     this.diarioPescaService.getDiarioPesca().subscribe(diario => this.diario = diario );
   }
@@ -48,11 +56,11 @@ export class CreateDiarioComponent {
   postDP() {
     if (this.formCDP.valid) {
       const value = this.formCDP.value;
-      
+
       // Formatear la fecha correctamente
       const fecha = new Date();
       value.fecha = `${fecha.getFullYear()}-${('0' + (fecha.getMonth() + 1)).slice(-2)}-${('0' + fecha.getDate()).slice(-2)}`;
-      
+
       this.diarioPescaService.postDiarioPesca(value).subscribe(
         res => {
           if (res) {
@@ -61,7 +69,7 @@ export class CreateDiarioComponent {
             this.dialogRef.close(res);
             this.getDiarioPesca();
           }
-        }, 
+        },
         error => {
           console.error("Error al guardar DP:", error);
           console.error("Detalles del error:", error.error);
@@ -69,6 +77,16 @@ export class CreateDiarioComponent {
       );
     }
   }
-  
 
+  getEspecies() {
+    this.especiesService.getDiarioPesca().subscribe(
+      especies => {
+        this.especies = especies;
+        // Aquí puedes realizar cualquier otra lógica necesaria con los datos de especies
+      },
+      error => {
+        console.error('Error al obtener especies:', error);
+      }
+    );
+  }
 }
