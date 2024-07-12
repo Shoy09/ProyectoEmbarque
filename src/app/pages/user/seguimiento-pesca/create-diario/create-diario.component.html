@@ -4,13 +4,17 @@
       <h2 class="h4 font-weight-semibold text-center mb-4">Agrega Diario de Pesca</h2>
       <form [formGroup]="formCDP" (ngSubmit)="postDP()">
         <div class="row mb-2">
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
-            <input type="text" placeholder="Embarcación" class="form-control custom-focus-ring" formControlName="embarcacion">
+            <select class="form-control custom-focus-ring" formControlName="embarcacion">
+              <option value="">Seleccione Embarcacion</option>
+              <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
+            </select>
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Fecha de Faena</label>
-            <input type="date" class="form-control custom-focus-ring" formControlName="fecha">
+            <input type="date" class="form-control custom-focus-ring" formControlName="fecha" [value]="''">
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">N° de Lance</label>
@@ -20,12 +24,17 @@
         <div class="row mb-2">
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
-            <input type="text" placeholder="Flota" class="form-control custom-focus-ring" formControlName="especie">
+            <select class="form-control custom-focus-ring" formControlName="especie">
+              <option value="">Seleccione Especie</option>
+              <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
+            </select>
           </div>
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
             <input type="text" placeholder="Zona" class="form-control custom-focus-ring" formControlName="zona_pesca">
           </div>
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Estrato</label>
             <select class="form-control custom-focus-ring" formControlName="estrato">
@@ -34,7 +43,7 @@
               <option value="II">II</option>
               <option value="III">III</option>
             </select>
-          </div>          
+          </div>
         </div>
         <div class="row mb-2">
           <div class="col-md-4 mb-2">

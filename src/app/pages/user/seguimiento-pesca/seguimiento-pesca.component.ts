@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 
 @Component({
   selector: 'app-seguimiento-pesca',
@@ -29,7 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './seguimiento-pesca.component.css'
 })
 export class SeguimientoPescaComponent {
-  
+
   readonly dialog = inject(MatDialog);
   displayedColumns: string[] = [ 'embarcacion', 'fecha', 'numero_alcance','especie', 'zona_pesca', 'estrato', 'profundidad', 'tiempo_efectivo', 'rango_talla_inicial', 'rango_talla_final','moda', 'porcentaje', 'ar', 'numero', 'acciones'];
   dataSource: MatTableDataSource<IDiarioPesca>;
@@ -38,33 +40,49 @@ export class SeguimientoPescaComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private diarioPescaService: DiarioPescaService, private changeDetector: ChangeDetectorRef) {
+  constructor(private diarioPescaService: DiarioPescaService,
+    private embarcacionesService: EmbarcacionesService,
+    private especieService: EspeciesService,
+    private changeDetector: ChangeDetectorRef) {
     this.dataSource = new MatTableDataSource<IDiarioPesca>();
   }
-  
+
 
   ngOnInit(): void {
-    this.diarioPescaService.getDiarioPesca().subscribe(data => {
-      this.dataSource = new MatTableDataSource<IDiarioPesca>(data);
-      // Configura el paginador y el ordenamiento aquí si es necesario
+    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
+      this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
+        const diariosConNombres = diarios.map(diario => ({
+          ...diario,
+          embarcacion: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
+        }));
+
+        this.dataSource = new MatTableDataSource<IDiarioPesca>(diariosConNombres);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
     });
   }
 
-  getDiarioPesca() {
-    this.diarioPescaService.getDiarioPesca().subscribe(
-      data => {
-        this.diario = data;
-        this.dataSource.data = this.diario;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.changeDetector.detectChanges(); // Notifica a Angular sobre los cambios
-      },
-      error => {
-        console.error('Error al obtener el diario de pesca:', error);
-      }
-    );
+  getDiarioPesca(forceRefresh?: boolean): void {
+    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
+      this.especieService.getDiarioPesca().subscribe(especies => {
+        this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
+          const diariosConNombres = diarios.map(diario => ({
+            ...diario,
+            embarcacion: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
+            especie: especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido',
+          }));
+
+          this.diario = diariosConNombres; // Actualiza la variable local para reflejar los nombres de las embarcaciones y especies
+          this.dataSource.data = diariosConNombres; // Actualiza el dataSource con los nuevos datos
+          this.changeDetector.detectChanges(); // Notifica a Angular sobre los cambios
+        });
+      });
+    });
   }
-  
+
+
+
 
   openFomrCreate(): void {
     const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
@@ -74,7 +92,7 @@ export class SeguimientoPescaComponent {
 
     dialogRefCreate.afterClosed().subscribe(result => {
       if (result) {
-        this.getDiarioPesca();
+        this.getDiarioPesca(true);
       }
     });
   }
@@ -110,7 +128,7 @@ export class SeguimientoPescaComponent {
     this.dataSource.sort = this.sort;
     this.getDiarioPesca(); // Asegúrate de llamar a getDiarioPesca aquí para cargar los datos
   }
-  
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -121,6 +139,6 @@ export class SeguimientoPescaComponent {
     }
   }
 
-  
-  
+
+
 }

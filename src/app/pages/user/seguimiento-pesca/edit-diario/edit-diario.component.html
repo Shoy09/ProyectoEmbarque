@@ -4,14 +4,16 @@
         <h1 class="h5 font-weight-semibold text-center mb-4">Diario de Pesca</h1>
         <form [formGroup]="formEDP" (ngSubmit)="save()">
           <div class="row mb-2">
-            <div class="col-md-4 mb-2">
-              <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
-              <input type="text" placeholder="Embarcación" class="form-control custom-focus-ring" formControlName="embarcacion">
-            </div>
-            <div class="col-md-4 mb-2">
-              <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
-              <input type="text" placeholder="Flota" class="form-control custom-focus-ring" formControlName="especie">
-            </div>
+
+            <select class="form-control custom-focus-ring" formControlName="embarcacion">
+              <option value="-1">Seleccione Embarcaciones</option>
+              <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
+            </select>
+
+            <select class="form-control custom-focus-ring" formControlName="especie">
+              <option value="-1">Seleccione Especie</option>
+              <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
+            </select>
             <div class="col-md-4 mb-2">
               <label class="mb-1 d-block text-xs font-weight-semibold">Fecha</label>
               <input type="date" class="form-control custom-focus-ring" formControlName="fecha">
@@ -28,7 +30,12 @@
             </div>
             <div class="col-md-4 mb-2">
               <label class="mb-1 d-block text-xs font-weight-semibold">Estrato</label>
-              <input type="text" placeholder="Estrato" class="form-control custom-focus-ring" formControlName="estrato">
+              <select class="form-control custom-focus-ring" formControlName="estrato">
+                <option value="">Seleccione Estrato</option>
+                <option value="I">I</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+              </select>
             </div>
           </div>
           <div class="row mb-2">
@@ -77,4 +84,4 @@
       </div>
     </div>
   </div>
-  
+

@@ -4,7 +4,7 @@
 </div>
 
 <div class="agregar-container" style="margin-top: 25px; display: flex; align-items: center;">
-  <h3 style="margin: 0; margin-right: 10px;"> Añade un nuevo registro</h3> 
+  <h3 style="margin: 0; margin-right: 10px;"> Añade un nuevo registro</h3>
   <span><button class="btn-celeste" (click)="openFomrCreate()"><i class="fas fa-plus"></i></button></span>
 </div>
 
@@ -16,6 +16,7 @@
   <mat-label>Filtra por Embarcación o Flota</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Santa Monica I" #input>
 </mat-form-field>
+
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>
@@ -128,7 +129,7 @@
   </table>
 
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-</div>  
+</div>
 </div>
 
 

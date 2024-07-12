@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
+import { Embarcaciones } from 'app/core/models/embarcacion';
+import { Especies } from 'app/core/models/especie.model';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 
 @Component({
   selector: 'app-edit-diario',
@@ -12,12 +16,16 @@ import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
   templateUrl: './edit-diario.component.html',
   styleUrl: './edit-diario.component.css'
 })
-export class EditDiarioComponent {
+export class EditDiarioComponent implements OnInit {
 
   formEDP: FormGroup;
+  especies: Especies[] = [];
+  embarcaciones: Embarcaciones[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
+    private especiesService: EspeciesService,
+    private embarcacionService: EmbarcacionesService,
     private diarioPE: DiarioPescaService,
     public dialogRef: MatDialogRef<EditDiarioComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IDiarioPesca
@@ -41,8 +49,43 @@ export class EditDiarioComponent {
   }
 
   ngOnInit(): void {
-    this.formEDP.patchValue(this.data);
+    this.formEDP.patchValue(this.data); // Aplicamos los datos iniciales
+    this.getEspecies();
+    this.getEmbarcaciones();
+
+    // Esperar a que los datos estén disponibles antes de establecer valores predeterminados
+    setTimeout(() => {
+      this.formEDP.controls['embarcacion'].setValue(-1);
+      this.formEDP.controls['especie'].setValue(-1);
+    }, 0);
   }
+
+  getEspecies() {
+    this.especiesService.getDiarioPesca().subscribe(
+      (especies: Especies[]) => {
+        this.especies = especies;
+        // Ahora que tenemos las especies, podemos establecer el valor predeterminado
+        this.formEDP.controls['especie'].setValue(-1); // Asume que -1 es un valor válido para establecer como predeterminado
+      },
+      (error: any) => {
+        console.error('Error al obtener especies:', error);
+      }
+    );
+  }
+
+  getEmbarcaciones() {
+    this.embarcacionService.getEmbarcaciones().subscribe(
+      (embarcaciones: Embarcaciones[]) => {
+        this.embarcaciones = embarcaciones;
+        // Ahora que tenemos las embarcaciones, podemos establecer el valor predeterminado
+        this.formEDP.controls['embarcacion'].setValue(-1); // Asume que -1 es un valor válido para establecer como predeterminado
+      },
+      (error: any) => {
+        console.error('Error al obtener embarcaciones:', error);
+      }
+    );
+  }
+
   save(): void {
     if (this.formEDP.valid) {
       const diario: IDiarioPesca = this.formEDP.value;
