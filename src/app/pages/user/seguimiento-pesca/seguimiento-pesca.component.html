@@ -35,6 +35,7 @@
   </mat-form-field>
 
   <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyDateFilter()">Aplicar</button>
+  <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button" (click)="clearDateFilter()">Quitar Filtro</button>
 </div>
 
 <div class="mat-elevation-z8">

@@ -44,6 +44,7 @@ export class SeguimientoPescaComponent {
   diario: IDiarioPesca[] = []
   startDate! : Date;
   endDate!: Date;
+  isDateFiltered = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -156,12 +157,24 @@ export class SeguimientoPescaComponent {
 
   applyDateFilter() {
     if (this.startDate && this.endDate) {
+      this.isDateFiltered = true; // Actualiza el estado del filtro
       this.dataSource.data = this.diario.filter(diario => {
         const fecha = new Date(diario.fecha);
         return fecha >= this.startDate && fecha <= this.endDate;
       });
       this.dataSource.paginator!.firstPage();
     }
+  }
+
+  clearDateFilter() {
+    // Restablece los controles de fecha
+    this.startDate = null!;
+    this.endDate = null!;
+    this.isDateFiltered = false; // Actualiza el estado del filtro
+
+    // Restablece los datos filtrados
+    this.dataSource.data = this.diario;
+    this.dataSource.paginator!.firstPage();
   }
 
 
