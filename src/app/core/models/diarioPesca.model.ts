@@ -1,7 +1,7 @@
 export interface IDiarioPesca{
     id: number,
-    embarcacion  : String,
-    especie: String,
+    embarcacion  : number,
+    especie: number,
     fecha: Date,
     numero_alcance: number,
     zona_pesca: String,
@@ -14,4 +14,6 @@ export interface IDiarioPesca{
     porcentaje: number,
     ar: number,
     numero: number
+
+    
 }

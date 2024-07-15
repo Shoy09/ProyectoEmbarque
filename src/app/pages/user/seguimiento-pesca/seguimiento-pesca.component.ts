@@ -51,9 +51,12 @@ export class SeguimientoPescaComponent {
   ngOnInit(): void {
     this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
       this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
-        const diariosConNombres = diarios.map(diario => ({
+        const diariosConNombres: IDiarioPesca[] = diarios.map(diario => ({
           ...diario,
-          embarcacion: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
+          embarcacion: Number(diario.embarcacion), // Asegúrate de que embarcacion sea number si así lo requiere tu interfaz IDiarioPesca
+          especie: Number(diario.especie), // Asegúrate de que especie sea number si así lo requiere tu interfaz IDiarioPesca
+          embarcacionNombre: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
+          // Agrega más propiedades según tu interfaz IDiarioPesca
         }));
 
         this.dataSource = new MatTableDataSource<IDiarioPesca>(diariosConNombres);
@@ -63,23 +66,29 @@ export class SeguimientoPescaComponent {
     });
   }
 
+
   getDiarioPesca(forceRefresh?: boolean): void {
     this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
-      this.especieService.getDiarioPesca().subscribe(especies => {
+      this.especieService.getDiarioPesca().subscribe(especies => { // Asegúrate de que el método sea getEspecies()
         this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
           const diariosConNombres = diarios.map(diario => ({
             ...diario,
-            embarcacion: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
-            especie: especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido',
+            embarcacion: Number(diario.embarcacion),
+            especie: Number(diario.especie),
+            embarcacionNombre: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
+            especieNombre: especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido',
           }));
 
-          this.diario = diariosConNombres; // Actualiza la variable local para reflejar los nombres de las embarcaciones y especies
-          this.dataSource.data = diariosConNombres; // Actualiza el dataSource con los nuevos datos
-          this.changeDetector.detectChanges(); // Notifica a Angular sobre los cambios
+          this.diario = diariosConNombres;
+          this.dataSource.data = diariosConNombres;
+          this.changeDetector.detectChanges();
         });
       });
     });
   }
+
+
+
 
 
 
