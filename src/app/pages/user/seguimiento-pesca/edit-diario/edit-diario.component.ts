@@ -52,20 +52,16 @@ export class EditDiarioComponent implements OnInit {
     this.formEDP.patchValue(this.data); // Aplicamos los datos iniciales
     this.getEspecies();
     this.getEmbarcaciones();
-
-    // Esperar a que los datos estén disponibles antes de establecer valores predeterminados
-    setTimeout(() => {
-      this.formEDP.controls['embarcacion'].setValue(-1);
-      this.formEDP.controls['especie'].setValue(-1);
-    }, 0);
   }
 
   getEspecies() {
     this.especiesService.getDiarioPesca().subscribe(
       (especies: Especies[]) => {
         this.especies = especies;
-        // Ahora que tenemos las especies, podemos establecer el valor predeterminado
-        this.formEDP.controls['especie'].setValue(-1); // Asume que -1 es un valor válido para establecer como predeterminado
+        // Ahora que tenemos las especies, podemos establecer el valor predeterminado correcto si data.especie existe
+        if (this.data && this.data.especie) {
+          this.formEDP.controls['especie'].setValue(this.data.especie);
+        }
       },
       (error: any) => {
         console.error('Error al obtener especies:', error);
@@ -77,8 +73,10 @@ export class EditDiarioComponent implements OnInit {
     this.embarcacionService.getEmbarcaciones().subscribe(
       (embarcaciones: Embarcaciones[]) => {
         this.embarcaciones = embarcaciones;
-        // Ahora que tenemos las embarcaciones, podemos establecer el valor predeterminado
-        this.formEDP.controls['embarcacion'].setValue(-1); // Asume que -1 es un valor válido para establecer como predeterminado
+        // Ahora que tenemos las embarcaciones, podemos establecer el valor predeterminado correcto si data.embarcacion existe
+        if (this.data && this.data.embarcacion) {
+          this.formEDP.controls['embarcacion'].setValue(this.data.embarcacion);
+        }
       },
       (error: any) => {
         console.error('Error al obtener embarcaciones:', error);
