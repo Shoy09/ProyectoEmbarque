@@ -3,7 +3,7 @@
         <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md" (click)="toggleSidebar()">
         <span>Santa Monica</span>
     </div>
-      
+
     <div class="menu-section">
         <ul>
             <div class="user-profile">
@@ -19,6 +19,12 @@
                 <i class="fas fa-fish custom-icon"></i>
                 <span>Seguimiento de Pesca</span>
             </li>
+        </ul>
+        <ul>
+          <li routerLink="estadistica-sp" routerLinkActive="active">
+            <i class="fas fa-chart-bar custom-icon"></i>
+              <span>Estadística SP</span>
+          </li>
         </ul>
     </div>
     <button class="logout-btn" routerLink="/login">

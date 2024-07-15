@@ -98,5 +98,44 @@ body {
   background-color: white;
 }
 
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre los elementos */
+  margin-bottom: 20px; /* Espacio inferior para separar del resto del contenido */
+}
+
+.filter-item {
+  flex: 0 1 auto;
+  min-width: 150px; /* Ancho mínimo para los campos de fecha */
+}
+
+button.filter-item {
+  flex: 0 0 auto; /* No expandir el botón */
+  height: 40px; /* Altura igual a la de los mat-form-field */
+  line-height: 1.5;
+  padding: 0 20px; /* Espaciado interior */
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-color: #3f51b5; /* Color del borde */
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thickness {
+  border-width: 1px; /* Grosor del borde */
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+.mat-datepicker-toggle .mat-icon-button {
+  color: #3f51b5; /* Color del icono */
+}
+
+.mat-form-field-appearance-outline .mat-form-field-label {
+  color: #3f51b5; /* Color de la etiqueta */
+}
+
 
 

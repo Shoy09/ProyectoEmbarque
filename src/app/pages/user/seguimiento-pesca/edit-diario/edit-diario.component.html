@@ -5,14 +5,14 @@
       <form [formGroup]="formEDP" (ngSubmit)="save()">
         <div class="row mb-2">
 
-          <div class="col-md-6 mb-2">
+          <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
             <select class="form-control custom-focus-ring" formControlName="embarcacion">
               <option value="-1">Seleccione Embarcaciones</option>
               <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
             </select>
           </div>
-          <div class="col-md-6 mb-2">
+          <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
             <select class="form-control custom-focus-ring" formControlName="especie">
               <option value="-1">Seleccione Especie</option>

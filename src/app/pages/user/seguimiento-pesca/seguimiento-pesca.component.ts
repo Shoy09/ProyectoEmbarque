@@ -14,6 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
+import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-seguimiento-pesca',
@@ -26,7 +29,10 @@ import { EspeciesService } from 'app/core/services/especies.service';
     MatSortModule,
     MatTableModule,
     MatIconModule,
-    MatButtonModule ],
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule],
   templateUrl: './seguimiento-pesca.component.html',
   styleUrl: './seguimiento-pesca.component.css'
 })
@@ -36,6 +42,8 @@ export class SeguimientoPescaComponent {
   displayedColumns: string[] = [ 'embarcacion', 'fecha', 'numero_alcance','especie', 'zona_pesca', 'estrato', 'profundidad', 'tiempo_efectivo', 'rango_talla_inicial', 'rango_talla_final','moda', 'porcentaje', 'ar', 'numero', 'acciones'];
   dataSource: MatTableDataSource<IDiarioPesca>;
   diario: IDiarioPesca[] = []
+  startDate! : Date;
+  endDate!: Date;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,6 +87,9 @@ export class SeguimientoPescaComponent {
             especieNombre: especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido',
           }));
 
+          // Invierte el orden de los diarios para que los últimos ingresados aparezcan primero
+          diariosConNombres.reverse();
+
           this.diario = diariosConNombres;
           this.dataSource.data = diariosConNombres;
           this.changeDetector.detectChanges();
@@ -86,11 +97,6 @@ export class SeguimientoPescaComponent {
       });
     });
   }
-
-
-
-
-
 
 
   openFomrCreate(): void {
@@ -145,6 +151,16 @@ export class SeguimientoPescaComponent {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  applyDateFilter() {
+    if (this.startDate && this.endDate) {
+      this.dataSource.data = this.diario.filter(diario => {
+        const fecha = new Date(diario.fecha);
+        return fecha >= this.startDate && fecha <= this.endDate;
+      });
+      this.dataSource.paginator!.firstPage();
     }
   }
 
