@@ -1,0 +1,31 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label for="embarcacion">Embarcación</label>
+    <input id="embarcacion" formControlName="embarcacion" type="number" />
+
+    <label for="consumo_gasolina">Consumo Gasolina</label>
+    <input id="consumo_gasolina" formControlName="consumo_gasolina" type="number" />
+
+    <button type="submit" [disabled]="form.invalid || !lastCosto">Guardar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Embarcación</th>
+        <th>Consumo Gasolina</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let consumo of consumos">
+        <td>{{ consumo.id }}</td>
+        <td>{{ consumo.embarcacion }}</td>
+        <td>{{ consumo.consumo_gasolina }}</td>
+        <td>{{ consumo.total }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

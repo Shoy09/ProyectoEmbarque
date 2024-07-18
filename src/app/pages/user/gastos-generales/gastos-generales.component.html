@@ -1,0 +1,95 @@
+
+<div class="table-container">
+  <div class="table-wrapper">
+    <h3>Costo de Galón B-05</h3>
+    <h3>Último Costo: S/{{ lastCosto?.costo }}</h3>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Código Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Costo TM de Hielo</h3>
+    <h3>Último Costo: S/{{ ultimoCostoHielo?.costo }}</h3>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceTMHielo" matSort>
+        <!-- Código Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsTMHielo"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsTMHielo;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Costo M3 Agua</h3>
+    <h3>Último costo: S/.{{ultimoCostoAgua?.costo}}</h3>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceT3Agua" matSort>
+        <!-- Código Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsT3Agua"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsT3Agua;"></tr>
+      </table>
+    </div>
+  </div>
+</div>
