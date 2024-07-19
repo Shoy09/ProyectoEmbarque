@@ -1,0 +1,81 @@
+<button mat-raised-button (click)="isEditable = !isEditable">
+  {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
+</button>
+
+<mat-stepper linear #stepper>
+  <!-- Primer Paso -->
+  <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Step 1: Fishing Details</ng-template>
+      <mat-form-field>
+        <mat-label>Fecha</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fecha" type="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Tipo de Cambio</mat-label>
+        <input matInput formControlName="tipo_cambio" placeholder="Tipo de Cambio" required>
+      </mat-form-field>
+      <div class="col-md-4 mb-2">
+        <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
+        <select class="form-control custom-focus-ring" formControlName="embarcacion">
+          <option value="">Seleccione Embarcacion</option>
+          <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
+        </select>
+      </div>
+      <mat-form-field>
+        <mat-label>Zona de Pesca</mat-label>
+        <input matInput formControlName="zona_pesca" placeholder="Zona de Pesca" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Horas de Faena</mat-label>
+        <input matInput formControlName="horas_faena" placeholder="Horas de Faena" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Kilos Declarados</mat-label>
+        <input matInput formControlName="kilos_declarados" placeholder="Kilos Declarados" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Merluza</mat-label>
+        <input matInput formControlName="merluza" placeholder="Merluza">
+      </mat-form-field>
+      <!-- Agrega los demás campos de la primera parte aquí -->
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Segundo Paso -->
+  <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Step 2: Cost and Consumption Details</ng-template>
+      <mat-form-field>
+        <mat-label>Consumo de Gasolina</mat-label>
+        <input matInput formControlName="consumo_gasolina" placeholder="Consumo de Gasolina" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Total Gasolina</mat-label>
+        <input matInput formControlName="total_gasolina" placeholder="Total Gasolina" required>
+      </mat-form-field>
+      <!-- Agrega los demás campos del segundo paso aquí -->
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso Final -->
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+
