@@ -17,6 +17,8 @@ export class FlotaComponent {
   form!: FormGroup;
   consumos: ConsumoGasolina[] = [];
   lastCosto?: CostoGalonGasoI;
+  costoActual?: number;
+
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +37,8 @@ export class FlotaComponent {
 
     this.costoXGalonService.getLastCosto().subscribe(last => {
       this.lastCosto = last;
+      this.costoActual = last?.costo;
+
     });
   }
 
@@ -53,7 +57,6 @@ export class FlotaComponent {
         this.loadConsumos();
       });
     } else {
-      // Manejar el caso en que lastCosto no esté disponible
       console.error('No se pudo obtener el último costo');
     }
   }

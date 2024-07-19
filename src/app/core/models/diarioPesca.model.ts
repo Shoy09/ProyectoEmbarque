@@ -14,6 +14,4 @@ export interface IDiarioPesca{
     porcentaje: number,
     ar: number,
     numero: number
-
-    
 }

@@ -1,7 +1,7 @@
 <div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label for="embarcacion">Embarcación</label>
-    <input id="embarcacion" formControlName="embarcacion" type="number" />
+    <input id="embarcacion" formControlName="embarcacion" type="text" />
 
     <label for="consumo_gasolina">Consumo Gasolina</label>
     <input id="consumo_gasolina" formControlName="consumo_gasolina" type="number" />
@@ -15,6 +15,7 @@
         <th>ID</th>
         <th>Embarcación</th>
         <th>Consumo Gasolina</th>
+        <th>Costo del Dólar</th>
         <th>Total</th>
       </tr>
     </thead>
@@ -23,9 +24,9 @@
         <td>{{ consumo.id }}</td>
         <td>{{ consumo.embarcacion }}</td>
         <td>{{ consumo.consumo_gasolina }}</td>
+        <td>{{ costoActual }}</td>
         <td>{{ consumo.total }}</td>
       </tr>
     </tbody>
   </table>
 </div>
-

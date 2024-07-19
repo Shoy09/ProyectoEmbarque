@@ -1,8 +1,7 @@
-
 <div class="table-container">
   <div class="table-wrapper">
     <h3>Costo de Galón B-05</h3>
-    <h3>Último Costo: S/{{ lastCosto?.costo }}</h3>
+    <div class="last-cost">Último Costo: S/{{ lastCosto?.costo }}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- Código Column -->
@@ -28,12 +27,13 @@
         <!-- Data Row -->
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
   </div>
 
   <div class="table-wrapper">
     <h3>Costo TM de Hielo</h3>
-    <h3>Último Costo: S/{{ ultimoCostoHielo?.costo }}</h3>
+    <div class="last-cost">Último Costo: S/{{ ultimoCostoHielo?.costo }}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceTMHielo" matSort>
         <!-- Código Column -->
@@ -59,12 +59,13 @@
         <!-- Data Row -->
         <tr mat-row *matRowDef="let row; columns: displayedColumnsTMHielo;"></tr>
       </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
   </div>
 
   <div class="table-wrapper">
     <h3>Costo M3 Agua</h3>
-    <h3>Último costo: S/.{{ultimoCostoAgua?.costo}}</h3>
+    <div class="last-cost">Último costo: S/{{ultimoCostoAgua?.costo}}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceT3Agua" matSort>
         <!-- Código Column -->
@@ -89,6 +90,90 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsT3Agua"></tr>
         <!-- Data Row -->
         <tr mat-row *matRowDef="let row; columns: displayedColumnsT3Agua;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Tipo de Cambio</h3>
+    <div class="last-cost">Último costo: S/{{ultimoCostoTipoCambio?.costo}}</div>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceTipoCambio" matSort>
+        <!-- Código Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsTipoCambio"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsTipoCambio;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Viveres por embarcación</h3>
+    <span><button class="btn-celeste" (click)="openCreateFormVE()"><i class="fas fa-plus"></i></button></span>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceViveresEmbarcacion" matSort>
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="embarcacion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Embarcación </th>
+          <td mat-cell *matCellDef="let row"> {{ getNombreEmbarcacion(row.embarcacion) }} </td>
+
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo_zarpe">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por Zarpe </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo_zarpe}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsViveresEmbarcacion"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsViveresEmbarcacion;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Mecanimos</h3>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceMecanismo" matSort>
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="item">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+          <td mat-cell *matCellDef="let row"> {{row.item}} </td>
+        </ng-container>
+
+        <!-- Costo Column -->
+        <ng-container matColumnDef="costo_dia">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por día</th>
+          <td mat-cell *matCellDef="let row"> S/{{row.costo_dia}} </td>
+        </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsMecanismo"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsMecanismo;"></tr>
       </table>
     </div>
   </div>
