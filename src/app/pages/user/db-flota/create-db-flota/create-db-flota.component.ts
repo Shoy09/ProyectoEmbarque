@@ -6,8 +6,12 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Embarcaciones } from 'app/core/models/embarcacion';
+import { FlotaDP } from 'app/core/models/flota.model';
+import { ZonaPescaI } from 'app/core/models/zonaPesca';
+import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { FlotaService } from 'app/core/services/flota.service';
 
@@ -21,7 +25,8 @@ import { FlotaService } from 'app/core/services/flota.service';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule],
+    MatNativeDateModule,
+    MatSelectModule],
   templateUrl: './create-db-flota.component.html',
   styleUrl: './create-db-flota.component.css'
 })
@@ -29,11 +34,11 @@ import { FlotaService } from 'app/core/services/flota.service';
 export class CreateDbFlotaComponent {
 
   embarcaciones: Embarcaciones[] = [];
-
+  zona_pesca: ZonaPescaI[] = [];
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
-    tipo_cambio: ['', Validators.required],
+    tipo_cambio: [{ value: '', disabled: true }, Validators.required],
     embarcacion: ['', Validators.required],
     zona_pesca: ['', Validators.required],
     horas_faena: ['', Validators.required],
@@ -44,9 +49,9 @@ export class CreateDbFlotaComponent {
     merluza_descarte: [''],
     otro: [''],
     kilo_otro: [''],
-    toneladas_procesadas: [''],
-    toneladas_recibidas: [''],
-    total_tripulacion: [''],
+    toneladas_procesadas: ['', Validators.required],
+    toneladas_recibidas: ['', Validators.required],
+    total_tripulacion: ['', Validators.required]
   });
 
   secondFormGroup = this._formBuilder.group({
@@ -67,26 +72,56 @@ export class CreateDbFlotaComponent {
 
   isEditable = false;
 
+
+
   constructor(
     private _formBuilder: FormBuilder,
     private embarcacionesService: EmbarcacionesService,
-    serviceFlota: FlotaService
+    private costoXGalonService: CostoXGalonService,
+    private flotaService: FlotaService
   ) {}
 
   ngOnInit(): void {
     this.getEmbarcaciones();
+    this.getZonaPesca();
+    this.loadLastTipoCambio();
   }
 
   getEmbarcaciones() {
     this.embarcacionesService.getEmbarcaciones().subscribe(
       embarcaciones => {
         this.embarcaciones = embarcaciones;
-        // Aquí puedes realizar cualquier otra lógica necesaria con los datos de especies
       },
       error => {
         console.error('Error al obtener embarcaciones:', error);
       }
     );
   }
+
+  getZonaPesca(){
+    this.embarcacionesService.getZonaPesca().subscribe(
+      zona_pesca => {
+        this.zona_pesca = zona_pesca;
+      },
+      error => {
+        console.error('Error al obtener zona_pesca:', error);
+      }
+    );
+  }
+
+  loadLastTipoCambio() {
+    this.costoXGalonService.getLastTipoCambio().subscribe(lastTipoCambio => {
+      if (lastTipoCambio) {
+        // Convierte el valor a string antes de asignarlo
+        this.firstFormGroup.patchValue({ tipo_cambio: String(lastTipoCambio.costo) });
+      }
+    });
+  }
+
+  
+
+
+
+
 
 }

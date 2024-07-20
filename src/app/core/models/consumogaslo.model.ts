@@ -3,5 +3,4 @@ export interface ConsumoGasolina {
   embarcacion: number;
   consumo_gasolina: number;
   total: number;
-  costo?: number;
 }

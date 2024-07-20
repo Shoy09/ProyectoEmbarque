@@ -1,0 +1,27 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+.half-width {
+  width: calc(50% - 16px); /* Ajuste para el espacio entre los campos */
+  margin-right: 16px; /* Espacio entre los campos */
+  margin-bottom: 16px; /* Espacio inferior para separar filas */
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto; /* Permitir desplazamiento vertical */
+  max-height: 70vh; /* Altura máxima ajustada para el contenedor del formulario */
+  padding: 16px; /* Espacio interno para el contenedor */
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

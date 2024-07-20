@@ -6,72 +6,93 @@
   <!-- Primer Paso -->
   <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Step 1: Fishing Details</ng-template>
-      <mat-form-field>
-        <mat-label>Fecha</mat-label>
-        <input matInput type="date" formControlName="fecha">
-      </mat-form-field>
+      <ng-template matStepLabel>Kilos recibidos</ng-template>
 
-      <mat-form-field>
-        <mat-label>Tipo de Cambio</mat-label>
-        <input matInput formControlName="tipo_cambio" placeholder="Tipo de Cambio" required>
-      </mat-form-field>
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Fecha</mat-label>
+          <input matInput type="date" formControlName="fecha">
+        </mat-form-field>
 
-      <div class="col-md-4 mb-2">
-        <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
-        <select class="form-control custom-focus-ring" formControlName="embarcacion">
-          <option value="">Seleccione Embarcacion</option>
-          <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
-        </select>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Tipo de Cambio</mat-label>
+          <input matInput formControlName="tipo_cambio" placeholder="Tipo de Cambio" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Embarcación</mat-label>
+          <mat-select formControlName="embarcacion">
+            <mat-option value="">Seleccione Embarcacion</mat-option>
+            <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Zona de Pesca</mat-label>
+          <mat-select formControlName="zona_pesca">
+            <mat-option value="">Seleccione la Zona</mat-option>
+            <mat-option *ngFor="let zona of zona_pesca" [value]="zona.id">{{ zona.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Horas de Faena</mat-label>
+          <input matInput formControlName="horas_faena" placeholder="Horas de Faena" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Kilos Declarados</mat-label>
+          <input matInput formControlName="kilos_declarados" placeholder="Kilos Declarados" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Merluza (kg)</mat-label>
+          <input matInput type="number" formControlName="merluza" placeholder="Merluza" min="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Bereche (kg)</mat-label>
+          <input matInput type="number" formControlName="bereche" placeholder="Bereche" min="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Volador (kg)</mat-label>
+          <input matInput type="number" formControlName="volador" placeholder="Volador" min="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Merluza de Descarte (kg)</mat-label>
+          <input matInput type="number" formControlName="merluza_descarte" placeholder="Merluza de Descarte" min="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Otra Especie</mat-label>
+          <input matInput formControlName="otro" placeholder="Otra Especie">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Kilos Otra Especie</mat-label>
+          <input matInput type="number" formControlName="kilo_otro" placeholder="Kilos">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Toneladas Procesadas</mat-label>
+          <input matInput type="number" formControlName="toneladas_procesadas" placeholder="Toneladas">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Toneladas Recibidas</mat-label>
+          <input matInput type="number" formControlName="toneladas_recibidas" placeholder="Toneladas">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Total de Tripulación</mat-label>
+          <input matInput type="number" formControlName="total_tripulacion" placeholder="Total Tripulación">
+        </mat-form-field>
       </div>
 
-      <mat-form-field>
-        <mat-label>Zona de Pesca</mat-label>
-        <input matInput formControlName="zona_pesca" placeholder="Zona de Pesca" required>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Horas de Faena</mat-label>
-        <input matInput formControlName="horas_faena" placeholder="Horas de Faena" required>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Kilos Declarados</mat-label>
-        <input matInput formControlName="kilos_declarados" placeholder="Kilos Declarados" required>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Merluza (kg)</mat-label>
-        <input matInput type="number" formControlName="merluza" placeholder="Merluza" min="0">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Bereche (kg)</mat-label>
-        <input matInput type="number" formControlName="bereche" placeholder="Bereche" min="0">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Volador (kg)</mat-label>
-        <input matInput type="number" formControlName="volador" placeholder="Volador" min="0">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Merluza de Descarte (kg)</mat-label>
-        <input matInput type="number" formControlName="merluza_descarte" placeholder="Merluza D" min="0">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Otro</mat-label>
-        <input matInput formControlName="otro" placeholder="Otra Especie">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>(Kg)</mat-label>
-        <input matInput type="number" formControlName="kilo_otro" placeholder="kilos">
-      </mat-form-field>
-      <!-- Agrega los demás campos de la primera parte aquí -->
-      <div>
-        <button mat-button matStepperNext>Next</button>
+      <div class="button-group">
+        <button mat-raised-button matStepperNext>Siguiente</button>
       </div>
     </form>
   </mat-step>
@@ -79,31 +100,92 @@
   <!-- Segundo Paso -->
   <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Step 2: Cost and Consumption Details</ng-template>
-      <mat-form-field>
-        <mat-label>Consumo de Gasolina</mat-label>
-        <input matInput formControlName="consumo_gasolina" placeholder="Consumo de Gasolina" required>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Total Gasolina</mat-label>
-        <input matInput formControlName="total_gasolina" placeholder="Total Gasolina" required>
-      </mat-form-field>
-      <!-- Agrega los demás campos del segundo paso aquí -->
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+      <ng-template matStepLabel>Consumo de tripulación</ng-template>
+
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Consumo de Gasolina</mat-label>
+          <input matInput formControlName="consumo_gasolina" placeholder="Consumo de Gasolina" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Total Gasolina</mat-label>
+          <input matInput formControlName="total_gasolina" placeholder="Total Gasolina" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Hielo</mat-label>
+          <input matInput formControlName="consumo_hielo" placeholder="Total Gasolina" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label> T Hielo</mat-label>
+          <input matInput formControlName="total_hielo" placeholder="total_hielo" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>consumo_agua</mat-label>
+          <input matInput formControlName="consumo_agua" placeholder="consumo_agua" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>total_agua</mat-label>
+          <input matInput formControlName="total_agua" placeholder="total_agua" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>consumo_viveres</mat-label>
+          <input matInput formControlName="consumo_viveres" placeholder="consumo_viveres" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>total_vivieres</mat-label>
+          <input matInput formControlName="total_vivieres" placeholder="total_vivieres" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>dias_inspeccion</mat-label>
+          <input matInput formControlName="dias_inspeccion" placeholder="dias_inspeccion" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>total_servicio_inspeccion</mat-label>
+          <input matInput formControlName="total_servicio_inspeccion" placeholder="total_servicio_inspeccion" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>total_derecho_pesca</mat-label>
+          <input matInput formControlName="total_derecho_pesca" placeholder="total_derecho_pesca" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>total_costo</mat-label>
+          <input matInput formControlName="total_costo" placeholder="total_costo" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>costo_tm_captura</mat-label>
+          <input matInput formControlName="costo_tm_captura" placeholder="costo_tm_captura" required>
+        </mat-form-field>
+
+        <!-- Agrega los demás campos del segundo paso aquí -->
+        <div>
+          <button mat-button matStepperPrevious>Atrás</button>
+          <button mat-button matStepperNext>Siguiente</button>
+        </div>
+
       </div>
     </form>
   </mat-step>
 
   <!-- Paso Final -->
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Finalizado</ng-template>
+    <p>Has completado el formulario.</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-raised-button color="primary" (click)="submitForm()">Enviar Formulario</button>
+      <button mat-button matStepperPrevious>Atrás</button>
+      <button mat-button (click)="stepper.reset()">Reiniciar</button>
     </div>
   </mat-step>
 </mat-stepper>
-
