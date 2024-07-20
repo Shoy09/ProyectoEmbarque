@@ -139,3 +139,36 @@ button.filter-item {
 
 
 
+.table-container {
+  margin-top: 25px;
+  width: 100%;
+  overflow: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+.mat-cell {
+  text-align: center;
+}
+
+.btn-celeste {
+  background-color: #00aaff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button.mat-button {
+  margin-right: 5px;
+}
+
+
+

@@ -71,3 +71,25 @@ th.mat-sort-header {
     width: calc(100% - 10px);
   }
 }
+
+.title-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  line-height: 1;/* Ajusta según sea necesario */
+}
+
+.add-btn {
+  margin-left: 30px;
+  padding: 8px 12px; /* Aumenta el tamaño del botón */
+  font-size: 14px; /* Ajusta el tamaño de la fuente */
+  border-radius: 4px; /* Redondea las esquinas del botón */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+}
+
+.btn-celeste {
+  background-color: #007bff; /* Color de fondo azul */
+  color: white; /* Color del texto blanco */
+  border: none; /* Quita el borde predeterminado */
+}

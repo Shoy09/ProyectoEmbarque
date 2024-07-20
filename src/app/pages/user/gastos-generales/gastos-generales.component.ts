@@ -15,6 +15,7 @@ import { CreateVEComponent } from './create-ve/create-ve.component';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
+import { CreateB05Component } from './create-b05/create-b05.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -35,7 +36,7 @@ export class GastosGeneralesComponent {
   readonly dialog = inject(MatDialog);
 
   //combustible
-  displayedColumns: string[] = ['id', 'fecha', 'costo'];
+  displayedColumns: string[] = ['fecha', 'costo'];
   dataSource!: MatTableDataSource<CostoGalonGasoI>;
   lastCosto?: CostoGalonGasoI;
 
@@ -184,6 +185,19 @@ export class GastosGeneralesComponent {
       }
     });
   }
+
+  openFormB05(): void{
+    const dialogRefCreate = this.dialog.open(CreateB05Component, {
+      width: '600px'
+    });
+
+    dialogRefCreate.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
+  
   ngAfterViewInit() {
     this.paginators.forEach((paginator, index) => {
       switch(index) {

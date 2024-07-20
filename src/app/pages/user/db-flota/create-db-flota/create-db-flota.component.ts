@@ -118,10 +118,62 @@ export class CreateDbFlotaComponent {
     });
   }
 
-  
+  submitForm(): void {
+    if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
+      // Obtén los valores de ambos formularios
+      const formData = {
+        ...this.firstFormGroup.getRawValue(),
+        ...this.secondFormGroup.getRawValue()
+      };
 
+      // Convierte los valores a tipos apropiados si es necesario
+      const flotaData: FlotaDP = {
+        fecha: formData.fecha || '',
+        tipo_cambio: Number(formData.tipo_cambio),
+        embarcacion: Number(formData.embarcacion),
+        zona_pesca: Number(formData.zona_pesca),
+        horas_faena: formData.horas_faena || '',
+        kilos_declarados: Number(formData.kilos_declarados),
+        merluza: formData.merluza ? Number(formData.merluza) : undefined,
+        bereche: formData.bereche ? Number(formData.bereche) : undefined,
+        volador: formData.volador ? Number(formData.volador) : undefined,
+        merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
+        otro: formData.otro || undefined,
+        kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
+        toneladas_procesadas: Number(formData.toneladas_procesadas),
+        toneladas_recibidas: Number(formData.toneladas_recibidas),
+        total_tripulacion: Number(formData.total_tripulacion),
+        consumo_gasolina: Number(formData.consumo_gasolina),
+        total_gasolina: Number(formData.total_gasolina),
+        consumo_hielo: Number(formData.consumo_hielo),
+        total_hielo: Number(formData.total_hielo),
+        consumo_agua: Number(formData.consumo_agua),
+        total_agua: Number(formData.total_agua),
+        consumo_viveres: Number(formData.consumo_viveres),
+        total_vivieres: Number(formData.total_vivieres),
+        dias_inspeccion: Number(formData.dias_inspeccion),
+        total_servicio_inspeccion: Number(formData.total_servicio_inspeccion),
+        total_derecho_pesca: Number(formData.total_derecho_pesca),
+        total_costo: Number(formData.total_costo),
+        costo_tm_captura: Number(formData.costo_tm_captura),
+      };
 
-
+      // Envía los datos al servicio para crear la flota
+      this.flotaService.createFlota(flotaData).subscribe(
+        response => {
+          console.log('Flota creada exitosamente', response);
+          // Opcional: reinicia el formulario o muestra un mensaje de éxito
+          this.firstFormGroup.reset();
+          this.secondFormGroup.reset();
+        },
+        error => {
+          console.error('Error al crear Flota', error);
+        }
+      );
+    } else {
+      console.error('El formulario no es válido.');
+    }
+  }
 
 
 }

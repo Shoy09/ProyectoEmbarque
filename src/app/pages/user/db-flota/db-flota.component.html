@@ -5,13 +5,196 @@
 
   <div class="agregar-container" style="margin-top: 25px; display: flex; align-items: center;">
     <h3 style="margin: 0; margin-right: 10px;"> Añade un nuevo registro</h3>
-    <span><button class="btn-celeste"(click)="openCreateFormFlota()"><i class="fas fa-plus"></i></button></span>
+    <span>
+      <button class="btn-celeste" (click)="openCreateFormFlota()">
+        <i class="fas fa-plus"></i>
+      </button>
+    </span>
   </div>
 
   <div class="container" style="display: flex; justify-content: center;">
     <h3>Registro de Flota</h3>
   </div>
+
   <div class="filter-container">
+    <!-- Aquí puedes agregar filtros si es necesario -->
   </div>
 
-</div>
+  <!-- Tabla para listar los registros de FlotaDP -->
+  <div class="table-container" style="margin-top: 25px;">
+    <table mat-table [dataSource]="flotas" class="mat-elevation-z8">
+
+      <!-- Columna Fecha -->
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <td mat-cell *matCellDef="let row"> {{row.fecha}} </td>
+      </ng-container>
+
+      <!-- Columna Tipo de Cambio -->
+      <ng-container matColumnDef="tipo_cambio">
+        <th mat-header-cell *matHeaderCellDef> Tipo de Cambio </th>
+        <td mat-cell *matCellDef="let row"> S/ {{row.tipo_cambio}} </td>
+      </ng-container>
+
+      <!-- Columna Embarcación -->
+      <ng-container matColumnDef="embarcacion">
+        <th mat-header-cell *matHeaderCellDef> Embarcación </th>
+        <td mat-cell *matCellDef="let row"> {{row.embarcacion}} </td>
+      </ng-container>
+
+      <!-- Columna Zona de Pesca -->
+      <ng-container matColumnDef="zona_pesca">
+        <th mat-header-cell *matHeaderCellDef> Zona de Pesca </th>
+        <td mat-cell *matCellDef="let row"> {{row.zona_pesca}} </td>
+      </ng-container>
+
+      <!-- Columna Horas de Faena -->
+      <ng-container matColumnDef="horas_faena">
+        <th mat-header-cell *matHeaderCellDef> Horas de Faena </th>
+        <td mat-cell *matCellDef="let row"> {{row.horas_faena}} </td>
+      </ng-container>
+
+      <!-- Columna Kilos Declarados -->
+      <ng-container matColumnDef="kilos_declarados">
+        <th mat-header-cell *matHeaderCellDef> Kilos Declarados </th>
+        <td mat-cell *matCellDef="let row"> {{row.kilos_declarados}} </td>
+      </ng-container>
+
+      <!-- Columna Merluza -->
+      <ng-container matColumnDef="merluza">
+        <th mat-header-cell *matHeaderCellDef> Merluza </th>
+        <td mat-cell *matCellDef="let row"> {{row.merluza ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Bereche -->
+      <ng-container matColumnDef="bereche">
+        <th mat-header-cell *matHeaderCellDef> Bereche </th>
+        <td mat-cell *matCellDef="let row"> {{row.bereche ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Volador -->
+      <ng-container matColumnDef="volador">
+        <th mat-header-cell *matHeaderCellDef> Volador </th>
+        <td mat-cell *matCellDef="let row"> {{row.volador ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Merluza Descarte -->
+      <ng-container matColumnDef="merluza_descarte">
+        <th mat-header-cell *matHeaderCellDef> Merluza Descarte </th>
+        <td mat-cell *matCellDef="let row"> {{row.merluza_descarte ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Otro -->
+      <ng-container matColumnDef="otro">
+        <th mat-header-cell *matHeaderCellDef> Otro </th>
+        <td mat-cell *matCellDef="let row"> {{row.otro ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Kilo Otro -->
+      <ng-container matColumnDef="kilo_otro">
+        <th mat-header-cell *matHeaderCellDef> Kilo Otro </th>
+        <td mat-cell *matCellDef="let row"> {{row.kilo_otro ?? ' '}} </td>
+      </ng-container>
+
+      <!-- Columna Toneladas Procesadas -->
+      <ng-container matColumnDef="toneladas_procesadas">
+        <th mat-header-cell *matHeaderCellDef> Toneladas Procesadas </th>
+        <td mat-cell *matCellDef="let row"> {{row.toneladas_procesadas}} </td>
+      </ng-container>
+
+      <!-- Columna Toneladas Recibidas -->
+      <ng-container matColumnDef="toneladas_recibidas">
+        <th mat-header-cell *matHeaderCellDef> Toneladas Recibidas </th>
+        <td mat-cell *matCellDef="let row"> {{row.toneladas_recibidas}} </td>
+      </ng-container>
+
+      <!-- Columna Total Tripulación -->
+      <ng-container matColumnDef="total_tripulacion">
+        <th mat-header-cell *matHeaderCellDef> Total Tripulación </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_tripulacion}} </td>
+      </ng-container>
+
+      <!-- Columna Consumo Gasolina -->
+      <ng-container matColumnDef="consumo_gasolina">
+        <th mat-header-cell *matHeaderCellDef> Consumo Gasolina </th>
+        <td mat-cell *matCellDef="let row"> {{row.consumo_gasolina}} </td>
+      </ng-container>
+
+      <!-- Columna Total Gasolina -->
+      <ng-container matColumnDef="total_gasolina">
+        <th mat-header-cell *matHeaderCellDef> Total Gasolina </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_gasolina}} </td>
+      </ng-container>
+
+      <!-- Columna Consumo Hielo -->
+      <ng-container matColumnDef="consumo_hielo">
+        <th mat-header-cell *matHeaderCellDef> Consumo Hielo </th>
+        <td mat-cell *matCellDef="let row"> {{row.consumo_hielo}} </td>
+      </ng-container>
+
+      <!-- Columna Total Hielo -->
+      <ng-container matColumnDef="total_hielo">
+        <th mat-header-cell *matHeaderCellDef> Total Hielo </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_hielo}} </td>
+      </ng-container>
+
+      <!-- Columna Consumo Agua -->
+      <ng-container matColumnDef="consumo_agua">
+        <th mat-header-cell *matHeaderCellDef> Consumo Agua </th>
+        <td mat-cell *matCellDef="let row"> {{row.consumo_agua}} </td>
+      </ng-container>
+
+      <!-- Columna Total Agua -->
+      <ng-container matColumnDef="total_agua">
+        <th mat-header-cell *matHeaderCellDef> Total Agua </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_agua}} </td>
+      </ng-container>
+
+      <!-- Columna Consumo Viveres -->
+      <ng-container matColumnDef="consumo_viveres">
+        <th mat-header-cell *matHeaderCellDef> Consumo Viveres </th>
+        <td mat-cell *matCellDef="let row"> {{row.consumo_viveres}} </td>
+      </ng-container>
+
+      <!-- Columna Total Viveres -->
+      <ng-container matColumnDef="total_vivieres">
+        <th mat-header-cell *matHeaderCellDef> Total Viveres </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_vivieres}} </td>
+      </ng-container>
+
+      <!-- Columna Días Inspección -->
+      <ng-container matColumnDef="dias_inspeccion">
+        <th mat-header-cell *matHeaderCellDef> Días Inspección </th>
+        <td mat-cell *matCellDef="let row"> {{row.dias_inspeccion}} </td>
+      </ng-container>
+
+      <!-- Columna Total Servicio Inspección -->
+      <ng-container matColumnDef="total_servicio_inspeccion">
+        <th mat-header-cell *matHeaderCellDef> Total Servicio Inspección </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_servicio_inspeccion}} </td>
+      </ng-container>
+
+      <!-- Columna Costo Otro -->
+      <ng-container matColumnDef="costo_otro">
+        <th mat-header-cell *matHeaderCellDef> Derecho de Pesca </th>
+        <td mat-cell *matCellDef="let row"> {{row.costo_otro}} </td>
+      </ng-container>
+
+      <!-- Columna Total Costo -->
+      <ng-container matColumnDef="total_costo">
+        <th mat-header-cell *matHeaderCellDef> Total Costo </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_costo}} </td>
+      </ng-container>
+
+      <!-- Columna Acción -->
+      <!-- Corrected Column Definition -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Acción </th>
+        <td mat-cell *matCellDef="let row"> <!-- Action cell content here --> </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
