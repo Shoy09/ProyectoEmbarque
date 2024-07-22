@@ -1,4 +1,3 @@
-/* gastos-generales.component.css */
 
 .table-container {
   display: flex;
@@ -74,22 +73,34 @@ th.mat-sort-header {
 
 .title-button-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between; /* Espacia el título y el botón */
+  align-items: center; /* Alinea verticalmente al centro */
   margin-bottom: 10px;
-  line-height: 1;/* Ajusta según sea necesario */
+  line-height: 1; /* Ajusta según sea necesario */
+}
+
+.title-button-container h3 {
+  margin: 0; /* Elimina el margen para que se alinee mejor con el botón */
+  font-size: 1.5rem; /* Ajusta el tamaño del texto si es necesario */
 }
 
 .add-btn {
-  margin-left: 30px;
   padding: 8px 12px; /* Aumenta el tamaño del botón */
   font-size: 14px; /* Ajusta el tamaño de la fuente */
   border-radius: 4px; /* Redondea las esquinas del botón */
   cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  display: flex; /* Alinea el ícono dentro del botón */
+  align-items: center; /* Alinea el contenido dentro del botón verticalmente */
 }
 
 .btn-celeste {
   background-color: #007bff; /* Color de fondo azul */
   color: white; /* Color del texto blanco */
   border: none; /* Quita el borde predeterminado */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
 }

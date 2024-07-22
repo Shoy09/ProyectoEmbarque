@@ -121,12 +121,8 @@ export class CostoXGalonService {
 
   //METODO POST
 
-  postCGG(categoria: CostoGalonGasoI): Observable<CostoGalonGasoI>{
+  postCGG(categoria: CostoGalonGasoI): Observable<CostoGalonGasoI> {
     return this.http.post<CostoGalonGasoI>(this.url, categoria)
-    .pipe(
-      tap(() => {
-        this._refresh$.next();
-      }));
   }
 
   postCTMHielo(hielo: CostoTMHielo): Observable<CostoTMHielo>{

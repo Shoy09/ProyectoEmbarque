@@ -112,7 +112,6 @@ export class CreateDbFlotaComponent {
   loadLastTipoCambio() {
     this.costoXGalonService.getLastTipoCambio().subscribe(lastTipoCambio => {
       if (lastTipoCambio) {
-        // Convierte el valor a string antes de asignarlo
         this.firstFormGroup.patchValue({ tipo_cambio: String(lastTipoCambio.costo) });
       }
     });

@@ -15,11 +15,10 @@ import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
   styleUrl: './create-ve.component.css'
 })
 export class CreateVEComponent {
-  @Output() newCostoAdded = new EventEmitter<ConsumoViveresI>();
-  @Input() updateTable!: EventEmitter<void>;
 
-  costo_x_zarpe: ConsumoViveresI[] = []
   formCVZ : FormGroup;
+  @Output() dataSaved = new EventEmitter<void>();
+
   embarcaciones: Embarcaciones[] = [];
 
   constructor(
@@ -36,12 +35,6 @@ export class CreateVEComponent {
 
   ngOnInit(): void {
     this.getEmbarcaciones();
-
-    if (this.updateTable) {
-      this.updateTable.subscribe(() => {
-        this.dialogRef.close(); // O cualquier otra acción que desees realizar
-      });
-    }
   }
 
   getEmbarcaciones() {
@@ -58,24 +51,19 @@ export class CreateVEComponent {
   postCostoViEm() {
     if (this.formCVZ.valid) {
       const value = this.formCVZ.value;
-
-      this.serviceViveresZarpe.postCV(value).subscribe(
-        res => {
-          if (res) {
-            console.log("costo x zarpe guardado", res);
-            this.formCVZ.reset();
-            this.newCostoAdded.emit(res); // Emitir el evento con el nuevo dato
-            this.dialogRef.close();
-          }
-        },
-        error => {
-          console.error("Error al guardar DP:", error);
-          console.error("Detalles del error:", error.error);
+      value.fecha = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+      console.log("Datos a enviar:", value);
+      this.serviceViveresZarpe.postCV(value).subscribe(res => {
+        if (res) {
+          console.log("Dato ingresado correctamente:", res);
+          this.formCVZ.reset();
+          this.dialogRef.close();
+          this.dataSaved.emit(); // Emitir evento para notificar al componente padre
         }
-      );
+      }, error => {
+        console.error("Error al guardar:", error);
+      });
     }
   }
-
-
 
 }

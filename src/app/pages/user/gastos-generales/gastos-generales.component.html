@@ -30,15 +30,14 @@
   </div>
 
   <div class="table-wrapper">
-    <h3>Costo TM de Hielo</h3>
+    <div class="title-button-container">
+      <h3>Costo TM de Hielo</h3>
+      <span><button class="btn-celeste add-btn" (click)="openFormHielo()" ><i class="fas fa-plus"></i></button></span>
+    </div>
+
     <div class="last-cost">Último Costo: S/{{ ultimoCostoHielo?.costo }}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceTMHielo" matSort>
-        <!-- Código Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
 
         <!-- Fecha Column -->
         <ng-container matColumnDef="fecha">
@@ -62,15 +61,14 @@
   </div>
 
   <div class="table-wrapper">
-    <h3>Costo M3 Agua</h3>
+    <div class="title-button-container">
+      <h3>Costo M3 Agua</h3>
+      <span><button class="btn-celeste add-btn" (click)="openFormAgua()" ><i class="fas fa-plus"></i></button></span>
+    </div>
+
     <div class="last-cost">Último costo: S/{{ultimoCostoAgua?.costo}}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceT3Agua" matSort>
-        <!-- Código Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
 
         <!-- Fecha Column -->
         <ng-container matColumnDef="fecha">
@@ -94,16 +92,14 @@
   </div>
 
   <div class="table-wrapper">
-    <h3>Tipo de Cambio</h3>
+    <div class="title-button-container">
+      <h3>Tipo de Cambio</h3>
+      <span><button class="btn-celeste add-btn" (click)="openFormTipoCambio()" ><i class="fas fa-plus"></i></button></span>
+    </div>
+
     <div class="last-cost">Último costo: S/{{ultimoCostoTipoCambio?.costo}}</div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceTipoCambio" matSort>
-        <!-- Código Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
-
         <!-- Fecha Column -->
         <ng-container matColumnDef="fecha">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
@@ -126,8 +122,10 @@
   </div>
 
   <div class="table-wrapper">
-    <h3>Viveres por embarcación</h3>
+    <div class="title-button-container">
+      <h3>Viveres por embarcación</h3>
     <span><button class="btn-celeste" (click)="openCreateFormVE()"><i class="fas fa-plus"></i></button></span>
+    </div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceViveresEmbarcacion" matSort>
         <!-- Fecha Column -->
@@ -153,7 +151,9 @@
   </div>
 
   <div class="table-wrapper">
-    <h3>Mecanimos</h3>
+    <div class="title-button-container">
+      <h3>Mecanimos</h3>
+    </div>
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSourceMecanismo" matSort>
         <!-- Fecha Column -->
@@ -162,12 +162,10 @@
           <td mat-cell *matCellDef="let row"> {{row.item}} </td>
         </ng-container>
 
-        <!-- Costo Column -->
         <ng-container matColumnDef="costo_dia">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por día</th>
           <td mat-cell *matCellDef="let row"> S/{{row.costo_dia}} </td>
         </ng-container>
-
         <!-- Header Row -->
         <tr mat-header-row *matHeaderRowDef="displayedColumnsMecanismo"></tr>
         <!-- Data Row -->

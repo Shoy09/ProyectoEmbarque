@@ -1,15 +1,16 @@
 <div class="dialog-content">
   <div class="form-container">
-    <h1>El valor de B05 hoy</h1>
-    <form [formGroup]="formCreateB05" (ngSubmit)="save()">
+    <h1>El valor del Hielo hoy</h1>
+    <form [formGroup]="formTipoCambio" (ngSubmit)="save()">
       <div class="form-group">
         <label for="costo">Costo</label>
         <input type="number" formControlName="costo" id="costo" name="costo" required>
       </div>
       <div class="button-group">
-        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formCreateB05.valid">Guardar</button>
+        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formTipoCambio.valid">Guardar</button>
         <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
       </div>
     </form>
   </div>
 </div>
+

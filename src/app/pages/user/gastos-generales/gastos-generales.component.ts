@@ -16,6 +16,9 @@ import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { CreateB05Component } from './create-b05/create-b05.component';
+import { CreateHieloComponent } from './create-hielo/create-hielo.component';
+import { CreateAguaComponent } from './create-agua/create-agua.component';
+import { CreateTipoCambioComponent } from './create-tipo-cambio/create-tipo-cambio.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -41,17 +44,17 @@ export class GastosGeneralesComponent {
   lastCosto?: CostoGalonGasoI;
 
   //hielo
-  displayedColumnsTMHielo: string[] = ['id', 'fecha', 'costo'];
+  displayedColumnsTMHielo: string[] = ['fecha', 'costo'];
   dataSourceTMHielo!: MatTableDataSource<CostoTMHielo>;
   ultimoCostoHielo?: CostoTMHielo;
 
   //agua
-  displayedColumnsT3Agua: string[] = ['id', 'fecha', 'costo'];
+  displayedColumnsT3Agua: string[] = ['fecha', 'costo'];
   dataSourceT3Agua!: MatTableDataSource<CostoM3Agua>;
   ultimoCostoAgua?: CostoM3Agua;
 
   //tipo cambio
-  displayedColumnsTipoCambio: string[] = ['id', 'fecha', 'costo'];
+  displayedColumnsTipoCambio: string[] = ['fecha', 'costo'];
   dataSourceTipoCambio!: MatTableDataSource<TipoCambio>;
   ultimoCostoTipoCambio?: TipoCambio;
 
@@ -71,14 +74,9 @@ export class GastosGeneralesComponent {
   constructor(
     private costoGalonGasolina: CostoXGalonService,
     private embarcacionesService: EmbarcacionesService,
-  ) {
-    this.updateTable.subscribe(() => {
-      this.getCostoViEm(); // Actualiza la tabla con los nuevos datos
-    });
-  }
+  ) {}
 
   ngOnInit() {
-
     this.dataSource = new MatTableDataSource();
     this.dataSourceTMHielo = new MatTableDataSource();
     this.dataSourceT3Agua = new MatTableDataSource();
@@ -86,10 +84,6 @@ export class GastosGeneralesComponent {
     this.dataSourceViveresEmbarcacion = new MatTableDataSource();
     this.dataSourceMecanismo = new MatTableDataSource();
     this.getEmbarcaciones();
-    this.updateTable.subscribe(() => {
-      this.getCostoViEm();
-    });
-
 
     //combustible
     this.costoGalonGasolina.getCGG().subscribe((data) => {
@@ -140,14 +134,10 @@ export class GastosGeneralesComponent {
     this.costoGalonGasolina.getM().subscribe((data) => {
       this.dataSourceMecanismo.data = data;
     });
-
   }
 
-  getCostoViEm() {
-    this.costoGalonGasolina.getCEV().subscribe(data => {
-      this.dataSourceViveresEmbarcacion.data = data;
-    });
-  }
+
+  //recarga de datos
 
   getEmbarcaciones() {
     this.embarcacionesService.getEmbarcaciones().subscribe(
@@ -165,39 +155,93 @@ export class GastosGeneralesComponent {
     return embarcacion ? embarcacion.nombre : 'Desconocido' as String;
   }
 
-  getCEV(): void {
-    this.costoGalonGasolina.getCEV().subscribe((data) => {
+  loadData() {
+    this.costoGalonGasolina.getCGG().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSource.data = reversedData;
+    });
+
+    this.costoGalonGasolina.getLastCosto().subscribe(last => {
+      this.lastCosto = last;
+    });
+  }
+
+  loadDataH(){
+    this.costoGalonGasolina.getTMHielo().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSourceTMHielo.data = reversedData;
+    });
+
+    this.costoGalonGasolina.getLastCostoHielo().subscribe(last => {
+      this.ultimoCostoHielo = last;
+    });
+  }
+
+  loadDataA(){
+    this.costoGalonGasolina.getM3Agua().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSourceT3Agua.data = reversedData;
+    });
+
+    this.costoGalonGasolina.getLastM3Agua().subscribe(last => {
+      this.ultimoCostoAgua = last;
+    });
+  }
+
+  loadDataTC(){
+    this.costoGalonGasolina.getTC().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSourceTipoCambio.data = reversedData;
+    });
+
+    this.costoGalonGasolina.getLastTipoCambio().subscribe(last => {
+      this.ultimoCostoTipoCambio = last;
+    });
+  }
+
+  getCostoViEm() {
+    this.costoGalonGasolina.getCEV().subscribe(data => {
       this.dataSourceViveresEmbarcacion.data = data;
     });
   }
 
+  //FORMULARIOS
+
   openCreateFormVE(): void {
-    const dialogRefCreate = this.dialog.open(CreateVEComponent, {
-      width: '600px',
-      data: {} as ConsumoViveresI
-    });
-
-    dialogRefCreate.componentInstance.updateTable = this.updateTable; // Pasando el EventEmitter como Input
-
-    dialogRefCreate.afterClosed().subscribe(result => {
-      if (result) {
-        this.getCostoViEm(); // Asegúrate de que esto esté en lugar adecuado
-      }
+    const dialogRef = this.dialog.open(CreateVEComponent);
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.getCostoViEm(); // Actualiza la tabla cuando se recibe el evento
     });
   }
 
-  openFormB05(): void{
-    const dialogRefCreate = this.dialog.open(CreateB05Component, {
-      width: '600px'
-    });
-
-    dialogRefCreate.afterClosed().subscribe(result => {
-      if (result) {
-      }
+  openFormB05(): void {
+    const dialogRef = this.dialog.open(CreateB05Component);
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadData(); // Actualiza la tabla cuando se recibe el evento
     });
   }
 
-  
+  openFormHielo(): void{
+    const dialogRef = this.dialog.open(CreateHieloComponent);
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadDataH(); // Actualiza la tabla cuando se recibe el evento
+    });
+  }
+
+  openFormAgua():void{
+    const dialogRef = this.dialog.open(CreateAguaComponent);
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadDataA(); // Actualiza la tabla cuando se recibe el evento
+    });
+  }
+
+  openFormTipoCambio():void{
+    const dialogRef = this.dialog.open(CreateTipoCambioComponent);
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadDataTC(); // Actualiza la tabla cuando se recibe el evento
+    });
+  }
+
   ngAfterViewInit() {
     this.paginators.forEach((paginator, index) => {
       switch(index) {
@@ -215,6 +259,9 @@ export class GastosGeneralesComponent {
           break;
         case 4:
           this.dataSourceViveresEmbarcacion.paginator = paginator;
+          break;
+          case 5: // Asegúrate de asignar el paginator para la tabla de mecanismo
+          this.dataSourceMecanismo.paginator = paginator;
           break;
       }
     });

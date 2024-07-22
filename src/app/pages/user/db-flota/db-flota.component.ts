@@ -31,7 +31,6 @@ export class DbFlotaComponent {
     'costo_otro', 'total_costo', 'action'
   ];
 
-
   constructor(private serviceFlota: FlotaService,
     private serviceGastoGenerales: CostoXGalonService
   ){}
