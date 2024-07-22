@@ -1,9 +1,9 @@
 export interface FlotaDP {
-  fecha: string;  // Considera usar Date en lugar de string si manejas fechas en objetos Date
-  tipo_cambio: number;  // Asumiendo que el ForeignKey se representa como un ID numérico
+  fecha: string;
+  tipo_cambio: number;
   embarcacion: number;
   zona_pesca: number;
-  horas_faena: string;  // Usar string para duración (puedes convertirlo a Duration si usas una librería para manejar duraciones)
+  horas_faena: string;
   kilos_declarados: number;
   merluza?: number;
   bereche?: number;

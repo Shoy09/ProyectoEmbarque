@@ -1,4 +1,5 @@
 export interface Embarcaciones{
   id: number,
-  nombre: String
+  nombre: String,
+  costo_zarpe: number
 }

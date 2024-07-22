@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
+import { CostoGalonGasoI } from 'app/core/models/costoGG.model';
+import { CostoTMHielo } from 'app/core/models/costoGH.model';
+import { CostoM3Agua } from 'app/core/models/costoMA.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
@@ -35,10 +38,18 @@ export class CreateDbFlotaComponent {
 
   embarcaciones: Embarcaciones[] = [];
   zona_pesca: ZonaPescaI[] = [];
+  toneladasProcesadas: number = 0;
+  toneladasRecibidas: number = 0;
+  lastCosto?: CostoGalonGasoI;
+  lastCostoHielo?: CostoTMHielo;
+  lastCostoAgua?: CostoM3Agua;
+  costoZarpe?: number;
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
     tipo_cambio: [{ value: '', disabled: true }, Validators.required],
+    consumo_viveres: [0, Validators.required],
+    total_vivieres: [{ value: 0, disabled: true }, Validators.required],
     embarcacion: ['', Validators.required],
     zona_pesca: ['', Validators.required],
     horas_faena: ['', Validators.required],
@@ -49,30 +60,25 @@ export class CreateDbFlotaComponent {
     merluza_descarte: [''],
     otro: [''],
     kilo_otro: [''],
-    toneladas_procesadas: ['', Validators.required],
-    toneladas_recibidas: ['', Validators.required],
     total_tripulacion: ['', Validators.required]
   });
 
   secondFormGroup = this._formBuilder.group({
-    consumo_gasolina: ['', Validators.required],
-    total_gasolina: ['', Validators.required],
-    consumo_hielo: ['', Validators.required],
-    total_hielo: ['', Validators.required],
-    consumo_agua: ['', Validators.required],
-    total_agua: ['', Validators.required],
-    consumo_viveres: ['', Validators.required],
-    total_vivieres: ['', Validators.required],
+    consumo_gasolina: [0, Validators.required],
+    total_gasolina: [{ value: 0, disabled: true }, Validators.required],
+    consumo_hielo: [0, Validators.required],
+    total_hielo: [{ value: 0, disabled: true }, Validators.required],
+    consumo_agua: [0, Validators.required],
+    total_agua: [{ value: 0, disabled: true }, Validators.required],
     dias_inspeccion: ['', Validators.required],
-    total_servicio_inspeccion: ['', Validators.required],
+    costo_inspeccion: [141.98, Validators.required],
+    total_servicio_inspeccion: [0, Validators.required],
     total_derecho_pesca: ['', Validators.required],
     total_costo: ['', Validators.required],
     costo_tm_captura: ['', Validators.required],
   });
 
   isEditable = false;
-
-
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -85,6 +91,9 @@ export class CreateDbFlotaComponent {
     this.getEmbarcaciones();
     this.getZonaPesca();
     this.loadLastTipoCambio();
+    this.loadLastCosto();
+    this.loadLastCostoHielo();
+    this.loadLastAgua();
   }
 
   getEmbarcaciones() {
@@ -117,8 +126,108 @@ export class CreateDbFlotaComponent {
     });
   }
 
+  //COMBUSTIBLE
+
+  loadLastCosto() {
+    this.costoXGalonService.getLastCosto().subscribe(lastCosto => {
+      this.lastCosto = lastCosto;
+      this.calculateTotalGasolina();
+    });
+  }
+
+  calculateTotalGasolina() {
+    if (this.lastCosto) {
+      const consumoGasolina = Number(this.secondFormGroup.get('consumo_gasolina')?.value) || 0;
+      const costoGalon = this.lastCosto.costo;
+      const totalGasolina = consumoGasolina * costoGalon;
+      this.secondFormGroup.patchValue({ total_gasolina: totalGasolina });
+    }
+  }
+
+  //HIELO
+  loadLastCostoHielo(){
+    this.costoXGalonService.getLastCostoHielo().subscribe(lastCosto => {
+      this.lastCostoHielo = lastCosto;
+      this.totalHielo();
+    });
+  }
+
+  totalHielo(){
+    if (this.lastCostoHielo) {
+      const consumo = Number(this.secondFormGroup.get('consumo_hielo')?.value) || 0;
+      const costoGalon = this.lastCostoHielo.costo;
+      const total = consumo * costoGalon;
+      this.secondFormGroup.patchValue({ total_hielo: total });
+    }
+  }
+
+  //AGUA
+  loadLastAgua(){
+    this.costoXGalonService.getLastM3Agua().subscribe(lastCosto => {
+      this.lastCostoAgua = lastCosto;
+      this.totalAgua();
+    });
+  }
+
+  totalAgua(){
+    if (this.lastCostoAgua) {
+      const consumo = Number(this.secondFormGroup.get('consumo_agua')?.value) || 0;
+      const costoGalon = this.lastCostoAgua.costo;
+      const total = consumo * costoGalon;
+      this.secondFormGroup.patchValue({ total_agua: total });
+    }
+  }
+
+  //VIVERES POR EMBARCACIÓN
+  calculateTotalVivieres(embarcacionId: number): void {
+    const selectedEmbarcacion = this.embarcaciones.find(e => e.id === embarcacionId);
+    if (selectedEmbarcacion) {
+      const consumoViveres = Number(this.firstFormGroup.get('consumo_viveres')?.value) || 0;
+      console.log(`Consumo de Viveres: ${consumoViveres}`);
+
+      const costoZarpe = selectedEmbarcacion.costo_zarpe;
+      const totalVivieres = consumoViveres * costoZarpe;
+      console.log(`Calculando totalVivieres: ${consumoViveres} * ${costoZarpe} = ${totalVivieres}`);
+      this.firstFormGroup.patchValue({ total_vivieres: totalVivieres });
+    }
+  }
+
+  //SERVICIO DE INSPECCION
+  calculateTotalServicioInspeccion(): void {
+    const diasInspeccion = Number(this.secondFormGroup.get('dias_inspeccion')?.value) || 0;
+    const costoInspeccion = Number(this.secondFormGroup.get('costo_inspeccion')?.value) || 141.98;
+    console.log('Días de inspección:', diasInspeccion); // Debug log
+    console.log('Costo de inspección:', costoInspeccion); // Debug log
+    const totalServicioInspeccion = diasInspeccion * costoInspeccion;
+    this.secondFormGroup.patchValue({ total_servicio_inspeccion: totalServicioInspeccion });
+  }
+
+  //TONELADAS
+
+  calculateToneladas(): void {
+    const totalMerluza = Number(this.firstFormGroup.get('merluza')?.value) || 0;
+    const totalBereche = Number(this.firstFormGroup.get('bereche')?.value) || 0;
+    const totalVolador = Number(this.firstFormGroup.get('volador')?.value) || 0;
+    const totalMerluzaDescarte = Number(this.firstFormGroup.get('merluza_descarte')?.value) || 0;
+    const totalKiloOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
+
+    console.log("Valores de toneladas:", totalMerluza, totalBereche, totalVolador, totalMerluzaDescarte, totalKiloOtro);
+
+    this.toneladasProcesadas = Number(((totalMerluza + totalBereche + totalVolador + totalKiloOtro) / 1000).toFixed(2));
+    this.toneladasRecibidas = Number((this.toneladasProcesadas + (totalMerluzaDescarte / 1000)).toFixed(2));
+
+    console.log("Toneladas Procesadas:", this.toneladasProcesadas, "Toneladas Recibidas:", this.toneladasRecibidas);
+  }
+
+  //metodo post
   submitForm(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
+      this.calculateToneladas();
+      this.calculateTotalGasolina();
+      this.totalHielo();
+      this.totalAgua();
+      this.calculateTotalVivieres;
+      this.calculateTotalServicioInspeccion();
       // Obtén los valores de ambos formularios
       const formData = {
         ...this.firstFormGroup.getRawValue(),
@@ -139,8 +248,8 @@ export class CreateDbFlotaComponent {
         merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
         otro: formData.otro || undefined,
         kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
-        toneladas_procesadas: Number(formData.toneladas_procesadas),
-        toneladas_recibidas: Number(formData.toneladas_recibidas),
+        toneladas_procesadas: this.toneladasProcesadas,
+        toneladas_recibidas: this.toneladasRecibidas,
         total_tripulacion: Number(formData.total_tripulacion),
         consumo_gasolina: Number(formData.consumo_gasolina),
         total_gasolina: Number(formData.total_gasolina),
@@ -173,6 +282,4 @@ export class CreateDbFlotaComponent {
       console.error('El formulario no es válido.');
     }
   }
-
-
 }

@@ -15,16 +15,16 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Tipo de Cambio</mat-label>
-          <input matInput formControlName="tipo_cambio" placeholder="Tipo de Cambio" required>
+          <mat-label>Días en Mar</mat-label>
+          <input matInput formControlName="consumo_viveres" placeholder="consumo_viveres" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Embarcación</mat-label>
-          <mat-select formControlName="embarcacion">
-            <mat-option value="">Seleccione Embarcacion</mat-option>
-            <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</mat-option>
-          </mat-select>
+          <mat-label>Embarcacion</mat-label>
+          <mat-select formControlName="embarcacion" (selectionChange)="calculateTotalVivieres($event.value)">
+          <mat-option value="">Seleccione Embarcacion</mat-option>
+          <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</mat-option>
+        </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
@@ -76,16 +76,6 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Toneladas Procesadas</mat-label>
-          <input matInput type="number" formControlName="toneladas_procesadas" placeholder="Toneladas">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Toneladas Recibidas</mat-label>
-          <input matInput type="number" formControlName="toneladas_recibidas" placeholder="Toneladas">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
           <mat-label>Total de Tripulación</mat-label>
           <input matInput type="number" formControlName="total_tripulacion" placeholder="Total Tripulación">
         </mat-form-field>
@@ -109,48 +99,23 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Total Gasolina</mat-label>
-          <input matInput formControlName="total_gasolina" placeholder="Total Gasolina" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Hielo</mat-label>
+          <mat-label>Consumo de Hielo</mat-label>
           <input matInput formControlName="consumo_hielo" placeholder="Total Gasolina" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label> T Hielo</mat-label>
-          <input matInput formControlName="total_hielo" placeholder="total_hielo" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>consumo_agua</mat-label>
+          <mat-label>Consumo de Agua</mat-label>
           <input matInput formControlName="consumo_agua" placeholder="consumo_agua" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>total_agua</mat-label>
-          <input matInput formControlName="total_agua" placeholder="total_agua" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>consumo_viveres</mat-label>
-          <input matInput formControlName="consumo_viveres" placeholder="consumo_viveres" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>total_vivieres</mat-label>
-          <input matInput formControlName="total_vivieres" placeholder="total_vivieres" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>dias_inspeccion</mat-label>
+          <mat-label>Días de inpección</mat-label>
           <input matInput formControlName="dias_inspeccion" placeholder="dias_inspeccion" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>total_servicio_inspeccion</mat-label>
-          <input matInput formControlName="total_servicio_inspeccion" placeholder="total_servicio_inspeccion" required>
+          <mat-label>Costo de Inspección</mat-label>
+          <input matInput formControlName="costo_inspeccion" placeholder="costo_inspeccion" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">

@@ -23,7 +23,7 @@ export class DbFlotaComponent {
 
   flotas: FlotaDP[] = [];
   displayedColumns: string[] = [
-    'fecha', 'tipo_cambio', 'embarcacion', 'zona_pesca', 'horas_faena', 'kilos_declarados',
+    'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
     'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro',
     'toneladas_procesadas', 'toneladas_recibidas', 'total_tripulacion', 'consumo_gasolina',
     'total_gasolina', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',

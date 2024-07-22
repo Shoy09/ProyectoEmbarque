@@ -154,4 +154,10 @@ export class CostoXGalonService {
     return this.http.put<MecanismoI>(`${this.url}${id}/`, mecanismo);
   }
 
+  //ADICIONAL
+  // En tu servicio de vivieres
+  getCostoZarpeByEmbarcacion(embarcacionId: number): Observable<any> {
+    return this.http.get<any>(`${this.url_viveres}?embarcacion=${embarcacionId}`);
+  }
+
 }
