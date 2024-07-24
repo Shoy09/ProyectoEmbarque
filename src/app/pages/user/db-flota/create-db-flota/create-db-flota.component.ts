@@ -51,7 +51,7 @@ export class CreateDbFlotaComponent {
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
     tipo_cambio: [{ value: '', disabled: true }, Validators.required],
-    consumo_viveres: [0, Validators.required],
+    consumo_viveres: [, Validators.required],
     total_vivieres: [{ value: 0, disabled: true }, Validators.required],
     embarcacion: ['', Validators.required],
     zona_pesca: ['', Validators.required],
@@ -67,11 +67,11 @@ export class CreateDbFlotaComponent {
   });
 
   secondFormGroup = this._formBuilder.group({
-    consumo_gasolina: [0, Validators.required],
+    consumo_gasolina: [, Validators.required],
     total_gasolina: [{ value: 0, disabled: true }, Validators.required],
-    consumo_hielo: [0, Validators.required],
+    consumo_hielo: [, Validators.required],
     total_hielo: [{ value: 0, disabled: true }, Validators.required],
-    consumo_agua: [0, Validators.required],
+    consumo_agua: [, Validators.required],
     total_agua: [{ value: 0, disabled: true }, Validators.required],
     dias_inspeccion: ['', Validators.required],
     total_servicio_inspeccion: [{ value: 0, disabled: true }, Validators.required],
@@ -334,8 +334,6 @@ export class CreateDbFlotaComponent {
       this.calculateCostoTMCaptura();
       this.calcularCSOT();
 
-
-
       // Obtén los valores de ambos formularios
       const formData = {
         ...this.firstFormGroup.getRawValue(),
@@ -378,18 +376,19 @@ export class CreateDbFlotaComponent {
       // Envía los datos al servicio para crear la flota
       console.log('Datos enviados al servidor:', flotaData);
 
-    this.flotaService.createFlota(flotaData).subscribe(
-      response => {
-        console.log('Flota creada exitosamente', response);
-        this.firstFormGroup.reset();
-        this.secondFormGroup.reset();
-      },
-      error => {
-        console.error('Error al crear Flota', error);
-      }
-    );
-  } else {
-    console.error('El formulario no es válido.');
-  }
+      this.flotaService.createFlota(flotaData).subscribe(
+        response => {
+          console.log('Fleet created successfully', response);
+          // Reset both form groups to close the form
+          this.firstFormGroup.reset();
+          this.secondFormGroup.reset();
+        },
+        error => {
+          console.error('Error creating Fleet', error);
+        }
+      );
+    } else {
+      console.error('The form is not valid.');
+    }
   }
 }

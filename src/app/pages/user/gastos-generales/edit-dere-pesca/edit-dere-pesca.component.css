@@ -1,53 +1,87 @@
-/* Ajuste para tres columnas */
-@media (min-width: 992px) {
-  .col-md-4 {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-  }
+/* Estilos generales del contenedor del formulario */
+.ccontainer-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+/* Estilos del contenedor del formulario */
+.form-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 600px; /* Ampliado para una mejor visualización */
+  width: 100%;
+}
+
+/* Estilos de las filas y columnas */
+.row {
+  margin-bottom: 20px; /* Aumentado el espacio entre filas */
+}
+
+.col-md-4 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Estilos para los labels */
+label {
+  display: block;
+  margin-bottom: 8px; /* Aumentado el espacio debajo del label */
+  font-size: 1rem; /* Tamaño de fuente aumentado para mejor visibilidad */
+  font-weight: 500;
+  color: #333;
+}
+
+/* Estilos para los inputs */
+input.form-control {
+  width: 100%;
+  padding: 14px; /* Aumentado el padding para inputs más grandes */
+  border-radius: 4px;
+  border: 1px solid #ccc; /* Borde gris claro */
+  font-size: 1rem; /* Tamaño de fuente adecuado */
+  box-sizing: border-box;
+  margin-bottom: 20px; /* Aumentado el espacio debajo del input */
+  line-height: 1.5; /* Mejora la altura de línea para mayor legibilidad */
 }
 
 /* Estilos para los botones */
 .button-group {
   display: flex;
-  gap: 10px; /* Espacio entre botones */
-  justify-content: flex-end; /* Alinea los botones a la derecha */
-  margin-top: 1rem;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .btn-contact {
-  padding: 10px 20px;
+  padding: 12px 20px;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
-  background-color: #4a90e2;
+  background-color: #007bff;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-contact:hover {
-  background-color: #357ab8;
+  background-color: #0056b3;
 }
 
 .btn-contact:active {
-  background-color: #2b5a84;
+  background-color: #004494;
   transform: scale(0.98);
 }
 
-/* Habilitar el desplazamiento en dispositivos móviles */
+/* Estilos responsivos para dispositivos móviles */
 @media (max-width: 576px) {
   .form-container {
-    overflow-y: auto; /* Habilita el desplazamiento vertical */
-    max-height: 80vh; /* Limita la altura máxima del contenedor del formulario */
-  }
-
-  .btn-contact {
-    padding: 8px 16px;
-    font-size: 0.875rem;
-  }
-
-  .button-group {
-    justify-content: center; /* Alinea los botones al centro en pantallas pequeñas */
+    max-height: 80vh;
+    overflow-y: auto;
   }
 }

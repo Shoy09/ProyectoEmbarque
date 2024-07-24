@@ -33,14 +33,15 @@
       <!-- Columna Embarcación -->
       <ng-container matColumnDef="embarcacion">
         <th mat-header-cell *matHeaderCellDef> Embarcación </th>
-        <td mat-cell *matCellDef="let row"> {{row.embarcacion}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.embarcacionNombre}} </td>
       </ng-container>
 
       <!-- Columna Zona de Pesca -->
       <ng-container matColumnDef="zona_pesca">
         <th mat-header-cell *matHeaderCellDef> Zona de Pesca </th>
-        <td mat-cell *matCellDef="let row"> {{row.zona_pesca}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.zonaNombre}} </td>
       </ng-container>
+
 
       <!-- Columna Horas de Faena -->
       <ng-container matColumnDef="horas_faena">

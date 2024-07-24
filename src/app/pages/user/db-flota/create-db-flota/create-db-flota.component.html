@@ -1,5 +1,6 @@
-<button mat-raised-button (click)="isEditable = !isEditable">
-  {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
+
+<button mat-raised-button class="edit-mode-button" (click)="isEditable = !isEditable">
+  {{!isEditable ? 'Habilitar modo de edición' : 'Deshabilitar modo de edición'}}
 </button>
 
 <mat-stepper linear #stepper>

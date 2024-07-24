@@ -7,6 +7,9 @@ import { CreateDbFlotaComponent } from './create-db-flota/create-db-flota.compon
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MatTableModule } from '@angular/material/table';
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { Embarcaciones } from 'app/core/models/embarcacion';
+import { ZonaPescaI } from 'app/core/models/zonaPesca';
 
 @Component({
   selector: 'app-db-flota',
@@ -22,6 +25,8 @@ export class DbFlotaComponent {
   readonly dialog = inject(MatDialog);
 
   flotas: FlotaDP[] = [];
+  embarcaciones: Embarcaciones[] = [];
+  zona_pesca: ZonaPescaI[] = []
   displayedColumns: string[] = [
     'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
     'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro',
@@ -32,18 +37,52 @@ export class DbFlotaComponent {
   ];
 
   constructor(private serviceFlota: FlotaService,
-    private serviceGastoGenerales: CostoXGalonService
+    private serviceGastoGenerales: CostoXGalonService,
+    private embarcacionesService: EmbarcacionesService
   ){}
 
   ngOnInit(): void {
     this.loadFlotas();
+    this.loadEmbarcaciones();
+    this.loadZonaPesca();
+  }
+
+  loadEmbarcaciones(): void {
+    this.embarcacionesService.getEmbarcaciones().subscribe(
+      (embarcaciones: Embarcaciones[]) => {
+        this.embarcaciones = embarcaciones;
+        this.loadFlotas(); // Cargar flotas después de obtener embarcaciones
+      },
+      error => {
+        console.error('Error al obtener embarcaciones:', error);
+      }
+    );
+  }
+
+  loadZonaPesca(): void{
+    this.embarcacionesService.getZonaPesca().subscribe(
+      (zona_pesca: ZonaPescaI[]) => {
+        this.zona_pesca = zona_pesca;
+        this.loadFlotas(); // Cargar flotas después de obtener embarcaciones
+      },
+      error => {
+        console.error('Error al obtener embarcaciones:', error);
+      }
+    );
   }
 
   loadFlotas(): void {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
+        // Mapear los datos para incluir nombres de embarcación y zona de pesca
+        const flotasConNombres = data.map(flota => ({
+          ...flota,
+          embarcacionNombre: this.embarcaciones.find(e => e.id === Number(flota.embarcacion))?.nombre || 'Desconocido',
+          zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido', // Añadido para zonaNombre
+        }));
+
         // Reversa el array de datos
-        const reversedData = data.reverse();
+        const reversedData = flotasConNombres.reverse();
         this.flotas = reversedData;
       },
       error => {

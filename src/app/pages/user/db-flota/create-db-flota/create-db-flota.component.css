@@ -25,3 +25,24 @@
   justify-content: flex-end;
   margin-top: 16px;
 }
+
+/* Ajustes para el botón de modo de edición */
+.edit-mode-button {
+  padding: 4px 8px; /* Tamaño pequeño */
+  font-size: 0.75rem; /* Tamaño de fuente reducido */
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4a90e2;
+  border-radius: 4px; /* Radio de borde ajustado */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: absolute;
+  top: -20px; /* Ajustar la posición más arriba */
+  left: 16px; /* Ajuste desde el borde izquierdo */
+  z-index: 1; /* Asegura que el botón esté por encima de otros elementos */
+}
+
+.edit-mode-button:hover {
+  background-color: #357
+}
+
