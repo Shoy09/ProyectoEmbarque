@@ -13,6 +13,7 @@ import { CostoTMHielo } from 'app/core/models/costoGH.model';
 import { CostoM3Agua } from 'app/core/models/costoMA.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { FlotaDP } from 'app/core/models/flota.model';
+import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
@@ -44,6 +45,8 @@ export class CreateDbFlotaComponent {
   lastCostoHielo?: CostoTMHielo;
   lastCostoAgua?: CostoM3Agua;
   costoZarpe?: number;
+  costoDia?: MecanismoI;
+  derechoPescaCosto?: number;
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
@@ -71,11 +74,11 @@ export class CreateDbFlotaComponent {
     consumo_agua: [0, Validators.required],
     total_agua: [{ value: 0, disabled: true }, Validators.required],
     dias_inspeccion: ['', Validators.required],
-    costo_inspeccion: [141.98, Validators.required],
-    total_servicio_inspeccion: [0, Validators.required],
-    total_derecho_pesca: ['', Validators.required],
-    total_costo: ['', Validators.required],
-    costo_tm_captura: ['', Validators.required],
+    total_servicio_inspeccion: [{ value: 0, disabled: true }, Validators.required],
+    total_derecho_pesca: [{ value: 0, disabled: true }, Validators.required],
+    total_costo: [{ value: 0, disabled: true }, Validators.required],
+    costo_tm_captura: [{ value: 0, disabled: true }, Validators.required],
+    csot: [{ value: 0, disabled: true }, Validators.required],
   });
 
   isEditable = false;
@@ -94,6 +97,8 @@ export class CreateDbFlotaComponent {
     this.loadLastCosto();
     this.loadLastCostoHielo();
     this.loadLastAgua();
+    this.loadCostoDia();
+    this.loadLastDerechoPesca();
   }
 
   getEmbarcaciones() {
@@ -139,7 +144,11 @@ export class CreateDbFlotaComponent {
     if (this.lastCosto) {
       const consumoGasolina = Number(this.secondFormGroup.get('consumo_gasolina')?.value) || 0;
       const costoGalon = this.lastCosto.costo;
-      const totalGasolina = consumoGasolina * costoGalon;
+      // Calcula el total de gasolina
+      let totalGasolina = consumoGasolina * costoGalon;
+      // Redondea el resultado a 2 decimales y conviértelo de nuevo a número
+      totalGasolina = parseFloat(totalGasolina.toFixed(2));
+      // Actualiza el valor en el formulario
       this.secondFormGroup.patchValue({ total_gasolina: totalGasolina });
     }
   }
@@ -193,17 +202,52 @@ export class CreateDbFlotaComponent {
   }
 
   //SERVICIO DE INSPECCION
+  loadCostoDia(): void {
+    this.costoXGalonService.getMecanismo().subscribe(lastCosto => {
+      this.costoDia = lastCosto;
+      this.calculateTotalServicioInspeccion();
+    });
+  }
+
   calculateTotalServicioInspeccion(): void {
     const diasInspeccion = Number(this.secondFormGroup.get('dias_inspeccion')?.value) || 0;
-    const costoInspeccion = Number(this.secondFormGroup.get('costo_inspeccion')?.value) || 141.98;
-    console.log('Días de inspección:', diasInspeccion); // Debug log
-    console.log('Costo de inspección:', costoInspeccion); // Debug log
-    const totalServicioInspeccion = diasInspeccion * costoInspeccion;
-    this.secondFormGroup.patchValue({ total_servicio_inspeccion: totalServicioInspeccion });
+    if (diasInspeccion === 0) {
+      console.error('Error: No hay días de inspección definidos.');
+      return;
+    }
+    if (!this.costoDia) {
+      console.error('Error: El costo por día no está definido.');
+      return;
+    }
+    // Accediendo correctamente a la propiedad 'costo' de 'costoDia'
+    const totalServicioInspeccion = diasInspeccion * this.costoDia.costo_dia;
+
+    // Redondear a dos decimales y actualizar el formulario
+    const totalServicioInspeccionRedondeado = parseFloat(totalServicioInspeccion.toFixed(2));
+    this.secondFormGroup.patchValue({ total_servicio_inspeccion: totalServicioInspeccionRedondeado });
+  }
+
+
+  //derecho de pesca
+  loadLastDerechoPesca(): void {
+    this.costoXGalonService.getLastDerechoPesca().subscribe(derechoPesca => {
+      if (derechoPesca) {
+        this.derechoPescaCosto = derechoPesca.costo;
+        this.calculateTotalDerechoPesca(); // Calcula el total de derecho de pesca si ya hay datos
+      }
+    });
+  }
+
+  calculateTotalDerechoPesca(): void {
+    if (this.derechoPescaCosto !== undefined) {
+      const kilosDeclarados = Number(this.firstFormGroup.get('kilos_declarados')?.value) || 0;
+      const totalDerechoPesca = (kilosDeclarados * this.derechoPescaCosto) / 1000;
+      const roundedTotalDerechoPesca = parseFloat(totalDerechoPesca.toFixed(2));
+      this.secondFormGroup.patchValue({ total_derecho_pesca: roundedTotalDerechoPesca });
+    }
   }
 
   //TONELADAS
-
   calculateToneladas(): void {
     const totalMerluza = Number(this.firstFormGroup.get('merluza')?.value) || 0;
     const totalBereche = Number(this.firstFormGroup.get('bereche')?.value) || 0;
@@ -219,6 +263,63 @@ export class CreateDbFlotaComponent {
     console.log("Toneladas Procesadas:", this.toneladasProcesadas, "Toneladas Recibidas:", this.toneladasRecibidas);
   }
 
+  //TOTAL COSTOS
+  calculateTotalCost(): void {
+    // Obtén los valores de cada campo del formulario
+    const totalDerechoPesca = Number(this.secondFormGroup.get('total_derecho_pesca')?.value) || 0;
+    const totalServicioInspeccion = Number(this.secondFormGroup.get('total_servicio_inspeccion')?.value) || 0;
+    const totalVivieres = Number(this.firstFormGroup.get('total_vivieres')?.value) || 0;
+    const totalAgua = Number(this.secondFormGroup.get('total_agua')?.value) || 0;
+    const totalHielo = Number(this.secondFormGroup.get('total_hielo')?.value) || 0;
+    const totalGasolina = Number(this.secondFormGroup.get('total_gasolina')?.value) || 0;
+    const totalTripulacion = Number(this.firstFormGroup.get('total_tripulacion')?.value) || 0;
+
+    // Calcula la suma total
+    const totalCost = totalDerechoPesca + totalServicioInspeccion + totalVivieres + totalAgua + totalHielo + totalGasolina + totalTripulacion;
+
+    // Redondea a dos decimales y actualiza el formulario
+    const totalCostRedondeado = parseFloat(totalCost.toFixed(2));
+    this.secondFormGroup.patchValue({ total_costo: totalCostRedondeado });
+  }
+
+  // TOTAL DE COSTO POR CAPTURA
+  calculateCostoTMCaptura(): void {
+    const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
+    const toneladasRecibidas = Number(this.toneladasRecibidas) || 0;
+
+    // Asegúrate de que toneladasRecibidas no sea cero para evitar división por cero
+    if (toneladasRecibidas <= 0) {
+      console.error('Error: Las toneladas recibidas deben ser mayores que cero para calcular el costo por tonelada.');
+      this.secondFormGroup.patchValue({ costo_tm_captura: 0 }); // Establece costo_tm_captura a 0 si hay un error
+      return;
+    }
+
+    const costoPorCaptura = totalCosto / toneladasRecibidas;
+
+    // Redondea el resultado a dos decimales y actualiza el formulario
+    const costoPorCapturaRedondeado = parseFloat(costoPorCaptura.toFixed(2));
+    this.secondFormGroup.patchValue({ costo_tm_captura: costoPorCapturaRedondeado });
+
+  }
+
+  //csot
+  calcularCSOT():void{
+    const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
+    const toneladasProcesadas = Number(this.toneladasProcesadas) || 0;
+
+    if (toneladasProcesadas <= 0) {
+      console.error('Error: Las toneladas recibidas deben ser mayores que cero para calcular el costo por tonelada.');
+      this.secondFormGroup.patchValue({ costo_tm_captura: 0 }); // Establece costo_tm_captura a 0 si hay un error
+      return;
+    }
+
+    const csot = totalCosto / toneladasProcesadas
+
+    const costoPorCSOT = parseFloat(csot.toFixed(2));
+    this.secondFormGroup.patchValue({ csot: costoPorCSOT });
+
+  }
+
   //metodo post
   submitForm(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
@@ -228,6 +329,13 @@ export class CreateDbFlotaComponent {
       this.totalAgua();
       this.calculateTotalVivieres;
       this.calculateTotalServicioInspeccion();
+      this.calculateTotalDerechoPesca();
+      this.calculateTotalCost(); // Asegúrate de calcular el total_costo
+      this.calculateCostoTMCaptura();
+      this.calcularCSOT();
+
+
+
       // Obtén los valores de ambos formularios
       const formData = {
         ...this.firstFormGroup.getRawValue(),
@@ -264,22 +372,24 @@ export class CreateDbFlotaComponent {
         total_derecho_pesca: Number(formData.total_derecho_pesca),
         total_costo: Number(formData.total_costo),
         costo_tm_captura: Number(formData.costo_tm_captura),
+        csot: Number(formData.csot),
       };
 
       // Envía los datos al servicio para crear la flota
-      this.flotaService.createFlota(flotaData).subscribe(
-        response => {
-          console.log('Flota creada exitosamente', response);
-          // Opcional: reinicia el formulario o muestra un mensaje de éxito
-          this.firstFormGroup.reset();
-          this.secondFormGroup.reset();
-        },
-        error => {
-          console.error('Error al crear Flota', error);
-        }
-      );
-    } else {
-      console.error('El formulario no es válido.');
-    }
+      console.log('Datos enviados al servidor:', flotaData);
+
+    this.flotaService.createFlota(flotaData).subscribe(
+      response => {
+        console.log('Flota creada exitosamente', response);
+        this.firstFormGroup.reset();
+        this.secondFormGroup.reset();
+      },
+      error => {
+        console.error('Error al crear Flota', error);
+      }
+    );
+  } else {
+    console.error('El formulario no es válido.');
+  }
   }
 }

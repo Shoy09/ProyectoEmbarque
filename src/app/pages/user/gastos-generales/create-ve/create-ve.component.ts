@@ -24,7 +24,6 @@ export class CreateVEComponent {
   constructor(
     private formBuilder: FormBuilder,
     private embarcacionesService: EmbarcacionesService,
-    private serviceViveresZarpe: CostoXGalonService,
     public dialogRef: MatDialogRef<CreateVEComponent>,
   ){
     this.formCVZ = this.formBuilder.group({
@@ -48,12 +47,13 @@ export class CreateVEComponent {
       }
     );
   }
+  
   postCostoViEm() {
     if (this.formCVZ.valid) {
       const value = this.formCVZ.value;
       value.fecha = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
       console.log("Datos a enviar:", value);
-      this.serviceViveresZarpe.postCV(value).subscribe(res => {
+      this.embarcacionesService.postEmbarcaciones(value).subscribe(res => {
         if (res) {
           console.log("Dato ingresado correctamente:", res);
           this.formCVZ.reset();

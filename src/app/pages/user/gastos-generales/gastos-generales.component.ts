@@ -19,6 +19,9 @@ import { CreateB05Component } from './create-b05/create-b05.component';
 import { CreateHieloComponent } from './create-hielo/create-hielo.component';
 import { CreateAguaComponent } from './create-agua/create-agua.component';
 import { CreateTipoCambioComponent } from './create-tipo-cambio/create-tipo-cambio.component';
+import { DerechoPI } from 'app/core/models/derechoP.model';
+import { EditDerePescaComponent } from './edit-dere-pesca/edit-dere-pesca.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -29,6 +32,7 @@ import { CreateTipoCambioComponent } from './create-tipo-cambio/create-tipo-camb
     MatTableModule,
     MatSortModule,
     MatDatepickerModule,
+    MatIconModule,
     MatPaginatorModule,
   ],
   templateUrl: './gastos-generales.component.html',
@@ -60,12 +64,16 @@ export class GastosGeneralesComponent {
 
   //viveres
   displayedColumnsViveresEmbarcacion: string[] = ['embarcacion', 'costo_zarpe'];
-  dataSourceViveresEmbarcacion!: MatTableDataSource<ConsumoViveresI>;
+  dataSourceViveresEmbarcacion!: MatTableDataSource<Embarcaciones>;
   embarcaciones: Embarcaciones[] = [];
 
-  //mecanismo
+  //servicio de inspeccion
   displayedColumnsMecanismo: string[] = ['item', 'costo_dia'];
   dataSourceMecanismo!: MatTableDataSource<MecanismoI>
+
+  //derecho de pesca
+  displayedColumnsDerechoPesca: string[] = ['item', 'costo_dia', 'acciones'];
+  dataSourceDerechoP! : MatTableDataSource<DerechoPI>
 
   //PAGINACIÓN
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
@@ -83,6 +91,7 @@ export class GastosGeneralesComponent {
     this.dataSourceTipoCambio = new MatTableDataSource();
     this.dataSourceViveresEmbarcacion = new MatTableDataSource();
     this.dataSourceMecanismo = new MatTableDataSource();
+    this.dataSourceDerechoP = new MatTableDataSource();
     this.getEmbarcaciones();
 
     //combustible
@@ -126,16 +135,20 @@ export class GastosGeneralesComponent {
     })
 
     //consumo de viveres por embarcacion
-    this.costoGalonGasolina.getCEV().subscribe((data) => {
+    this.embarcacionesService.getEmbarcaciones().subscribe((data) => {
       this.dataSourceViveresEmbarcacion.data = data;
     });
 
-    //mecanismo
+    //servicio inspeccion - Mecanismo
     this.costoGalonGasolina.getM().subscribe((data) => {
       this.dataSourceMecanismo.data = data;
     });
-  }
 
+    //Derecho de Pesca
+    this.costoGalonGasolina.getDerechoPesca().subscribe((data) => {
+      this.dataSourceDerechoP.data = data;
+    })
+  }
 
   //recarga de datos
 
@@ -148,11 +161,6 @@ export class GastosGeneralesComponent {
         console.error('Error al obtener embarcaciones:', error);
       }
     );
-  }
-
-  getNombreEmbarcacion(id: number): String {
-    const embarcacion = this.embarcaciones.find(e => e.id === id);
-    return embarcacion ? embarcacion.nombre : 'Desconocido' as String;
   }
 
   loadData() {
@@ -200,7 +208,7 @@ export class GastosGeneralesComponent {
   }
 
   getCostoViEm() {
-    this.costoGalonGasolina.getCEV().subscribe(data => {
+    this.embarcacionesService.getEmbarcaciones().subscribe(data => {
       this.dataSourceViveresEmbarcacion.data = data;
     });
   }
@@ -242,6 +250,12 @@ export class GastosGeneralesComponent {
     });
   }
 
+  openFormEditDP(DerePesca: DerechoPI){
+    const dialogRefUpdate = this.dialog.open(EditDerePescaComponent, {
+      data: DerePesca
+    });
+  }
+
   ngAfterViewInit() {
     this.paginators.forEach((paginator, index) => {
       switch(index) {
@@ -266,5 +280,7 @@ export class GastosGeneralesComponent {
       }
     });
   }
+
+
 
 }

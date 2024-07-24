@@ -7,6 +7,7 @@ import { CostoM3Agua } from '../models/costoMA.model';
 import { TipoCambio } from '../models/costoTC.model';
 import { ConsumoViveresI } from '../models/tViveres.model';
 import { MecanismoI } from '../models/mecanismoI.models';
+import { DerechoPI } from '../models/derechoP.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class CostoXGalonService {
   private url_tipo_cambio: string = 'http://127.0.0.1:8000/api/costotipocambio/'
   private url_viveres: string = 'http://127.0.0.1:8000/api/viveres/'
   private url_mecanismo: string = 'http://127.0.0.1:8000/api/mescanismo/'
+  private url_derecho_pesca: string = 'http://127.0.0.1:8000/api/derechopescas/'
 
   constructor(private http: HttpClient)  {}
 
@@ -52,6 +54,10 @@ export class CostoXGalonService {
     return this.http.get<MecanismoI[]>(this.url_mecanismo)
   }
 
+  getDerechoPesca():Observable<DerechoPI[]>{
+    return this.http.get<DerechoPI[]>(this.url_derecho_pesca)
+  }
+
   //metodo get por id
 
   getCGGById(id: number): Observable<CostoGalonGasoI> {
@@ -73,6 +79,7 @@ export class CostoXGalonService {
   getMById(id: number): Observable<MecanismoI>{
     return this.http.get<MecanismoI>(`${this.url_viveres}/${id}`);
   }
+
   //Ultimo Dato
 
   getLastCosto(): Observable<CostoGalonGasoI | undefined> {
@@ -119,6 +126,28 @@ export class CostoXGalonService {
     );
   }
 
+  getMecanismo(): Observable<MecanismoI | undefined> {
+    return this.http.get<MecanismoI[]>(this.url_mecanismo).pipe(
+      map(data => {
+        if (data.length > 0) {
+          return data.reverse()[0];
+        }
+        return undefined;
+      })
+    );
+  }
+
+  getLastDerechoPesca(): Observable<DerechoPI | undefined> {
+    return this.http.get<DerechoPI[]>(this.url_derecho_pesca).pipe(
+      map(data => {
+        if (data.length > 0) {
+          return data.reverse()[0];
+        }
+        return undefined;
+      })
+    );
+  }
+
   //METODO POST
 
   postCGG(categoria: CostoGalonGasoI): Observable<CostoGalonGasoI> {
@@ -145,6 +174,10 @@ export class CostoXGalonService {
     return this.http.post<MecanismoI>(this.url_mecanismo, mecanismo)
   }
 
+  postDerechoP(pesca: DerechoPI):Observable<DerechoPI>{
+    return this.http.post<DerechoPI>(this.url_derecho_pesca, pesca)
+  }
+
   //METODO PUT
   updateCV(consumo: ConsumoViveresI, id: number): Observable<ConsumoViveresI> {
     return this.http.put<ConsumoViveresI>(`${this.url}${id}/`, consumo);
@@ -152,6 +185,10 @@ export class CostoXGalonService {
 
   updateM(mecanismo: MecanismoI, id: number): Observable<MecanismoI>{
     return this.http.put<MecanismoI>(`${this.url}${id}/`, mecanismo);
+  }
+
+  updateDerechoPesca(pesca: DerechoPI, id:number): Observable<DerechoPI>{
+    return this.http.put<DerechoPI>(`${this.url_derecho_pesca}${id}/`, pesca)
   }
 
   //ADICIONAL

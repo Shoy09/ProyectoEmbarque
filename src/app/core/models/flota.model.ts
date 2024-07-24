@@ -27,4 +27,5 @@ export interface FlotaDP {
   total_derecho_pesca: number;
   total_costo: number;
   costo_tm_captura: number;
+  csot: number
 }

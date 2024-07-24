@@ -28,7 +28,7 @@ export class DbFlotaComponent {
     'toneladas_procesadas', 'toneladas_recibidas', 'total_tripulacion', 'consumo_gasolina',
     'total_gasolina', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
-    'costo_otro', 'total_costo', 'action'
+    'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot'
   ];
 
   constructor(private serviceFlota: FlotaService,
@@ -42,8 +42,9 @@ export class DbFlotaComponent {
   loadFlotas(): void {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
-        console.log(data); // Log fetched data
-        this.flotas = data;
+        // Reversa el array de datos
+        const reversedData = data.reverse();
+        this.flotas = reversedData;
       },
       error => {
         console.error('Error al obtener registros de flota:', error);
@@ -51,13 +52,11 @@ export class DbFlotaComponent {
     );
   }
 
-
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {
       width: '600px',
       data: {} as MecanismoI
     });
-
 
     dialogRefCreate.afterClosed().subscribe(result => {
       if (result) {

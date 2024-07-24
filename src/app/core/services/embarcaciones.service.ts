@@ -53,4 +53,8 @@ export class EmbarcacionesService {
     this.zonaPescaCache = zona;
     this._refresh$.next();
   }
+
+  postEmbarcaciones(embarcaciones: Embarcaciones): Observable<Embarcaciones>{
+    return this.http.post<Embarcaciones>(this.url, embarcaciones)
+  }
 }
