@@ -22,6 +22,10 @@ import { CreateTipoCambioComponent } from './create-tipo-cambio/create-tipo-camb
 import { DerechoPI } from 'app/core/models/derechoP.model';
 import { EditDerePescaComponent } from './edit-dere-pesca/edit-dere-pesca.component';
 import { MatIconModule } from '@angular/material/icon';
+import { Especies } from 'app/core/models/especie.model';
+import { EspeciesService } from 'app/core/services/especies.service';
+import { CreateEspeciesComponent } from './create-especies/create-especies.component';
+import { PutEspecieComponent } from './put-especie/put-especie.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -75,6 +79,10 @@ export class GastosGeneralesComponent {
   displayedColumnsDerechoPesca: string[] = ['item', 'costo_dia', 'acciones'];
   dataSourceDerechoP! : MatTableDataSource<DerechoPI>
 
+  //especies
+  displayedColumnsEspecies: string[] = ['fecha', 'nombre', 'precio', 'acciones']
+  dataSourceEspecies!: MatTableDataSource<Especies>
+
   //PAGINACIÓN
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @Output() updateTable = new EventEmitter<void>();
@@ -82,6 +90,7 @@ export class GastosGeneralesComponent {
   constructor(
     private costoGalonGasolina: CostoXGalonService,
     private embarcacionesService: EmbarcacionesService,
+    private especiesService: EspeciesService
   ) {}
 
   ngOnInit() {
@@ -92,6 +101,7 @@ export class GastosGeneralesComponent {
     this.dataSourceViveresEmbarcacion = new MatTableDataSource();
     this.dataSourceMecanismo = new MatTableDataSource();
     this.dataSourceDerechoP = new MatTableDataSource();
+    this.dataSourceEspecies = new MatTableDataSource();
     this.getEmbarcaciones();
 
     //combustible
@@ -147,6 +157,11 @@ export class GastosGeneralesComponent {
     //Derecho de Pesca
     this.costoGalonGasolina.getDerechoPesca().subscribe((data) => {
       this.dataSourceDerechoP.data = data;
+    })
+
+    //especies
+    this.especiesService.getDiarioPesca().subscribe((data) =>{
+      this.dataSourceEspecies.data = data
     })
   }
 
@@ -213,6 +228,13 @@ export class GastosGeneralesComponent {
     });
   }
 
+  loadDataEspecie(){
+    this.especiesService.getDiarioPesca().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSourceEspecies.data = reversedData;
+    });
+  }
+
   //FORMULARIOS
 
   openCreateFormVE(): void {
@@ -255,6 +277,24 @@ export class GastosGeneralesComponent {
       data: DerePesca
     });
   }
+
+  openFormEspecie():void{
+    const dialogRef = this.dialog.open(CreateEspeciesComponent)
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadDataEspecie(); // Actualiza la tabla cuando se recibe el evento
+    });
+  }
+
+  openPutEspecie(PutEspecie: Especies): void {
+    const dialogRef = this.dialog.open(PutEspecieComponent, {
+      data: PutEspecie
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loadDataEspecie(); // Actualiza la tabla después de cerrar el diálogo
+    });
+  }
+
 
   ngAfterViewInit() {
     this.paginators.forEach((paginator, index) => {

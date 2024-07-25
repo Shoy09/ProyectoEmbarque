@@ -1,4 +1,6 @@
 export interface Especies{
   id: number,
-  nombre: String
+  nombre: String,
+  precio: number,
+  fecha: Date
 }

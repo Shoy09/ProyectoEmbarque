@@ -36,6 +36,11 @@ table {
   margin: 0 auto; /* Centra la tabla horizontalmente */
 }
 
+.fas.fa-pencil-alt {
+  cursor: pointer;
+}
+
+
 th, td {
   padding: 8px 16px;
   text-align: center;

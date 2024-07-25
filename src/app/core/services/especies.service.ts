@@ -36,4 +36,13 @@ export class EspeciesService {
     this.especiesCache = especies;
     this._refresh$.next();
   }
+
+  postEspecie(especie: Especies): Observable<Especies> {
+    return this.http.post<Especies>(this.url, especie);
+  }
+
+  putEspecie(especie: Especies, id:any): Observable<Especies>{
+    return this.http.put<Especies>(`${this.url}${id}/`, especie);
+  }
+
 }

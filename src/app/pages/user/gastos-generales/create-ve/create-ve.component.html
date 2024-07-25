@@ -1,10 +1,8 @@
 <form [formGroup]="formCVZ" (ngSubmit)="postCostoViEm()" class="form-container">
+
   <div class="form-group">
-    <label for="embarcacion" class="form-label">Embarcación</label>
-    <select id="embarcacion" class="form-control" formControlName="embarcacion">
-      <option value="">Seleccione Embarcacion</option>
-      <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
-    </select>
+    <label for="nombre">Embarcación</label>
+    <input type="text" formControlName="nombre" id="nombre" name="nombre" required>
   </div>
   <div class="form-group">
     <label for="costo_zarpe" class="form-label">Costo por Zarpe</label>

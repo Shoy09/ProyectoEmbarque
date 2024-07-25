@@ -27,27 +27,11 @@ export class CreateVEComponent {
     public dialogRef: MatDialogRef<CreateVEComponent>,
   ){
     this.formCVZ = this.formBuilder.group({
-      embarcacion: ['', [Validators.required]],
+      nombre: ['', [Validators.required]],
       costo_zarpe: ['', [Validators.required]],
     });
   }
 
-  ngOnInit(): void {
-    this.getEmbarcaciones();
-  }
-
-  getEmbarcaciones() {
-    this.embarcacionesService.getEmbarcaciones().subscribe(
-      embarcaciones => {
-        this.embarcaciones = embarcaciones;
-        // Aquí puedes realizar cualquier otra lógica necesaria con los datos de especies
-      },
-      error => {
-        console.error('Error al obtener embarcaciones:', error);
-      }
-    );
-  }
-  
   postCostoViEm() {
     if (this.formCVZ.valid) {
       const value = this.formCVZ.value;
