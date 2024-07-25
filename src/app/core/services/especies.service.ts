@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { Especies } from '../models/especie.model';
 
 @Injectable({
@@ -44,5 +44,13 @@ export class EspeciesService {
   putEspecie(especie: Especies, id:any): Observable<Especies>{
     return this.http.put<Especies>(`${this.url}${id}/`, especie);
   }
+
+  //buscar el precio por el nombre
+  getPrecioPorNombre(nombre: string): Observable<number> {
+    return this.http.get<{ precio: number }>(`${this.url}precio/${nombre}`).pipe(
+      map(response => response.precio)
+    );
+  }
+
 
 }

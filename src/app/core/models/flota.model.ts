@@ -13,6 +13,8 @@ export interface FlotaDP {
   kilo_otro?: number;
   toneladas_procesadas: number;
   toneladas_recibidas: number;
+  costo_basico: number;
+  participacion: number;
   total_tripulacion: number;
   consumo_gasolina: number;
   total_gasolina: number;

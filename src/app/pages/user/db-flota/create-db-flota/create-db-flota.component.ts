@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +17,7 @@ import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 import { FlotaService } from 'app/core/services/flota.service';
 
 @Component({
@@ -63,6 +64,8 @@ export class CreateDbFlotaComponent {
     merluza_descarte: [''],
     otro: [''],
     kilo_otro: [''],
+    costo_basico: [, Validators.required],
+    participacion: [{ value: 0, disabled: true }, Validators.required],
     total_tripulacion: ['', Validators.required]
   });
 
@@ -87,7 +90,7 @@ export class CreateDbFlotaComponent {
     private _formBuilder: FormBuilder,
     private embarcacionesService: EmbarcacionesService,
     private costoXGalonService: CostoXGalonService,
-    private flotaService: FlotaService
+    private flotaService: FlotaService,
   ) {}
 
   ngOnInit(): void {
@@ -130,7 +133,7 @@ export class CreateDbFlotaComponent {
       }
     });
   }
-
+  
   //COMBUSTIBLE
 
   loadLastCosto() {
@@ -227,7 +230,6 @@ export class CreateDbFlotaComponent {
     this.secondFormGroup.patchValue({ total_servicio_inspeccion: totalServicioInspeccionRedondeado });
   }
 
-
   //derecho de pesca
   loadLastDerechoPesca(): void {
     this.costoXGalonService.getLastDerechoPesca().subscribe(derechoPesca => {
@@ -320,10 +322,22 @@ export class CreateDbFlotaComponent {
 
   }
 
+  //CALCULAR PARTICIPACIÓN
+  calculateParticipacion(): void{
+    const toneladasRecibidas = Number(this.toneladasRecibidas) || 0;
+    const costoBasico = Number(this.firstFormGroup.get('costo_basico')?.value) || 0;
+
+    const participacion = toneladasRecibidas * costoBasico * 0.33
+
+    const participacionRedondeada = parseFloat(participacion.toFixed(2));
+    this.firstFormGroup.patchValue({participacion: participacionRedondeada})
+  }
+
   //metodo post
   submitForm(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       this.calculateToneladas();
+      this.calculateParticipacion();
       this.calculateTotalGasolina();
       this.totalHielo();
       this.totalAgua();
@@ -356,6 +370,8 @@ export class CreateDbFlotaComponent {
         kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
         toneladas_procesadas: this.toneladasProcesadas,
         toneladas_recibidas: this.toneladasRecibidas,
+        costo_basico: Number(formData.costo_basico),
+        participacion: Number(formData.participacion),
         total_tripulacion: Number(formData.total_tripulacion),
         consumo_gasolina: Number(formData.consumo_gasolina),
         total_gasolina: Number(formData.total_gasolina),
