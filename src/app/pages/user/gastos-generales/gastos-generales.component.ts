@@ -327,8 +327,14 @@ export class GastosGeneralesComponent {
         case 4:
           this.dataSourceViveresEmbarcacion.paginator = paginator;
           break;
-          case 5: // Asegúrate de asignar el paginator para la tabla de mecanismo
+        case 5:
           this.dataSourceMecanismo.paginator = paginator;
+          break;
+        case 6:
+          this.dataSourceDerechoP.paginator = paginator;
+          break;
+        case 7:
+          this.dataSourceEspecies.paginator = paginator;
           break;
       }
     });

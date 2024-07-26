@@ -3,8 +3,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Embarcaciones } from 'app/core/models/embarcacion';
-import { ConsumoViveresI } from 'app/core/models/tViveres.model';
-import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 
 @Component({
@@ -29,6 +27,7 @@ export class CreateVEComponent {
     this.formCVZ = this.formBuilder.group({
       nombre: ['', [Validators.required]],
       costo_zarpe: ['', [Validators.required]],
+      bonificacion: ['', [Validators.required]],
       boner: ['', [Validators.required]]
     });
   }

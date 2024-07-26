@@ -1,15 +1,28 @@
-<form [formGroup]="formCVZ" (ngSubmit)="postCostoViEm()" class="form-container">
+<div class="dialog-content">
+  <div class="form-container">
+    <h4>Embarcaciones</h4>
+    <form [formGroup]="formCVZ" (ngSubmit)="postCostoViEm()" class="form-container">
+      <div class="form-group">
+        <label for="nombre">Embarcación</label>
+        <input type="text" formControlName="nombre" id="nombre" name="nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="costo_zarpe" class="form-label">Costo por Zarpe</label>
+        <input id="costo_zarpe" type="number" placeholder="Costo por zarpe" class="form-control" formControlName="costo_zarpe">
+      </div>
+      <div class="form-group">
+        <label for="bonificacion" class="form-label">Bonificación</label>
+        <input id="bonificacion" type="number" placeholder="bonificacion" class="form-control" formControlName="bonificacion">
+      </div>
+      <div class="form-group">
+        <label for="boner" class="form-label">Capacidad de Boner</label>
+        <input id="boner" type="number" placeholder="Capacidad de Boner" class="form-control" formControlName="boner">
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary" cdkFocusInitial [disabled]="!formCVZ.valid">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="dialogRef.close()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-  <div class="form-group">
-    <label for="nombre">Embarcación</label>
-    <input type="text" formControlName="nombre" id="nombre" name="nombre" required>
-  </div>
-  <div class="form-group">
-    <label for="costo_zarpe" class="form-label">Costo por Zarpe</label>
-    <input id="costo_zarpe" type="number" placeholder="Costo por zarpe" class="form-control" formControlName="costo_zarpe">
-  </div>
-  <div class="button-group">
-    <button type="button" class="btn btn-secondary" (click)="dialogRef.close()">Cancelar</button>
-    <button type="submit" class="btn btn-primary">Enviar</button>
-  </div>
-</form>

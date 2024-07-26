@@ -1,49 +1,43 @@
+/* Estilos generales para el contenedor del formulario */
 .dialog-content {
-  max-width: 400px; /* Ajustar el ancho del contenedor del diálogo */
-  margin: 0 auto;
-}
-
-.form-container {
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
 }
 
-.form-container h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #333;
-}
-
+/* Estilos para los grupos de campos del formulario */
 .form-group {
   margin-bottom: 15px;
 }
 
-.form-group label {
+/* Estilos para los labels */
+label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
 }
 
-.form-group input[type="number"] {
+h4{
+  font-size: 25px;
+  text-align: center;
+}
+
+
+/* Estilos para los inputs */
+input[type="text"], input[type="number"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box;
+  font-size: 14px;
 }
 
+/* Estilos para los botones */
 .button-group {
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
 }
 
 .submit-button, .cancel-button {
-  width: 48%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -54,20 +48,7 @@
   color: white;
 }
 
-.submit-button[disabled] {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.submit-button:not([disabled]):hover {
-  background-color: #0056b3;
-}
-
 .cancel-button {
-  background-color: #ccc;
-  color: black;
-}
-
-.cancel-button:hover {
-  background-color: #999;
+  background-color: #ff7676;
+  color: white;
 }
