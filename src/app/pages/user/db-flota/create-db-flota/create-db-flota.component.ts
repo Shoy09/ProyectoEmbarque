@@ -14,6 +14,7 @@ import { CostoM3Agua } from 'app/core/models/costoMA.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
+import { TarifaCostoI } from 'app/core/models/tarifaCosto.model';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
@@ -48,6 +49,8 @@ export class CreateDbFlotaComponent {
   costoZarpe?: number;
   costoDia?: MecanismoI;
   derechoPescaCosto?: number;
+  embarcacionSeleccionada: Embarcaciones | undefined;
+  rep?: number;
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
@@ -66,6 +69,9 @@ export class CreateDbFlotaComponent {
     kilo_otro: [''],
     costo_basico: [, Validators.required],
     participacion: [{ value: 0, disabled: true }, Validators.required],
+    bonificacion: [{ value: 0, disabled: true }, Validators.required],
+    total_participacion: [{ value: 0, disabled: true }, Validators.required],
+    aporte_REP: [{ value: 0, disabled: true }, Validators.required],
     total_tripulacion: ['', Validators.required]
   });
 
@@ -102,6 +108,7 @@ export class CreateDbFlotaComponent {
     this.loadLastAgua();
     this.loadCostoDia();
     this.loadLastDerechoPesca();
+    this.loadREP();
   }
 
   getEmbarcaciones() {
@@ -133,7 +140,7 @@ export class CreateDbFlotaComponent {
       }
     });
   }
-  
+
   //COMBUSTIBLE
 
   loadLastCosto() {
@@ -267,7 +274,6 @@ export class CreateDbFlotaComponent {
 
   //TOTAL COSTOS
   calculateTotalCost(): void {
-    // Obtén los valores de cada campo del formulario
     const totalDerechoPesca = Number(this.secondFormGroup.get('total_derecho_pesca')?.value) || 0;
     const totalServicioInspeccion = Number(this.secondFormGroup.get('total_servicio_inspeccion')?.value) || 0;
     const totalVivieres = Number(this.firstFormGroup.get('total_vivieres')?.value) || 0;
@@ -331,13 +337,79 @@ export class CreateDbFlotaComponent {
 
     const participacionRedondeada = parseFloat(participacion.toFixed(2));
     this.firstFormGroup.patchValue({participacion: participacionRedondeada})
+    this.calculateBonificacion();
   }
+
+  // BONIFICACIÓN POR EMBARCACIÓN
+
+  onSelectEmbarcacion(embarcacionId: number): void {
+    this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionId);
+    if (!this.embarcacionSeleccionada) {
+      console.log("No se encontró la embarcación con el ID proporcionado.");
+    }
+  }
+
+  calculateBonificacion(): void {
+    if (!this.embarcacionSeleccionada) {
+      console.log("No se ha seleccionado una embarcación.");
+      return;
+    }
+
+    const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
+    console.log(`Participación: ${participacion}`);
+
+    if (isNaN(participacion) || participacion === 0) {
+      console.log("La participación aún no está disponible.");
+      return;
+    }
+
+    const bonificacion = Number(this.embarcacionSeleccionada.bonificacion) || 0;
+    if (bonificacion > 0) {
+      const totalBonificacion = participacion / bonificacion;
+      const redondeo = parseFloat(totalBonificacion.toFixed(2))
+      console.log(`Calculando bonificación: (${participacion} / ${bonificacion}) =  ${totalBonificacion}`);
+      this.firstFormGroup.patchValue({ bonificacion: redondeo });
+    } else {
+      this.firstFormGroup.patchValue({ bonificacion: 0 });
+    }
+  }
+
+  //CALCULAR TOTAL PARTICIPACION
+  calculateParticipacionTotal(): void{
+    const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
+    const bonificacion = Number(this.firstFormGroup.get('bonificacion')?.value) || 0;
+
+    const participacion_total = participacion + bonificacion
+    const redondeo = parseFloat(participacion_total.toFixed(2));
+    this.firstFormGroup.patchValue({total_participacion: redondeo })
+  }
+
+  //APORTE REP
+
+  loadREP() {
+    this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
+      this.rep = costo_rep;
+      this.calculateREP();
+    });
+  }
+
+  calculateREP(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const valor_REP = this.rep || 0;
+    const REP = participacion_total * valor_REP;
+    const redondeo = parseFloat(REP.toFixed(2));
+    this.firstFormGroup.patchValue({ aporte_REP: redondeo });
+  }
+
 
   //metodo post
   submitForm(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       this.calculateToneladas();
       this.calculateParticipacion();
+      this.calculateBonificacion();
+      this.calculateParticipacionTotal();
+      this.calculateREP();
       this.calculateTotalGasolina();
       this.totalHielo();
       this.totalAgua();
@@ -372,6 +444,9 @@ export class CreateDbFlotaComponent {
         toneladas_recibidas: this.toneladasRecibidas,
         costo_basico: Number(formData.costo_basico),
         participacion: Number(formData.participacion),
+        bonificacion: Number(formData.bonificacion),
+        total_participacion: Number(formData.total_participacion),
+        aporte_REP: Number(formData.aporte_REP),
         total_tripulacion: Number(formData.total_tripulacion),
         consumo_gasolina: Number(formData.consumo_gasolina),
         total_gasolina: Number(formData.total_gasolina),

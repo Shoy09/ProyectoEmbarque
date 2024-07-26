@@ -15,6 +15,9 @@ export interface FlotaDP {
   toneladas_recibidas: number;
   costo_basico: number;
   participacion: number;
+  bonificacion : number;
+  total_participacion: number;
+  aporte_REP: number,
   total_tripulacion: number;
   consumo_gasolina: number;
   total_gasolina: number;

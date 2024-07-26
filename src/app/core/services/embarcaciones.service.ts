@@ -57,4 +57,8 @@ export class EmbarcacionesService {
   postEmbarcaciones(embarcaciones: Embarcaciones): Observable<Embarcaciones>{
     return this.http.post<Embarcaciones>(this.url, embarcaciones)
   }
+
+  updateEmbarcaciones(embarcaciones: Embarcaciones, id:any): Observable<Embarcaciones>{
+    return this.http.put<Embarcaciones>(`${this.url}${id}/`, embarcaciones);
+  }
 }

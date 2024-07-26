@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -35,12 +35,17 @@ export class PutEspecieComponent {
 
   save(): void {
     if (this.fomrPutEspecie.valid) {
+      // Formatea la fecha al día actual en formato 'YYYY-MM-DD'
+      const currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+      this.fomrPutEspecie.get('fecha')!.setValue(currentDate);
+
       const especie: Especies = this.fomrPutEspecie.value;
+      console.log("Datos enviados:", especie);
+
       this.especie.putEspecie(especie, this.data.id).subscribe(
         (res) => {
           console.log("DP actualizada:", res);
           this.dialogRef.close(res);
-          this.fomrPutEspecie.get('fecha')!.setValue(new Date());
         },
         (error) => {
           console.error("Error al actualizar DP:", error);

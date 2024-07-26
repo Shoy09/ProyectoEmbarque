@@ -26,6 +26,7 @@ import { Especies } from 'app/core/models/especie.model';
 import { EspeciesService } from 'app/core/services/especies.service';
 import { CreateEspeciesComponent } from './create-especies/create-especies.component';
 import { PutEspecieComponent } from './put-especie/put-especie.component';
+import { EditEmbarcacionesComponent } from './edit-embarcaciones/edit-embarcaciones.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -67,7 +68,7 @@ export class GastosGeneralesComponent {
   ultimoCostoTipoCambio?: TipoCambio;
 
   //viveres
-  displayedColumnsViveresEmbarcacion: string[] = ['embarcacion', 'costo_zarpe'];
+  displayedColumnsViveresEmbarcacion: string[] = ['embarcacion', 'costo_zarpe', 'bonificacion', 'boner', 'acciones'];
   dataSourceViveresEmbarcacion!: MatTableDataSource<Embarcaciones>;
   embarcaciones: Embarcaciones[] = [];
 
@@ -293,6 +294,18 @@ export class GastosGeneralesComponent {
     dialogRef.afterClosed().subscribe(() => {
       this.loadDataEspecie(); // Actualiza la tabla después de cerrar el diálogo
     });
+  }
+
+  openPutEmbarcacion(PutEmbarcacion: Embarcaciones): void{
+    const dialog = this.dialog.open(EditEmbarcacionesComponent, {
+      data: PutEmbarcacion
+    });
+
+    dialog.afterClosed().subscribe(() => {
+      this.getCostoViEm(); // Actualiza la tabla después de cerrar el diálogo
+    });
+
+
   }
 
 

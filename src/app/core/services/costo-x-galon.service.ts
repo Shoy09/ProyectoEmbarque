@@ -8,6 +8,7 @@ import { TipoCambio } from '../models/costoTC.model';
 import { ConsumoViveresI } from '../models/tViveres.model';
 import { MecanismoI } from '../models/mecanismoI.models';
 import { DerechoPI } from '../models/derechoP.model';
+import { TarifaCostoI } from '../models/tarifaCosto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,7 @@ export class CostoXGalonService {
   private url_viveres: string = 'http://127.0.0.1:8000/api/viveres/'
   private url_mecanismo: string = 'http://127.0.0.1:8000/api/mescanismo/'
   private url_derecho_pesca: string = 'http://127.0.0.1:8000/api/derechopescas/'
+  private url_tarifas: string = 'http://127.0.0.1:8000/api/tarifa-costo/'
 
   constructor(private http: HttpClient)  {}
 
@@ -56,6 +58,10 @@ export class CostoXGalonService {
 
   getDerechoPesca():Observable<DerechoPI[]>{
     return this.http.get<DerechoPI[]>(this.url_derecho_pesca)
+  }
+
+  getTarifas():Observable<TarifaCostoI[]>{
+    return this.http.get<TarifaCostoI[]>(this.url_tarifas)
   }
 
   //metodo get por id
@@ -178,6 +184,10 @@ export class CostoXGalonService {
     return this.http.post<DerechoPI>(this.url_derecho_pesca, pesca)
   }
 
+  postTarifas(tarifa: TarifaCostoI):Observable<TarifaCostoI>{
+    return this.http.post<TarifaCostoI>(this.url_tarifas, tarifa)
+  }
+
   //METODO PUT
   updateCV(consumo: ConsumoViveresI, id: number): Observable<ConsumoViveresI> {
     return this.http.put<ConsumoViveresI>(`${this.url}${id}/`, consumo);
@@ -191,10 +201,23 @@ export class CostoXGalonService {
     return this.http.put<DerechoPI>(`${this.url_derecho_pesca}${id}/`, pesca)
   }
 
+  updateTarifa(tarifa: TarifaCostoI, id:number): Observable<TarifaCostoI>{
+    return this.http.put<TarifaCostoI>(`${this.url_tarifas}${id}/`, tarifa)
+  }
+
   //ADICIONAL
-  // En tu servicio de vivieres
+
   getCostoZarpeByEmbarcacion(embarcacionId: number): Observable<any> {
     return this.http.get<any>(`${this.url_viveres}?embarcacion=${embarcacionId}`);
   }
+
+  //buscar precio por el nombre
+
+  getCostoTarifa(nombre_t: string): Observable<number>{
+    return this.http.get<{ tarifa: number }>(`${this.url_tarifas}tarifa/${nombre_t}/`).pipe(
+      map(response => response.tarifa)
+    );
+  }
+
 
 }

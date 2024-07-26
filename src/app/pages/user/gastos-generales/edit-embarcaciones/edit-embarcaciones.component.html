@@ -1,0 +1,23 @@
+<div class="dialog-content">
+  <div class="form-container">
+    <h1>Embarcación</h1>
+    <form [formGroup]="formPutEmbarcacion" (ngSubmit)="save()">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" formControlName="nombre" id="nombre" name="nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Costo por Zarpe</label>
+        <input type="number" formControlName="costo_zarpe" id="costo_zarpe" name="costo_zarpe" required>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Boner</label>
+        <input type="number" formControlName="boner" id="boner" name="boner" required>
+      </div>
+      <div class="button-group">
+        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formPutEmbarcacion.valid">Guardar</button>
+        <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
