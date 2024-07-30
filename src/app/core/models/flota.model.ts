@@ -18,6 +18,14 @@ export interface FlotaDP {
   bonificacion : number;
   total_participacion: number;
   aporte_REP: number,
+  gratificacion: number,
+  vacaciones: number,
+  cts: number,
+  essalud: number,
+  senati: number,
+  SCTR_SAL: number,
+  SCTR_PEN: number,
+  poliza_seguro: number,
   total_tripulacion: number;
   consumo_gasolina: number;
   total_gasolina: number;

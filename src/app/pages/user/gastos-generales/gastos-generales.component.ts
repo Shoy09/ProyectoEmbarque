@@ -340,6 +340,4 @@ export class GastosGeneralesComponent {
     });
   }
 
-
-
 }

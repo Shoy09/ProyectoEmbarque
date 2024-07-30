@@ -51,6 +51,11 @@ export class CreateDbFlotaComponent {
   derechoPescaCosto?: number;
   embarcacionSeleccionada: Embarcaciones | undefined;
   rep?: number;
+  esSalud?: number;
+  senati?: number;
+  SCTR_SAL?: number;
+  SCTR_PEN?: number;
+  p_seguro?: number;
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
@@ -72,7 +77,15 @@ export class CreateDbFlotaComponent {
     bonificacion: [{ value: 0, disabled: true }, Validators.required],
     total_participacion: [{ value: 0, disabled: true }, Validators.required],
     aporte_REP: [{ value: 0, disabled: true }, Validators.required],
-    total_tripulacion: ['', Validators.required]
+    gratificacion: [{ value: 0, disabled: true }, Validators.required],
+    vacaciones: [{ value: 0, disabled: true }, Validators.required],
+    cts: [{ value: 0, disabled: true }, Validators.required],
+    essalud: [{ value: 0, disabled: true }, Validators.required],
+    senati: [{ value: 0, disabled: true }, Validators.required],
+    SCTR_SAL: [{ value: 0, disabled: true }, Validators.required],
+    SCTR_PEN: [{ value: 0, disabled: true }, Validators.required],
+    poliza_seguro: [{ value: 0, disabled: true }, Validators.required],
+    total_tripulacion: [{ value: 0, disabled: true }, Validators.required],
   });
 
   secondFormGroup = this._formBuilder.group({
@@ -109,6 +122,11 @@ export class CreateDbFlotaComponent {
     this.loadCostoDia();
     this.loadLastDerechoPesca();
     this.loadREP();
+    this.loadEssalud();
+    this.loadSenati();
+    this.loadSCTRSAL();
+    this.loadSCTRPEN();
+    this.loadPoliSeguro();
   }
 
   getEmbarcaciones() {
@@ -341,7 +359,6 @@ export class CreateDbFlotaComponent {
   }
 
   // BONIFICACIÓN POR EMBARCACIÓN
-
   onSelectEmbarcacion(embarcacionId: number): void {
     this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionId);
     if (!this.embarcacionSeleccionada) {
@@ -385,7 +402,6 @@ export class CreateDbFlotaComponent {
   }
 
   //APORTE REP
-
   loadREP() {
     this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
       this.rep = costo_rep;
@@ -401,6 +417,140 @@ export class CreateDbFlotaComponent {
     this.firstFormGroup.patchValue({ aporte_REP: redondeo });
   }
 
+  //GRATIFICACIÓN
+  calculateGratificacion(): void{
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const gratificacion = total_participacion*1/6;
+    const redondeo = parseFloat(gratificacion.toFixed(2));
+    this.firstFormGroup.patchValue({gratificacion: redondeo})
+  }
+
+  //vacaciones
+  calculateVacaciones(): void{
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = total_participacion * 1/12;
+    const redondeo = parseFloat(vacaciones.toFixed(2));
+    this.firstFormGroup.patchValue({vacaciones: redondeo})
+  }
+
+  //CTS
+  calculateCTS(): void{
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const cts = total_participacion * 1/12;
+    const redondeo = parseFloat(cts.toFixed(2))
+    this.firstFormGroup.patchValue({cts: redondeo})
+  }
+
+  //ESSALUD
+  loadEssalud(){
+    this.costoXGalonService.getCostoTarifa('ESSALUD').subscribe(costo_essalud => {
+      this.esSalud = costo_essalud;
+      this.calculateEssalud();
+    });
+  }
+
+  calculateEssalud(): void{
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const valor_esSalud =this.esSalud || 0
+    const esSalud = (participacion_total + vacaciones)*valor_esSalud
+    const redondeo = parseFloat(esSalud.toFixed(2));
+    this.firstFormGroup.patchValue({essalud: redondeo })
+  }
+
+  //SENATI
+  loadSenati(){
+    this.costoXGalonService.getCostoTarifa('SENATI').subscribe(costo_senati => {
+      this.senati = costo_senati;
+      this.calculateSenati();
+    })
+  }
+
+  calculateSenati(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_senati = this.senati || 0;
+    const senati = (participacion_total + vacaciones + gratificacion) * valor_senati
+    const redondeo = parseFloat(senati.toFixed(2));
+    console.log(`Calculando totalVivieres: ${participacion_total} + ${vacaciones} + ${gratificacion}  / ${valor_senati}= ${redondeo}`);
+    this.firstFormGroup.patchValue({ senati: redondeo})
+  }
+
+  //SCTR SAL
+  loadSCTRSAL(){
+    this.costoXGalonService.getCostoTarifa('SCTR%20SAL').subscribe( costo_strlsal => {
+      this.SCTR_SAL = costo_strlsal;
+      this.calculateSCTRSAL();
+    })
+  }
+
+  calculateSCTRSAL(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_sctrsal = this.SCTR_SAL || 0;
+    const sctrSal = (participacion_total + vacaciones + gratificacion) * valor_sctrsal;
+    const redondeo = parseFloat(sctrSal.toFixed(2));
+    this.firstFormGroup.patchValue({SCTR_SAL:redondeo })
+  }
+
+  //SCTR PEN
+  loadSCTRPEN(){
+    this.costoXGalonService.getCostoTarifa('SCTR%20PEN').subscribe( costo_sctrpen => {
+      this.SCTR_PEN = costo_sctrpen;
+      this.calculateSCTRPEN();
+    })
+  }
+
+  calculateSCTRPEN(): void{
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_pen = this.SCTR_PEN || 0;
+    const sctrPen = (participacion_total + vacaciones + gratificacion) * valor_pen
+    const redondeo = parseFloat(sctrPen.toFixed(2));
+    this.firstFormGroup.patchValue({ SCTR_PEN: redondeo})
+  }
+
+  //POLIZA DE SEGURO
+  loadPoliSeguro(){
+    this.costoXGalonService.getCostoTarifa('P.%20Seguro').subscribe( poliza_seguro => {
+      this.p_seguro = poliza_seguro;
+      this.calculatePolizaSeguro();
+    })
+  }
+
+  calculatePolizaSeguro(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_PS = this.p_seguro || 0;
+    const poliza_seguro = (participacion_total + vacaciones + gratificacion) * valor_PS
+    const redondeo = parseFloat(poliza_seguro.toFixed(2));
+    this.firstFormGroup.patchValue({ poliza_seguro: redondeo })
+  }
+
+  //TOTAL DE LA TRIPULACIÓN
+  calculateTotalTripulacion(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const rep = Number(this.firstFormGroup.get('aporte_REP')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0
+    const cts = Number(this.firstFormGroup.get('cts')?.value) || 0;
+    const essalud = Number(this.firstFormGroup.get('essalud')?.value) || 0;
+    const senati = Number(this.firstFormGroup.get('senati')?.value) || 0;
+    const SCTR_SAL = Number(this.firstFormGroup.get('SCTR_SAL')?.value) || 0
+    const SCTR_PEN = Number(this.firstFormGroup.get('SCTR_PEN')?.value) || 0
+    const poliza_seguro = Number(this.firstFormGroup.get('poliza_seguro')?.value)
+
+    const total_tripulacion = participacion_total + rep + gratificacion + vacaciones + cts + essalud + senati + SCTR_SAL + SCTR_PEN + poliza_seguro
+
+    const redondeo = parseFloat(total_tripulacion.toFixed(2))
+
+    this.firstFormGroup.patchValue({total_tripulacion: redondeo})
+
+  }
 
   //metodo post
   submitForm(): void {
@@ -410,6 +560,15 @@ export class CreateDbFlotaComponent {
       this.calculateBonificacion();
       this.calculateParticipacionTotal();
       this.calculateREP();
+      this.calculateGratificacion();
+      this.calculateVacaciones();
+      this.calculateCTS();
+      this.calculateEssalud();
+      this.calculateSenati();
+      this.calculateSCTRSAL();
+      this.calculateSCTRPEN();
+      this.calculatePolizaSeguro();
+      this.calculateTotalTripulacion();
       this.calculateTotalGasolina();
       this.totalHielo();
       this.totalAgua();
@@ -447,6 +606,14 @@ export class CreateDbFlotaComponent {
         bonificacion: Number(formData.bonificacion),
         total_participacion: Number(formData.total_participacion),
         aporte_REP: Number(formData.aporte_REP),
+        gratificacion: Number(formData.gratificacion),
+        vacaciones:Number(formData.vacaciones),
+        cts:Number(formData.cts),
+        essalud : Number(formData.essalud),
+        senati: Number(formData.senati),
+        SCTR_SAL: Number(formData.SCTR_SAL),
+        SCTR_PEN: Number(formData.SCTR_PEN),
+        poliza_seguro: Number(formData.poliza_seguro),
         total_tripulacion: Number(formData.total_tripulacion),
         consumo_gasolina: Number(formData.consumo_gasolina),
         total_gasolina: Number(formData.total_gasolina),
