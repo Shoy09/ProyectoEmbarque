@@ -27,6 +27,7 @@ import { EspeciesService } from 'app/core/services/especies.service';
 import { CreateEspeciesComponent } from './create-especies/create-especies.component';
 import { PutEspecieComponent } from './put-especie/put-especie.component';
 import { EditEmbarcacionesComponent } from './edit-embarcaciones/edit-embarcaciones.component';
+import { EditSIComponent } from './edit-si/edit-si.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -73,7 +74,7 @@ export class GastosGeneralesComponent {
   embarcaciones: Embarcaciones[] = [];
 
   //servicio de inspeccion
-  displayedColumnsMecanismo: string[] = ['item', 'costo_dia'];
+  displayedColumnsMecanismo: string[] = ['item', 'costo_dia', 'acciones'];
   dataSourceMecanismo!: MatTableDataSource<MecanismoI>
 
   //derecho de pesca
@@ -236,6 +237,12 @@ export class GastosGeneralesComponent {
     });
   }
 
+  loadDerechoPesca(){
+    this.costoGalonGasolina.getDerechoPesca().subscribe(data => {
+      this.dataSourceDerechoP.data = data
+    })
+  }
+
   //FORMULARIOS
 
   openCreateFormVE(): void {
@@ -277,6 +284,17 @@ export class GastosGeneralesComponent {
     const dialogRefUpdate = this.dialog.open(EditDerePescaComponent, {
       data: DerePesca
     });
+
+    dialogRefUpdate.afterClosed().subscribe(() => {
+      this.loadDerechoPesca(); // Actualiza la tabla después de cerrar el diálogo
+    });
+  }
+
+  openFormEditSerInsp(ServiInsp: MecanismoI){
+    const dialog = this.dialog.open(EditSIComponent, {
+      data: ServiInsp
+    })
+
   }
 
   openFormEspecie():void{

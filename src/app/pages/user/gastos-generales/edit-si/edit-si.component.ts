@@ -2,47 +2,50 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DerechoPI } from 'app/core/models/derechoP.model';
+import { MecanismoI } from 'app/core/models/mecanismoI.models';
+
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 
 @Component({
-  selector: 'app-edit-dere-pesca',
+  selector: 'app-edit-si',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './edit-dere-pesca.component.html',
-  styleUrl: './edit-dere-pesca.component.css'
+  templateUrl: './edit-si.component.html',
+  styleUrl: './edit-si.component.css'
 })
-export class EditDerePescaComponent {
-
-  formEDePesca: FormGroup;
+export class EditSIComponent {
+  formESP: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     private serviceDP: CostoXGalonService,
-    public dialogRef: MatDialogRef<EditDerePescaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DerechoPI
+    public dialogRef: MatDialogRef<EditSIComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: MecanismoI
   ){
-    this.formEDePesca = this.formBuilder.group({
+    this.formESP = this.formBuilder.group({
       item : [{ value: '' , disabled: true }, Validators.required],
-      costo : ['', [Validators.required]],
+      costo_dia : ['', [Validators.required]],
     })
   }
 
   ngOnInit():void{
-    this.formEDePesca.patchValue(this.data)
+    this.formESP.patchValue(this.data)
   }
 
   save(): void {
-    if (this.formEDePesca.valid) {
+    if (this.formESP.valid) {
       // Habilita el campo deshabilitado temporalmente para obtener sus valores
-      this.formEDePesca.get('item')?.enable();
+      this.formESP.get('item')?.enable();
 
-      const derePesca: DerechoPI = this.formEDePesca.getRawValue(); // getRawValue() obtiene los valores incluso de los campos deshabilitados
+      const derePesca: MecanismoI = this.formESP.getRawValue(); // getRawValue() obtiene los valores incluso de los campos deshabilitados
+
+      console.log('Datos del formulario:', derePesca);
+      console.log('Todos los datos del formulario:', this.formESP.value);
 
       // Vuelve a deshabilitar el campo antes de enviar los datos
-      this.formEDePesca.get('item')?.disable();
+      this.formESP.get('item')?.disable();
 
-      this.serviceDP.updateDerechoPesca(derePesca, this.data.id).subscribe(
+      this.serviceDP.updateM(derePesca, this.data.id).subscribe(
         (res) => {
           console.log("DP actualizada:", res);
           this.dialogRef.close(res);
@@ -53,5 +56,10 @@ export class EditDerePescaComponent {
       );
     }
   }
+
+  cancel() {
+    this.dialogRef.close();
+  }
+
 
 }

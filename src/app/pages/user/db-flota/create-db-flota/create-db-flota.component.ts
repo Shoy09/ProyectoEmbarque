@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -14,11 +15,9 @@ import { CostoM3Agua } from 'app/core/models/costoMA.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
-import { TarifaCostoI } from 'app/core/models/tarifaCosto.model';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
-import { EspeciesService } from 'app/core/services/especies.service';
 import { FlotaService } from 'app/core/services/flota.service';
 
 @Component({
@@ -30,9 +29,11 @@ import { FlotaService } from 'app/core/services/flota.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule],
+    MatSelectModule,
+  ],
   templateUrl: './create-db-flota.component.html',
   styleUrl: './create-db-flota.component.css'
 })
@@ -56,6 +57,8 @@ export class CreateDbFlotaComponent {
   SCTR_SAL?: number;
   SCTR_PEN?: number;
   p_seguro?: number;
+
+  @Output() dataSaved = new EventEmitter<boolean>();
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
@@ -90,6 +93,7 @@ export class CreateDbFlotaComponent {
 
   secondFormGroup = this._formBuilder.group({
     consumo_gasolina: [, Validators.required],
+    costo_gasolina: [{ value: '', disabled: true }, Validators.required],
     total_gasolina: [{ value: 0, disabled: true }, Validators.required],
     consumo_hielo: [, Validators.required],
     total_hielo: [{ value: 0, disabled: true }, Validators.required],
@@ -151,6 +155,8 @@ export class CreateDbFlotaComponent {
     );
   }
 
+  //TIPO DE CAMBIO
+
   loadLastTipoCambio() {
     this.costoXGalonService.getLastTipoCambio().subscribe(lastTipoCambio => {
       if (lastTipoCambio) {
@@ -163,6 +169,9 @@ export class CreateDbFlotaComponent {
 
   loadLastCosto() {
     this.costoXGalonService.getLastCosto().subscribe(lastCosto => {
+      if (lastCosto){
+        this.secondFormGroup.patchValue({costo_gasolina: String(lastCosto.costo)})
+      }
       this.lastCosto = lastCosto;
       this.calculateTotalGasolina();
     });
@@ -637,12 +646,14 @@ export class CreateDbFlotaComponent {
       this.flotaService.createFlota(flotaData).subscribe(
         response => {
           console.log('Fleet created successfully', response);
-          // Reset both form groups to close the form
-          this.firstFormGroup.reset();
-          this.secondFormGroup.reset();
+        this.dataSaved.emit(true); // Emitir true cuando los datos se guarden con éxito
+        // Resetear los formularios si es necesario
+        this.firstFormGroup.reset();
+        this.secondFormGroup.reset();
         },
         error => {
           console.error('Error creating Fleet', error);
+          this.dataSaved.emit(false);
         }
       );
     } else {

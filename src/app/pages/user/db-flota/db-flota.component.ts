@@ -6,7 +6,7 @@ import { FlotaService } from 'app/core/services/flota.service';
 import { CreateDbFlotaComponent } from './create-db-flota/create-db-flota.component';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { FlotaDP } from 'app/core/models/flota.model';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
@@ -22,7 +22,7 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
   styleUrl: './db-flota.component.css'
 })
 export class DbFlotaComponent {
-  readonly dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
 
   flotas: FlotaDP[] = [];
   embarcaciones: Embarcaciones[] = [];
@@ -35,6 +35,7 @@ export class DbFlotaComponent {
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
     'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot'
   ];
+  dataSource!: MatTableDataSource<FlotaDP>
 
   constructor(private serviceFlota: FlotaService,
     private serviceGastoGenerales: CostoXGalonService,
@@ -45,6 +46,7 @@ export class DbFlotaComponent {
     this.loadFlotas();
     this.loadEmbarcaciones();
     this.loadZonaPesca();
+    this.dataSource = new MatTableDataSource<FlotaDP>([]);
   }
 
   loadEmbarcaciones(): void {
@@ -91,14 +93,23 @@ export class DbFlotaComponent {
     );
   }
 
+  getFlotaDP() {
+    this.serviceFlota.getFlotas().subscribe(data => {
+      const datos = data.reverse();
+      this.dataSource = new MatTableDataSource(datos);
+    });
+  }
+
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {
-      width: '600px',
-      data: {} as MecanismoI
+      disableClose: true // Evita que se cierre al hacer clic fuera
     });
 
-    dialogRefCreate.afterClosed().subscribe(result => {
-      if (result) {
+    dialogRefCreate.componentInstance.dataSaved.subscribe((success: boolean) => {
+      if (success) {
+        dialogRefCreate.close(); // Cierra el diálogo
+        this.getFlotaDP();
+        this.loadFlotas(); // Actualiza también la lista de flotas
       }
     });
   }
