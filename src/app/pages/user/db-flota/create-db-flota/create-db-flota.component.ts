@@ -8,7 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { CostoGalonGasoI } from 'app/core/models/costoGG.model';
 import { CostoTMHielo } from 'app/core/models/costoGH.model';
 import { CostoM3Agua } from 'app/core/models/costoMA.model';
@@ -163,6 +163,13 @@ export class CreateDbFlotaComponent {
         this.firstFormGroup.patchValue({ tipo_cambio: String(lastTipoCambio.costo) });
       }
     });
+  }
+
+  //cerrar
+  cancel(stepper: MatStepper) {
+    this.firstFormGroup.reset();
+    this.secondFormGroup.reset();
+    stepper.reset();
   }
 
   //COMBUSTIBLE

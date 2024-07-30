@@ -194,7 +194,7 @@ export class CostoXGalonService {
   }
 
   updateM(mecanismo: MecanismoI, id: number): Observable<MecanismoI>{
-    return this.http.put<MecanismoI>(`${this.url}${id}/`, mecanismo);
+    return this.http.put<MecanismoI>(`${this.url_mecanismo}${id}/`, mecanismo);
   }
 
   updateDerechoPesca(pesca: DerechoPI, id:number): Observable<DerechoPI>{

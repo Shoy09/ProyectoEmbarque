@@ -33,10 +33,10 @@
           <td mat-cell *matCellDef="let row"> </td>
         </ng-container>
 
-        <!-- Header Row -->
+
         <tr mat-header-row *matHeaderRowDef="displayedColumnsEspecies"></tr>
-        <!-- Data Row -->
         <tr mat-row *matRowDef="let row; columns: displayedColumnsEspecies;"></tr>
+
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
@@ -274,6 +274,40 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsDerechoPesca"></tr>
         <!-- Data Row -->
         <tr mat-row *matRowDef="let row; columns: displayedColumnsDerechoPesca;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="title-button-container">
+      <h3>Gastos de tripulación</h3>
+    </div>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceTarifas" matSort>
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="nombre_t">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+          <td mat-cell *matCellDef="let row"> {{row.nombre_t}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tarifa">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por día</th>
+          <td mat-cell *matCellDef="let row"> S/{{row.tarifa}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Actualizar</th>
+          <td mat-cell *matCellDef="let row">
+            <i class="fas fa-pencil-alt" (click)="openPutGastTri(row)"></i>
+          </td>
+          <td mat-cell *matCellDef="let row"> </td>
+        </ng-container>
+
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsTarifas"></tr>
+        <!-- Data Row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsTarifas;"></tr>
       </table>
     </div>
   </div>

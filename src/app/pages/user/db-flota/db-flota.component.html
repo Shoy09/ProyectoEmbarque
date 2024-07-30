@@ -109,6 +109,16 @@
         <td mat-cell *matCellDef="let row"> {{row.toneladas_recibidas}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="participacion">
+        <th mat-header-cell *matHeaderCellDef> Participación </th>
+        <td mat-cell *matCellDef="let row"> {{row.participacion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="total_participacion">
+        <th mat-header-cell *matHeaderCellDef> Total Participación </th>
+        <td mat-cell *matCellDef="let row"> {{row.total_participacion}} </td>
+      </ng-container>
+
       <!-- Columna Total Tripulación -->
       <ng-container matColumnDef="total_tripulacion">
         <th mat-header-cell *matHeaderCellDef> Total Tripulación </th>
@@ -153,7 +163,7 @@
 
       <!-- Columna Consumo Viveres -->
       <ng-container matColumnDef="consumo_viveres">
-        <th mat-header-cell *matHeaderCellDef> Consumo Viveres </th>
+        <th mat-header-cell *matHeaderCellDef> Días de consumo Viveres </th>
         <td mat-cell *matCellDef="let row"> {{row.consumo_viveres}} </td>
       </ng-container>
 

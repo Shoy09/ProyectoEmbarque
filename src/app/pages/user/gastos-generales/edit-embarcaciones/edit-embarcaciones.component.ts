@@ -54,8 +54,6 @@ export class EditEmbarcacionesComponent {
     }
   }
 
-
-
   cancel() {
     this.dialog.close();
   }

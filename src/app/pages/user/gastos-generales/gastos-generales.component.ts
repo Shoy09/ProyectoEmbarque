@@ -28,18 +28,29 @@ import { CreateEspeciesComponent } from './create-especies/create-especies.compo
 import { PutEspecieComponent } from './put-especie/put-especie.component';
 import { EditEmbarcacionesComponent } from './edit-embarcaciones/edit-embarcaciones.component';
 import { EditSIComponent } from './edit-si/edit-si.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
+import { TarifaCostoI } from 'app/core/models/tarifaCosto.model';
+import { EditGastTripuComponent } from './edit-gast-tripu/edit-gast-tripu.component';
 
 @Component({
   selector: 'app-gastos-generales',
   standalone: true,
-  imports: [
-    CommonModule,
+  imports: [CommonModule,
     MatDialogModule,
-    MatTableModule,
-    MatSortModule,
-    MatDatepickerModule,
-    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatPaginatorModule,
+    MatSortModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule
   ],
   templateUrl: './gastos-generales.component.html',
   styleUrl: './gastos-generales.component.css'
@@ -85,6 +96,10 @@ export class GastosGeneralesComponent {
   displayedColumnsEspecies: string[] = ['fecha', 'nombre', 'precio', 'acciones']
   dataSourceEspecies!: MatTableDataSource<Especies>
 
+  //Tarifas
+  displayedColumnsTarifas: string[] = ['nombre_t', 'tarifa', 'acciones']
+  dataSourceTarifas!: MatTableDataSource<TarifaCostoI>
+
   //PAGINACIÓN
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @Output() updateTable = new EventEmitter<void>();
@@ -104,6 +119,7 @@ export class GastosGeneralesComponent {
     this.dataSourceMecanismo = new MatTableDataSource();
     this.dataSourceDerechoP = new MatTableDataSource();
     this.dataSourceEspecies = new MatTableDataSource();
+    this.dataSourceTarifas = new MatTableDataSource();
     this.getEmbarcaciones();
 
     //combustible
@@ -164,6 +180,11 @@ export class GastosGeneralesComponent {
     //especies
     this.especiesService.getDiarioPesca().subscribe((data) =>{
       this.dataSourceEspecies.data = data
+    })
+
+    //tarifas
+    this.costoGalonGasolina.getTarifas().subscribe((data) => {
+      this.dataSourceTarifas.data = data
     })
   }
 
@@ -243,6 +264,18 @@ export class GastosGeneralesComponent {
     })
   }
 
+  loadTariEmb(){
+    this.costoGalonGasolina.getTarifas().subscribe(data => {
+      this.dataSourceTarifas.data = data
+    })
+  }
+
+  loadServiInspe(){
+    this.costoGalonGasolina.getTarifas().subscribe(data => {
+      this.dataSourceTarifas.data = data
+    })
+  }
+
   //FORMULARIOS
 
   openCreateFormVE(): void {
@@ -295,6 +328,10 @@ export class GastosGeneralesComponent {
       data: ServiInsp
     })
 
+    dialog.afterClosed().subscribe(() => {
+      this.loadServiInspe();
+    })
+
   }
 
   openFormEspecie():void{
@@ -322,37 +359,39 @@ export class GastosGeneralesComponent {
     dialog.afterClosed().subscribe(() => {
       this.getCostoViEm(); // Actualiza la tabla después de cerrar el diálogo
     });
-
-
   }
 
+  openPutGastTri(PutGT: TarifaCostoI): void{
+    const dialog = this.dialog.open(EditGastTripuComponent, {
+      data: PutGT
+    })
+
+    dialog.afterClosed().subscribe(() => {
+      this.loadTariEmb();
+    })
+
+  }
 
   ngAfterViewInit() {
     this.paginators.forEach((paginator, index) => {
       switch(index) {
         case 0:
-          this.dataSource.paginator = paginator;
+          this.dataSourceEspecies.paginator = paginator;
           break;
         case 1:
-          this.dataSourceTMHielo.paginator = paginator;
-          break;
-        case 2:
-          this.dataSourceT3Agua.paginator = paginator;
-          break;
-        case 3:
-          this.dataSourceTipoCambio.paginator = paginator;
-          break;
-        case 4:
           this.dataSourceViveresEmbarcacion.paginator = paginator;
           break;
+        case 2:
+          this.dataSource.paginator = paginator;
+          break;
+        case 3:
+          this.dataSourceTMHielo.paginator = paginator;
+          break;
+        case 4:
+          this.dataSourceT3Agua.paginator = paginator;
+          break;
         case 5:
-          this.dataSourceMecanismo.paginator = paginator;
-          break;
-        case 6:
-          this.dataSourceDerechoP.paginator = paginator;
-          break;
-        case 7:
-          this.dataSourceEspecies.paginator = paginator;
+          this.dataSourceTipoCambio.paginator = paginator;
           break;
       }
     });

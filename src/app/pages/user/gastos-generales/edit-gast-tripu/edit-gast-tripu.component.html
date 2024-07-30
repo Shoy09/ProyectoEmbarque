@@ -1,0 +1,19 @@
+<div class="dialog-content">
+  <div class="form-container">
+    <h1>Embarcación</h1>
+    <form [formGroup]="formPutGT" (ngSubmit)="save()">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" formControlName="nombre_t" id="nombre_t" name="nombre_t" readonly>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Tarifa</label>
+        <input type="number" formControlName="tarifa" id="tarifa" name="tarifa" required>
+      </div>
+      <div class="button-group">
+        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formPutGT.valid">Guardar</button>
+        <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
