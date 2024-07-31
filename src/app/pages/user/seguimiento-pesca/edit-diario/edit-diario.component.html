@@ -32,8 +32,13 @@
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
-            <input type="text" placeholder="Zona" class="form-control custom-focus-ring" formControlName="zona_pesca">
+            <select class="form-control custom-focus-ring" formControlName="zona_pesca">
+              <option value="-1">Seleccione Zona de Pesca</option>
+              <option *ngFor="let zona of zona" [value]="zona.id">{{ zona.nombre }}</option>
+            </select>
+
           </div>
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Estrato</label>
             <select class="form-control custom-focus-ring" formControlName="estrato">

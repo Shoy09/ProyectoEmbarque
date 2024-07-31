@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angu
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { Especies } from 'app/core/models/especie.model';
+import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
@@ -22,6 +23,7 @@ export class CreateDiarioComponent implements OnInit{
   diario : IDiarioPesca[] = [];
   formCDP: FormGroup;
   embarcaciones: Embarcaciones[] = [];
+  zona: ZonaPescaI[] = [];
   especies: Especies[] = [];
 
   constructor(
@@ -55,6 +57,7 @@ export class CreateDiarioComponent implements OnInit{
   ngOnInit(): void {
     this.getEspecies();
     this.getEmbarcaciones();
+    this.getZonaPesca();
   }
 
   getDiarioPesca(){
@@ -119,6 +122,17 @@ export class CreateDiarioComponent implements OnInit{
         console.error('Error al obtener embarcaciones:', error);
       }
     );
+  }
+
+  getZonaPesca(){
+    this.embarcacionesService.getZonaPesca().subscribe(
+      zona => {
+        this.zona = zona;
+      },
+      error => {
+        console.error('Error al obtener zona:', error);
+      }
+    )
   }
 
   cancel() {

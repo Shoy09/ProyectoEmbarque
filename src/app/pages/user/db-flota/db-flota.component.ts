@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { FlotaService } from 'app/core/services/flota.service';
@@ -12,13 +12,17 @@ import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CreateDiarioComponent } from '../seguimiento-pesca/create-diario/create-diario.component';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-db-flota',
   standalone: true,
   imports: [CommonModule,
     MatDialogModule,
-    MatTableModule
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule
   ],
   templateUrl: './db-flota.component.html',
   styleUrl: './db-flota.component.css'
@@ -37,10 +41,13 @@ export class DbFlotaComponent {
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
     'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot','lances'
   ];
+
   dataSource!: MatTableDataSource<FlotaDP>
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private serviceFlota: FlotaService,
-    private serviceGastoGenerales: CostoXGalonService,
+    //private serviceGastoGenerales: CostoXGalonService,
     private embarcacionesService: EmbarcacionesService
   ){}
 
@@ -78,16 +85,17 @@ export class DbFlotaComponent {
   loadFlotas(): void {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
-        // Mapear los datos para incluir nombres de embarcación y zona de pesca
         const flotasConNombres = data.map(flota => ({
           ...flota,
           embarcacionNombre: this.embarcaciones.find(e => e.id === Number(flota.embarcacion))?.nombre || 'Desconocido',
-          zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido', // Añadido para zonaNombre
+          zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido',
         }));
 
-        // Reversa el array de datos
         const reversedData = flotasConNombres.reverse();
         this.flotas = reversedData;
+        this.dataSource = new MatTableDataSource(this.flotas);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error => {
         console.error('Error al obtener registros de flota:', error);
@@ -99,12 +107,12 @@ export class DbFlotaComponent {
     return [];
   }
 
-  getFlotaDP() {
-    this.serviceFlota.getFlotas().subscribe(data => {
-      const datos = data.reverse();
-      this.dataSource = new MatTableDataSource(datos);
-    });
-  }
+  //getFlotaDP() {
+    //this.serviceFlota.getFlotas().subscribe(data => {
+      //const datos = data.reverse();
+      //this.dataSource = new MatTableDataSource(datos);
+   // });
+  //}
 
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {
@@ -114,7 +122,7 @@ export class DbFlotaComponent {
     dialogRefCreate.componentInstance.dataSaved.subscribe((success: boolean) => {
       if (success) {
         dialogRefCreate.close(); // Cierra el diálogo
-        this.getFlotaDP();
+        //this.getFlotaDP();
         this.loadFlotas(); // Actualiza también la lista de flotas
       }
     });
@@ -125,6 +133,10 @@ export class DbFlotaComponent {
       width: '600px', // ajusta el ancho según tus necesidades
       data: { flotaDP_id: flotaDP.id} // Pasa el id de la instancia de FlotaDP seleccionada
     });
+  }
+
+  ngAfterViewInit() {
+    this.loadFlotas();
   }
 
 }

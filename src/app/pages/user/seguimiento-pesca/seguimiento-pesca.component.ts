@@ -67,6 +67,7 @@ export class SeguimientoPescaComponent {
           ...diario,
           embarcacion: Number(diario.embarcacion), // Asegúrate de que embarcacion sea number si así lo requiere tu interfaz IDiarioPesca
           especie: Number(diario.especie), // Asegúrate de que especie sea number si así lo requiere tu interfaz IDiarioPesca
+          zona: Number(diario.zona_pesca),
           embarcacionNombre: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
           // Agrega más propiedades según tu interfaz IDiarioPesca
         }));
@@ -81,14 +82,18 @@ export class SeguimientoPescaComponent {
 
   getDiarioPesca(forceRefresh?: boolean): void {
     this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
-      this.especieService.getDiarioPesca().subscribe(especies => { // Asegúrate de que el método sea getEspecies()
+      this.especieService.getDiarioPesca().subscribe(especies => {
+        this.embarcacionesService.getZonaPesca().subscribe( zona => {
+
         this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
           const diariosConNombres = diarios.map(diario => ({
             ...diario,
             embarcacion: Number(diario.embarcacion),
             especie: Number(diario.especie),
+            zona: Number(diario.zona_pesca),
             embarcacionNombre: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
             especieNombre: especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido',
+            zonaNombre: zona.find(e => Number(e.id) === Number(diario.zona_pesca))?.nombre || 'Desconocido',
           }));
 
           // Invierte el orden de los diarios para que los últimos ingresados aparezcan primero
@@ -98,6 +103,7 @@ export class SeguimientoPescaComponent {
           this.dataSource.data = diariosConNombres;
           this.changeDetector.detectChanges();
         });
+      });
       });
     });
   }

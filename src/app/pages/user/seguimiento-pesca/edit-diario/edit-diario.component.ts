@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { Especies } from 'app/core/models/especie.model';
+import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
@@ -21,6 +22,7 @@ export class EditDiarioComponent implements OnInit {
   formEDP: FormGroup;
   especies: Especies[] = [];
   embarcaciones: Embarcaciones[] = [];
+  zona: ZonaPescaI[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,6 +55,7 @@ export class EditDiarioComponent implements OnInit {
     this.formEDP.patchValue(this.data); // Aplicamos los datos iniciales
     this.getEspecies();
     this.getEmbarcaciones();
+    this.getZonaPesca();
   }
 
   getEspecies() {
@@ -83,6 +86,21 @@ export class EditDiarioComponent implements OnInit {
         console.error('Error al obtener embarcaciones:', error);
       }
     );
+  }
+
+  getZonaPesca() {
+    this.embarcacionService.getZonaPesca().subscribe(
+      (zonas: ZonaPescaI[]) => {
+        console.log('Zonas obtenidas:', zonas); // Agrega esta línea para verificar
+        this.zona = zonas;
+        if (this.data && this.data.zona_pesca) {
+          this.formEDP.controls['zona_pesca'].setValue(this.data.zona_pesca);
+        }
+      },
+      (error: any) => {
+        console.error('Error al obtener zonas:', error);
+      }
+    )
   }
 
   save(): void {

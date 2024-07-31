@@ -170,5 +170,11 @@ button.mat-button {
   margin-right: 5px;
 }
 
+.icon-center {
+  display: flex;
+  align-items: center;  /* Alinea verticalmente */
+  justify-content: center; /* Alinea horizontalmente */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
+}
 
 
