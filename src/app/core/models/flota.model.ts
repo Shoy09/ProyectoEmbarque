@@ -30,6 +30,7 @@ export interface FlotaDP {
   total_tripulacion: number;
   consumo_gasolina: number;
   total_gasolina: number;
+  galon_hora: number;
   consumo_hielo: number;
   total_hielo: number;
   consumo_agua: number;

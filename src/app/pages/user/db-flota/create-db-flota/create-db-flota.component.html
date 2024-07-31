@@ -33,11 +33,6 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Tipo de Cambio</mat-label>
-            <input matInput formControlName="tipo_cambio" placeholder="" required>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
             <mat-label>Horas de Faena</mat-label>
             <input matInput formControlName="horas_faena" placeholder="Horas de Faena" required>
           </mat-form-field>
@@ -103,8 +98,8 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Costo de galon de gaslina </mat-label>
-            <input matInput formControlName="costo_gasolina" placeholder="" required>
+            <mat-label>Costo de galon de gasolina </mat-label>
+            <input matInput formControlName="costo_gasolina" placeholder="" readonly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
@@ -113,13 +108,28 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Costo de Hielo </mat-label>
+            <input matInput formControlName="costo_hilo" placeholder="" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
             <mat-label>Consumo de Agua</mat-label>
             <input matInput formControlName="consumo_agua" placeholder="consumo_agua" required>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Costo de Agua </mat-label>
+            <input matInput formControlName="costo_agua" placeholder="" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
             <mat-label>Días de inpección</mat-label>
             <input matInput formControlName="dias_inspeccion" placeholder="dias_inspeccion" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Tipo de Cambio</mat-label>
+            <input matInput formControlName="tipo_cambio" placeholder="" readonly>
           </mat-form-field>
 
           <!-- Agrega los demás campos del segundo paso aquí -->

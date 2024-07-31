@@ -127,7 +127,7 @@
 
       <!-- Columna Consumo Gasolina -->
       <ng-container matColumnDef="consumo_gasolina">
-        <th mat-header-cell *matHeaderCellDef> Consumo Gasolina </th>
+        <th mat-header-cell *matHeaderCellDef> Galones Gasolina </th>
         <td mat-cell *matCellDef="let row"> {{row.consumo_gasolina}} </td>
       </ng-container>
 
@@ -135,6 +135,11 @@
       <ng-container matColumnDef="total_gasolina">
         <th mat-header-cell *matHeaderCellDef> Total Gasolina </th>
         <td mat-cell *matCellDef="let row"> {{row.total_gasolina}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="galon_hora">
+        <th mat-header-cell *matHeaderCellDef>Galon por H.</th>
+        <td mat-cell *matCellDef="let row"> {{row.galon_hora}} </td>
       </ng-container>
 
       <!-- Columna Consumo Hielo -->

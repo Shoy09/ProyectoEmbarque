@@ -63,7 +63,6 @@ export class CreateDbFlotaComponent {
 
   firstFormGroup = this._formBuilder.group({
     fecha: ['', Validators.required],
-    tipo_cambio: [{ value: '', disabled: true }, Validators.required],
     consumo_viveres: [, Validators.required],
     total_vivieres: [{ value: 0, disabled: true }, Validators.required],
     embarcacion: ['', Validators.required],
@@ -94,13 +93,17 @@ export class CreateDbFlotaComponent {
 
   secondFormGroup = this._formBuilder.group({
     consumo_gasolina: [, Validators.required],
-    costo_gasolina: [{ value: '', disabled: true }, Validators.required],
+    costo_gasolina: ['', Validators.required],
     total_gasolina: [{ value: 0, disabled: true }, Validators.required],
+    galon_hora: [{ value: 0, disabled: true }, Validators.required],
     consumo_hielo: [, Validators.required],
+    costo_hilo: ['', Validators.required],
     total_hielo: [{ value: 0, disabled: true }, Validators.required],
     consumo_agua: [, Validators.required],
+    costo_agua: ['', Validators.required],
     total_agua: [{ value: 0, disabled: true }, Validators.required],
     dias_inspeccion: ['', Validators.required],
+    tipo_cambio: ['', Validators.required],
     total_servicio_inspeccion: [{ value: 0, disabled: true }, Validators.required],
     total_derecho_pesca: [{ value: 0, disabled: true }, Validators.required],
     total_costo: [{ value: 0, disabled: true }, Validators.required],
@@ -160,7 +163,7 @@ export class CreateDbFlotaComponent {
   loadLastTipoCambio() {
     this.costoXGalonService.getLastTipoCambio().subscribe(lastTipoCambio => {
       if (lastTipoCambio) {
-        this.firstFormGroup.patchValue({ tipo_cambio: String(lastTipoCambio.costo) });
+        this.secondFormGroup.patchValue({ tipo_cambio: String(lastTipoCambio.costo) });
       }
     });
   }
@@ -198,9 +201,24 @@ export class CreateDbFlotaComponent {
     }
   }
 
+  //GALON DE COMBUSTIBLE POR HORA
+
+  calculateGalonHota(): void{
+    const hora = Number(this.firstFormGroup.get('horas_faena')?.value) || 0;
+    const galones = Number(this.secondFormGroup.get('consumo_gasolina')?.value) || 0;
+    const galon_hora = hora / galones
+
+    const redondeo = parseFloat(galon_hora.toFixed(2))
+
+    this.secondFormGroup.patchValue({galon_hora: redondeo })
+  }
+
   //HIELO
   loadLastCostoHielo(){
     this.costoXGalonService.getLastCostoHielo().subscribe(lastCosto => {
+      if (lastCosto){
+        this.secondFormGroup.patchValue({costo_hilo: String(lastCosto.costo)})
+      }
       this.lastCostoHielo = lastCosto;
       this.totalHielo();
     });
@@ -218,6 +236,9 @@ export class CreateDbFlotaComponent {
   //AGUA
   loadLastAgua(){
     this.costoXGalonService.getLastM3Agua().subscribe(lastCosto => {
+      if (lastCosto){
+        this.secondFormGroup.patchValue({costo_agua: String(lastCosto.costo)})
+      }
       this.lastCostoAgua = lastCosto;
       this.totalAgua();
     });
@@ -587,6 +608,7 @@ export class CreateDbFlotaComponent {
       this.calculatePolizaSeguro();
       this.calculateTotalTripulacion();
       this.calculateTotalGasolina();
+      this.calculateGalonHota();
       this.totalHielo();
       this.totalAgua();
       this.calculateTotalVivieres;
@@ -634,6 +656,7 @@ export class CreateDbFlotaComponent {
         total_tripulacion: Number(formData.total_tripulacion),
         consumo_gasolina: Number(formData.consumo_gasolina),
         total_gasolina: Number(formData.total_gasolina),
+        galon_hora: Number(formData.galon_hora),
         consumo_hielo: Number(formData.consumo_hielo),
         total_hielo: Number(formData.total_hielo),
         consumo_agua: Number(formData.consumo_agua),

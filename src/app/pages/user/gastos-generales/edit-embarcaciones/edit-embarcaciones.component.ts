@@ -24,6 +24,7 @@ export class EditEmbarcacionesComponent {
     this.formPutEmbarcacion = this.fomrBuilder.group({
       nombre: ['', [Validators.required]],
       costo_zarpe: ['', [Validators.required]],
+      bonificacion: [''],
       boner: ['', [Validators.required]],
       fecha: [new Date(), Validators.required]
     })

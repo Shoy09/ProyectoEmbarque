@@ -33,7 +33,7 @@ export class DbFlotaComponent {
     'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
     'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro',
     'toneladas_procesadas', 'toneladas_recibidas', 'participacion', 'total_participacion','total_tripulacion', 'consumo_gasolina',
-    'total_gasolina', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
+    'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
     'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot', 'lances'
   ];
