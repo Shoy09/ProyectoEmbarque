@@ -80,7 +80,7 @@ export class CreateDbFlotaComponent {
     merluza_descarte: [''],
     otro: [''],
     kilo_otro: [''],
-    precio_otro: [''],
+    precio_otro: [ ],
     costo_basico:  [{ value: 0, disabled: true }, Validators.required],
     participacion: [{ value: 0, disabled: true }, Validators.required],
     bonificacion: [{ value: 0, disabled: true }, Validators.required],
@@ -208,6 +208,7 @@ export class CreateDbFlotaComponent {
     const bereche = this.firstFormGroup.get('bereche')?.value;
     const volador = this.firstFormGroup.get('volador')?.value;
     const merluzaNPro = this.firstFormGroup.get('merluza_descarte')?.value;
+    const precioOtro = this.firstFormGroup.get('precio_otro')?.value;
 
     let costoBasico = 0;
 
@@ -215,6 +216,7 @@ export class CreateDbFlotaComponent {
     if (bereche) costoBasico += this.precio_bereche || 0;
     if (volador) costoBasico += this.precio_volador || 0;
     if (merluzaNPro) costoBasico += this.precio_merluza_NOPRO || 0;
+    if (precioOtro) costoBasico += precioOtro;
 
     this.firstFormGroup.patchValue({ costo_basico: costoBasico });
 }
@@ -248,7 +250,7 @@ export class CreateDbFlotaComponent {
   calculateGalonHota(): void{
     const hora = Number(this.firstFormGroup.get('horas_faena')?.value) || 0;
     const galones = Number(this.secondFormGroup.get('consumo_gasolina')?.value) || 0;
-    const galon_hora = hora / galones
+    const galon_hora = galones / hora
 
     const redondeo = parseFloat(galon_hora.toFixed(2))
 
@@ -270,8 +272,8 @@ export class CreateDbFlotaComponent {
     if (this.lastCostoHielo) {
       const consumo = Number(this.secondFormGroup.get('consumo_hielo')?.value) || 0;
       const costoGalon = this.lastCostoHielo.costo;
-      const total = consumo * costoGalon;
-      this.secondFormGroup.patchValue({ total_hielo: total });
+      const total = (consumo * costoGalon).toFixed(2);
+      this.secondFormGroup.patchValue({ total_hielo: parseFloat(total)});
     }
   }
 
@@ -290,8 +292,8 @@ export class CreateDbFlotaComponent {
     if (this.lastCostoAgua) {
       const consumo = Number(this.secondFormGroup.get('consumo_agua')?.value) || 0;
       const costoGalon = this.lastCostoAgua.costo;
-      const total = consumo * costoGalon;
-      this.secondFormGroup.patchValue({ total_agua: total });
+      const total = (consumo * costoGalon).toFixed(2);
+      this.secondFormGroup.patchValue({ total_agua: parseFloat(total) });
     }
   }
 
@@ -681,6 +683,7 @@ export class CreateDbFlotaComponent {
         merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
         otro: formData.otro || undefined,
         kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
+        precio_otro: formData.precio_otro ? Number(formData.precio_otro) : undefined,
         toneladas_procesadas: this.toneladasProcesadas,
         toneladas_recibidas: this.toneladasRecibidas,
         costo_basico: Number(formData.costo_basico),

@@ -137,5 +137,10 @@ button.filter-item {
   color: #3f51b5; /* Color de la etiqueta */
 }
 
+.hover-cell {
+  cursor: pointer; /* Cambiar el cursor cuando esté sobre la celda */
+}
+
+
 
 

@@ -17,11 +17,13 @@ import { EspeciesService } from 'app/core/services/especies.service';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-seguimiento-pesca',
   standalone: true,
   imports: [CommonModule,
+    RouterOutlet,
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
@@ -52,7 +54,8 @@ export class SeguimientoPescaComponent {
   constructor(private diarioPescaService: DiarioPescaService,
     private embarcacionesService: EmbarcacionesService,
     private especieService: EspeciesService,
-    private changeDetector: ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef,
+    private router: Router) {
     this.dataSource = new MatTableDataSource<IDiarioPesca>();
   }
 
@@ -97,6 +100,10 @@ export class SeguimientoPescaComponent {
         });
       });
     });
+  }
+
+  navigateToFlotaDP(flotaDPId: number): void {
+    this.router.navigate(['/db-flota', flotaDPId]);
   }
 
 

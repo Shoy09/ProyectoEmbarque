@@ -3,12 +3,7 @@
   <h1>Bienvenido a Diario de Pesca</h1>
 </div>
 
-<div class="agregar-container" style="margin-top: 25px; display: flex; align-items: center;">
-  <h3 style="margin: 0; margin-right: 10px;"> Añade un nuevo registro</h3>
-  <span><button class="btn-celeste" (click)="openFomrCreate()"><i class="fas fa-plus"></i></button></span>
-</div>
-
-<div class="container" style="display: flex; justify-content: center;">
+<div class="container" style="display: flex; justify-content: center; margin-top: 35px;">
   <h3>Registro Diario de Pesca</h3>
 </div>
 <div class="filter-container">
@@ -45,7 +40,9 @@
 
     <ng-container matColumnDef="flotaDP_id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Flota </th>
-      <td mat-cell *matCellDef="let row"> {{row.flotaDP_id}} </td>
+      <td mat-cell *matCellDef="let row" (click)="navigateToFlotaDP(row.flotaDP_id)" class="hover-cell">
+        {{row.flotaDP_id}}
+      </td>
     </ng-container>
 
     <!-- Embarcación Column -->

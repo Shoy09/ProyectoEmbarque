@@ -45,6 +45,7 @@ export class EditDiarioComponent implements OnInit {
       porcentaje: ['', [Validators.required]],
       ar: ['', [Validators.required]],
       numero: ['', [Validators.required]],
+      flotaDP_id: [0, Validators.required],
     })
   }
 

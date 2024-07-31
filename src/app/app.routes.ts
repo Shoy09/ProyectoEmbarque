@@ -17,7 +17,9 @@ export const routes: Routes = [
         {path: 'estadistica-sp', component: EstadisticaSPComponent},
         {path: 'gastos-generales', component: GastosGeneralesComponent},
         {path: 'flota', component: FlotaComponent},
-        {path: 'db-flota', component: DbFlotaComponent}
+        {path: 'db-flota', component: DbFlotaComponent},
+        { path: 'db-flota/:flotaDPId', component: DbFlotaComponent }
+
       ]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },

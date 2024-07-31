@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { Especies } from 'app/core/models/especie.model';
@@ -30,7 +30,8 @@ export class CreateDiarioComponent implements OnInit{
     private embarcacionesService: EmbarcacionesService,
     private diarioPescaService: DiarioPescaService,
     public dialogRef: MatDialogRef<CreateDiarioComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { flotaDP_id: number }
+    @Inject(MAT_DIALOG_DATA) public data: { flotaDP_id: number },
+    private matDialog: MatDialog
   ){
     this.formCDP = this.formBuilder.group({
       embarcacion: ['', [Validators.required]],
@@ -74,9 +75,18 @@ export class CreateDiarioComponent implements OnInit{
         res => {
           if (res) {
             console.log("DP guardada: ", res);
-            this.formCDP.reset();
-            this.dialogRef.close(res);
-            this.getDiarioPesca();
+            this.formCDP.reset(); // Limpiamos el formulario
+            this.dialogRef.close(res); // Cerramos el diálogo actual
+            this.getDiarioPesca(); // Actualizamos la lista de registros
+
+            let respuesta = window.confirm("Registro enviado correctamente. ¿Desea agregar otro?");
+            if (respuesta) {
+              // Si el usuario quiere continuar, abrimos el diálogo nuevamente usando MatDialog
+              this.matDialog.open(CreateDiarioComponent, {
+                width: '500px',
+                data: { flotaDP_id: this.data.flotaDP_id }
+              });
+            }
           }
         },
         error => {
@@ -86,7 +96,6 @@ export class CreateDiarioComponent implements OnInit{
       );
     }
   }
-
 
   getEspecies() {
     this.especiesService.getDiarioPesca().subscribe(
@@ -115,5 +124,5 @@ export class CreateDiarioComponent implements OnInit{
   cancel() {
     this.dialogRef.close();
   }
-  
+
 }
