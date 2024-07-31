@@ -97,6 +97,11 @@
         <td mat-cell *matCellDef="let row"> {{row.kilo_otro ?? ' '}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="precio_basico">
+        <th mat-header-cell *matHeaderCellDef>Precio de Especies </th>
+        <td mat-cell *matCellDef="let row"> {{row.costo_basico ?? ' '}} </td>
+      </ng-container>
+
       <!-- Columna Toneladas Procesadas -->
       <ng-container matColumnDef="toneladas_procesadas">
         <th mat-header-cell *matHeaderCellDef> Toneladas Procesadas </th>

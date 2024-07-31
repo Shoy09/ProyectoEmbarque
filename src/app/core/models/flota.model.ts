@@ -12,6 +12,7 @@ export interface FlotaDP {
   merluza_descarte?: number;
   otro?: string;
   kilo_otro?: number;
+  precio_otro?: number;
   toneladas_procesadas: number;
   toneladas_recibidas: number;
   costo_basico: number;

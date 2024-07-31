@@ -18,6 +18,7 @@ import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 import { FlotaService } from 'app/core/services/flota.service';
 
 @Component({
@@ -44,6 +45,10 @@ export class CreateDbFlotaComponent {
   zona_pesca: ZonaPescaI[] = [];
   toneladasProcesadas: number = 0;
   toneladasRecibidas: number = 0;
+  precio_merluza?:number; //
+  precio_bereche?:number; //
+  precio_volador?:number; //
+  precio_merluza_NOPRO?:number; //
   lastCosto?: CostoGalonGasoI;
   lastCostoHielo?: CostoTMHielo;
   lastCostoAgua?: CostoM3Agua;
@@ -75,7 +80,8 @@ export class CreateDbFlotaComponent {
     merluza_descarte: [''],
     otro: [''],
     kilo_otro: [''],
-    costo_basico: [, Validators.required],
+    precio_otro: [''],
+    costo_basico:  [{ value: 0, disabled: true }, Validators.required],
     participacion: [{ value: 0, disabled: true }, Validators.required],
     bonificacion: [{ value: 0, disabled: true }, Validators.required],
     total_participacion: [{ value: 0, disabled: true }, Validators.required],
@@ -118,11 +124,13 @@ export class CreateDbFlotaComponent {
     private embarcacionesService: EmbarcacionesService,
     private costoXGalonService: CostoXGalonService,
     private flotaService: FlotaService,
+    private serviceEspecies: EspeciesService,
   ) {}
 
   ngOnInit(): void {
     this.getEmbarcaciones();
     this.getZonaPesca();
+    this.loadPreciosEspecies();
     this.loadLastTipoCambio();
     this.loadLastCosto();
     this.loadLastCostoHielo();
@@ -175,6 +183,40 @@ export class CreateDbFlotaComponent {
     overlayContainers.forEach(container => {
         container.innerHTML = '';
     });
+  }
+
+  //PRECIOS DE LAS ESPECIES
+  loadPreciosEspecies(): void {
+    const especies = [
+        { nombre: 'merluza', propiedad: 'precio_merluza' },
+        { nombre: 'bereche', propiedad: 'precio_bereche' },
+        { nombre: 'volador', propiedad: 'precio_volador' },
+        { nombre: 'merluza%20np', propiedad: 'precio_merluza_NOPRO' },
+    ];
+
+    especies.forEach(especie => {
+        this.serviceEspecies.getPrecioPorNombre(especie.nombre).subscribe(costo => {
+            // Aquí usamos type assertion para evitar el error de TypeScript
+            (this as any)[especie.propiedad] = costo;
+            this.calculateCostoBasico(); // Calcular el costo básico cada vez que se obtenga un precio
+        });
+    });
+  }
+
+  calculateCostoBasico(): void {
+    const merluza = this.firstFormGroup.get('merluza')?.value;
+    const bereche = this.firstFormGroup.get('bereche')?.value;
+    const volador = this.firstFormGroup.get('volador')?.value;
+    const merluzaNPro = this.firstFormGroup.get('merluza_descarte')?.value;
+
+    let costoBasico = 0;
+
+    if (merluza) costoBasico += this.precio_merluza || 0;
+    if (bereche) costoBasico += this.precio_bereche || 0;
+    if (volador) costoBasico += this.precio_volador || 0;
+    if (merluzaNPro) costoBasico += this.precio_merluza_NOPRO || 0;
+
+    this.firstFormGroup.patchValue({ costo_basico: costoBasico });
 }
 
   //COMBUSTIBLE
@@ -593,6 +635,7 @@ export class CreateDbFlotaComponent {
   //metodo post
   submitForm(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
+      this.calculateCostoBasico();
       this.calculateToneladas();
       this.calculateParticipacion();
       this.calculateBonificacion();

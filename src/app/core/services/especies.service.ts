@@ -47,10 +47,9 @@ export class EspeciesService {
 
   //buscar el precio por el nombre
   getPrecioPorNombre(nombre: string): Observable<number> {
-    return this.http.get<{ precio: number }>(`${this.url}precio/${nombre}`).pipe(
+    return this.http.get<{ precio: number }>(`${this.url}precio/${nombre}/`).pipe(
       map(response => response.precio)
     );
   }
-
 
 }

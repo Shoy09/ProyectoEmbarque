@@ -31,7 +31,7 @@ export class DbFlotaComponent {
   zona_pesca: ZonaPescaI[] = []
   displayedColumns: string[] = [
     'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
-    'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro',
+    'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro', 'precio_basico',
     'toneladas_procesadas', 'toneladas_recibidas', 'participacion', 'total_participacion','total_tripulacion', 'consumo_gasolina',
     'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
