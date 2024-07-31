@@ -10,6 +10,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
+import { CreateDiarioComponent } from '../seguimiento-pesca/create-diario/create-diario.component';
+import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 
 @Component({
   selector: 'app-db-flota',
@@ -33,7 +35,7 @@ export class DbFlotaComponent {
     'toneladas_procesadas', 'toneladas_recibidas', 'participacion', 'total_participacion','total_tripulacion', 'consumo_gasolina',
     'total_gasolina', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
-    'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot'
+    'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot', 'lances'
   ];
   dataSource!: MatTableDataSource<FlotaDP>
 
@@ -111,6 +113,13 @@ export class DbFlotaComponent {
         this.getFlotaDP();
         this.loadFlotas(); // Actualiza también la lista de flotas
       }
+    });
+  }
+
+  openFomrCreateLances(flotaDP: FlotaDP): void {
+    const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
+      width: '600px', // ajusta el ancho según tus necesidades
+      data: { flotaDP_id: flotaDP.id} // Pasa el id de la instancia de FlotaDP seleccionada
     });
   }
 

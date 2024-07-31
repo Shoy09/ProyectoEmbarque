@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, numberAttribute, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -57,6 +57,7 @@ export class CreateDbFlotaComponent {
   SCTR_SAL?: number;
   SCTR_PEN?: number;
   p_seguro?: number;
+  showStepper: boolean = true;
 
   @Output() dataSaved = new EventEmitter<boolean>();
 
@@ -156,7 +157,6 @@ export class CreateDbFlotaComponent {
   }
 
   //TIPO DE CAMBIO
-
   loadLastTipoCambio() {
     this.costoXGalonService.getLastTipoCambio().subscribe(lastTipoCambio => {
       if (lastTipoCambio) {
@@ -166,14 +166,15 @@ export class CreateDbFlotaComponent {
   }
 
   //cerrar
-  cancel(stepper: MatStepper) {
-    this.firstFormGroup.reset();
-    this.secondFormGroup.reset();
-    stepper.reset();
-  }
+  closeStepper() {
+    this.showStepper = false;
+    const overlayContainers = document.querySelectorAll('.cdk-overlay-container');
+    overlayContainers.forEach(container => {
+        container.innerHTML = '';
+    });
+}
 
   //COMBUSTIBLE
-
   loadLastCosto() {
     this.costoXGalonService.getLastCosto().subscribe(lastCosto => {
       if (lastCosto){

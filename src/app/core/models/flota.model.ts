@@ -1,4 +1,5 @@
 export interface FlotaDP {
+  id?: number;
   fecha: string;
   tipo_cambio: number;
   embarcacion: number;

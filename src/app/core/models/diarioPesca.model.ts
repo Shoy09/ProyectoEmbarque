@@ -13,5 +13,6 @@ export interface IDiarioPesca{
     moda: number,
     porcentaje: number,
     ar: number,
-    numero: number
+    numero: number,
+    flotaDP_id:number
 }

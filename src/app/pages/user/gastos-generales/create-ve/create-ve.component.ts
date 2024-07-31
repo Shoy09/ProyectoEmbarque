@@ -27,7 +27,7 @@ export class CreateVEComponent {
     this.formCVZ = this.formBuilder.group({
       nombre: ['', [Validators.required]],
       costo_zarpe: ['', [Validators.required]],
-      bonificacion: ['', [Validators.required]],
+      bonificacion: [''],
       boner: ['', [Validators.required]]
     });
   }

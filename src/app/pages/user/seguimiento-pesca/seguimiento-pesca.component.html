@@ -43,6 +43,11 @@
 
     <!-- ID Column -->
 
+    <ng-container matColumnDef="flotaDP_id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Flota </th>
+      <td mat-cell *matCellDef="let row"> {{row.flotaDP_id}} </td>
+    </ng-container>
+
     <!-- Embarcación Column -->
     <ng-container matColumnDef="embarcacion">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Embarcación </th>

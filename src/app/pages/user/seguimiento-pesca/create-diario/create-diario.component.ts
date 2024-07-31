@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { Especies } from 'app/core/models/especie.model';
@@ -30,6 +30,7 @@ export class CreateDiarioComponent implements OnInit{
     private embarcacionesService: EmbarcacionesService,
     private diarioPescaService: DiarioPescaService,
     public dialogRef: MatDialogRef<CreateDiarioComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { flotaDP_id: number }
   ){
     this.formCDP = this.formBuilder.group({
       embarcacion: ['', [Validators.required]],
@@ -46,6 +47,7 @@ export class CreateDiarioComponent implements OnInit{
       porcentaje: ['', [Validators.required]],
       ar: ['', [Validators.required]],
       numero: ['', [Validators.required]],
+      flotaDP_id: [this.data.flotaDP_id, [Validators.required]]
     });
   }
 
@@ -109,4 +111,9 @@ export class CreateDiarioComponent implements OnInit{
       }
     );
   }
+
+  cancel() {
+    this.dialogRef.close();
+  }
+  
 }

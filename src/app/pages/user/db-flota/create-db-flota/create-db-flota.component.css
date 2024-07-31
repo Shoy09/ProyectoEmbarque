@@ -7,9 +7,9 @@
 }
 
 .half-width {
-  width: calc(50% - 16px); /* Ajuste para el espacio entre los campos */
-  margin-right: 16px; /* Espacio entre los campos */
-  margin-bottom: 16px; /* Espacio inferior para separar filas */
+  width: calc(50% - 16px);
+  margin-right: 16px;
+  margin-bottom: 16px;
 }
 
 .form-group {
@@ -28,21 +28,35 @@
 
 /* Ajustes para el botón de modo de edición */
 .edit-mode-button {
-  padding: 4px 8px; /* Tamaño pequeño */
-  font-size: 0.75rem; /* Tamaño de fuente reducido */
+  padding: 8px 16px; /* Tamaño del botón */
+  font-size: 0.875rem; /* Tamaño de fuente */
   font-weight: bold;
   color: #ffffff;
   background-color: #4a90e2;
-  border-radius: 4px; /* Radio de borde ajustado */
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.2s ease;
   position: absolute;
-  top: -20px; /* Ajustar la posición más arriba */
-  left: 16px; /* Ajuste desde el borde izquierdo */
-  z-index: 1; /* Asegura que el botón esté por encima de otros elementos */
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+}
+
+.stepper-container {
+  position: relative;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .edit-mode-button:hover {
   background-color: #357
 }
+
+.mat-stepper-horizontal {
+  margin-top: 0; /* Ajusta a 0 para que no haya espacio extra */
+}
+
+
+
+
 

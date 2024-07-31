@@ -202,6 +202,13 @@
         <td mat-cell *matCellDef="let row"> {{row.costo_tm_captura}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="lances">
+        <th mat-header-cell *matHeaderCellDef>Lances</th>
+        <td mat-cell *matCellDef="let row">
+          <i class="fas fa-pencil-alt" (click)="openFomrCreateLances(row)"></i>
+        </td>
+      </ng-container>
+
       <!-- Columna Acción -->
       <!-- Corrected Column Definition -->
       <ng-container matColumnDef="csot">
