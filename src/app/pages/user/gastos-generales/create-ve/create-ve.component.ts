@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
-import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-ve',
@@ -21,6 +21,7 @@ export class CreateVEComponent {
   embarcaciones: Embarcaciones[] = [];
 
   constructor(
+    private _toastr: ToastrService,
     private formBuilder: FormBuilder,
     private embarcacionesService: EmbarcacionesService,
     public dialogRef: MatDialogRef<CreateVEComponent>,
@@ -44,14 +45,11 @@ export class CreateVEComponent {
           this.formCVZ.reset();
           this.dialogRef.close();
           this.dataSaved.emit(); // Emitir evento para notificar al componente padre
-          Swal.fire( // Muestra la alerta
-            'Éxito!',
-            'El registro se guardó correctamente.',
-            'success'
-          );
+          this._toastr.success('Éxito!', 'Registro guardado correctamente');
         }
       }, error => {
         console.error("Error al guardar:", error);
+        this._toastr.error('Error!', 'Hubo un error al guardar el registro');
       });
     }
   }
