@@ -1,5 +1,118 @@
-<div class="table-container">
+<style>
 
+.table-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.table-wrapper {
+  width: calc(50% - 10px);
+  margin: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.last-cost {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.table-wrapper h3 {
+  text-align: center;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.fas.fa-pencil-alt {
+  cursor: pointer;
+}
+
+
+th, td {
+  padding: 8px 16px;
+  text-align: center;
+}
+
+th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+td {
+  background-color: #fff;
+}
+
+th, td {
+  border: 1px solid #ddd;
+}
+
+th.mat-sort-header {
+  cursor: pointer;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 1200px) {
+  .table-wrapper {
+    width: calc(50% - 10px);
+  }
+}
+
+@media (max-width: 900px) {
+  .table-wrapper {
+    width: calc(100% - 10px);
+  }
+}
+
+.title-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.title-button-container h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.add-btn {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.btn-celeste {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+</style>
+<div class="table-container">
   <div class="table-wrapper">
     <div class="title-button-container">
       <h3>Especies</h3>
@@ -68,7 +181,7 @@
               S/{{row.bonificacion}}
             </ng-container>
             <ng-template #noBonificacion>
-              
+
             </ng-template>
           </td>
         </ng-container>

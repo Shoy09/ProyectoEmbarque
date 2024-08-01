@@ -19,14 +19,22 @@ export class CostoXGalonService {
     return this._refresh$;
   }
 
-  private url: string = 'http://127.0.0.1:8000/api/costogalonb_05/'
-  private url_hielo: string = 'http://127.0.0.1:8000/api/costoHielo/'
-  private url_agua: string = 'http://127.0.0.1:8000/api/costogalonagua/'
-  private url_tipo_cambio: string = 'http://127.0.0.1:8000/api/costotipocambio/'
-  private url_viveres: string = 'http://127.0.0.1:8000/api/viveres/'
-  private url_mecanismo: string = 'http://127.0.0.1:8000/api/mescanismo/'
-  private url_derecho_pesca: string = 'http://127.0.0.1:8000/api/derechopescas/'
-  private url_tarifas: string = 'http://127.0.0.1:8000/api/tarifa-costo/'
+  private url: string = 'https://patt.pythonanywhere.com/api/costogalonb_05/'
+  //private url: string = 'http://127.0.0.1:8000/api/costogalonb_05/'
+  private url_hielo: string = 'https://patt.pythonanywhere.com/api/costoHielo/'
+  //private url_hielo: string = 'http://127.0.0.1:8000/api/costoHielo/'
+  private url_agua: string = 'https://patt.pythonanywhere.com/api/costogalonagua/'
+  //private url_agua: string = 'http://127.0.0.1:8000/api/costogalonagua/'
+  private url_tipo_cambio: string = 'https://patt.pythonanywhere.com/api/costotipocambio/'
+  //private url_tipo_cambio: string = 'http://127.0.0.1:8000/api/costotipocambio/'
+  private url_viveres: string = 'https://patt.pythonanywhere.com/api/viveres/'
+  //private url_viveres: string = 'http://127.0.0.1:8000/api/viveres/'
+  private url_mecanismo: string = 'https://patt.pythonanywhere.com/api/mescanismo/'
+  //private url_mecanismo: string = 'http://127.0.0.1:8000/api/mescanismo/'
+  private url_derecho_pesca: string = 'https://patt.pythonanywhere.com/api/derechopescas/'
+  //private url_derecho_pesca: string = 'http://127.0.0.1:8000/api/derechopescas/'
+  private url_tarifas: string = 'https://patt.pythonanywhere.com/api/tarifa-costo/'
+  //private url_tarifas: string = 'http://127.0.0.1:8000/api/tarifa-costo/'
 
   constructor(private http: HttpClient)  {}
 

@@ -11,136 +11,27 @@
   justify-content: center;
 }
 
-/* Estilo del h1 */
 .hero-section h1 {
   position: relative;
-  z-index: 1; /* Asegura que el texto esté delante del fondo */
-  color: hsl(0, 100%, 100%); /* Color del texto */
+  z-index: 1;
+  color: hsl(0, 100%, 100%);
   padding: 10px 20px;
-  border-radius: 10px; /* Bordes redondeados */
+  border-radius: 10px;
   font-family: "Poppins", sans-serif;
   text-align: center;
   font-weight: bold;
 }
 
-/* Asegurarse de que el contenedor ocupe todo el ancho */
 .hero-section::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* Fondo negro semi-transparente adicional */
-  z-index: 0; /* Debajo del h1 */
+  height: 100%;
+  z-index: 0;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
 /**/
-
-
-.agregar-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px; /* Añade espacio inferior */
-}
-
-.agregar-container h3 {
-  margin-right: 10px;
-  color: #0A4F81; /* Color azul para el texto */
-  line-height: 1; /* Asegura que el texto del h3 tenga la misma altura que el botón */
-}
-
-.btn-celeste {
-  background-color: #0A4F81;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  line-height: 1; /* Asegura que el botón tenga la misma altura que el texto del h3 */
-  display: flex;
-  align-items: center; /* Centra el contenido del botón verticalmente */
-}
-
-
-
-.btn-celeste:hover {
-  background-color: #0056b3; /* Cambio de color al pasar el cursor */
-}
-
-/*tabla ng material*/
-
-table {
-  width: 100%;
-  border-collapse: collapse; /* Asegura que los bordes de las celdas se fusionen correctamente */
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-td, th {
-  padding: 8px; /* Ajusta el padding según sea necesario */
-  border: 1px solid #ddd; /* Define un borde para las celdas */
-}
-
-.mat-elevation-z8 {
-  overflow-x: auto; /* Permite desplazamiento horizontal cuando el contenido es más ancho */
-  max-width: 100%; /* Asegura que la tabla no sea más ancha que su contenedor */
-}
-
-.dd{
-  background-color: white;
-}
-body {
-  background-color: white;
-}
-
-.filter-container {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Espacio entre los elementos */
-  margin-bottom: 20px; /* Espacio inferior para separar del resto del contenido */
-}
-
-.filter-item {
-  flex: 0 1 auto;
-  min-width: 150px; /* Ancho mínimo para los campos de fecha */
-}
-
-button.filter-item {
-  flex: 0 0 auto; /* No expandir el botón */
-  height: 40px; /* Altura igual a la de los mat-form-field */
-  line-height: 1.5;
-  padding: 0 20px; /* Espaciado interior */
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline {
-  border-color: #3f51b5; /* Color del borde */
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-thickness {
-  border-width: 1px; /* Grosor del borde */
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-radius: 4px; /* Bordes redondeados */
-}
-
-.mat-datepicker-toggle .mat-icon-button {
-  color: #3f51b5; /* Color del icono */
-}
-
-.mat-form-field-appearance-outline .mat-form-field-label {
-  color: #3f51b5; /* Color de la etiqueta */
-}
-
-.hover-cell {
-  cursor: pointer; /* Cambiar el cursor cuando esté sobre la celda */
-}
-
-
-
 

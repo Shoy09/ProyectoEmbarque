@@ -219,7 +219,7 @@ export class CreateDbFlotaComponent {
     if (merluzaNPro) costoBasico += this.precio_merluza_NOPRO || 0;
     if (precioOtro) costoBasico += precioOtro;
 
-    this.firstFormGroup.patchValue({ costo_basico: costoBasico });
+    this.firstFormGroup.patchValue({ costo_basico: parseFloat(costoBasico.toFixed(2)) });
 }
 
   //COMBUSTIBLE
@@ -237,11 +237,8 @@ export class CreateDbFlotaComponent {
     if (this.lastCosto) {
       const consumoGasolina = Number(this.secondFormGroup.get('consumo_gasolina')?.value) || 0;
       const costoGalon = this.lastCosto.costo;
-      // Calcula el total de gasolina
       let totalGasolina = consumoGasolina * costoGalon;
-      // Redondea el resultado a 2 decimales y conviértelo de nuevo a número
       totalGasolina = parseFloat(totalGasolina.toFixed(2));
-      // Actualiza el valor en el formulario
       this.secondFormGroup.patchValue({ total_gasolina: totalGasolina });
     }
   }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Especies } from 'app/core/models/especie.model';
 import { EspeciesService } from 'app/core/services/especies.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-put-especie',
@@ -17,6 +18,7 @@ export class PutEspecieComponent {
   fomrPutEspecie: FormGroup;
 
   constructor(
+    private _toastr: ToastrService,
     private formBuilder: FormBuilder,
     private especie: EspeciesService,
     private dialogRef: MatDialogRef<PutEspecieComponent>,
@@ -46,9 +48,11 @@ export class PutEspecieComponent {
         (res) => {
           console.log("DP actualizada:", res);
           this.dialogRef.close(res);
+          this._toastr.success('Registro actualizado correctamente');
         },
         (error) => {
           console.error("Error al actualizar DP:", error);
+          this._toastr.error('Hubo un error al actualizar el registro');
         }
       );
     }

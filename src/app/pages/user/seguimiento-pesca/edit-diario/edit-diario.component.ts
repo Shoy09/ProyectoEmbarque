@@ -9,6 +9,7 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-diario',
@@ -25,6 +26,7 @@ export class EditDiarioComponent implements OnInit {
   zona: ZonaPescaI[] = [];
 
   constructor(
+    private _toastr: ToastrService,
     private formBuilder: FormBuilder,
     private especiesService: EspeciesService,
     private embarcacionService: EmbarcacionesService,
@@ -110,9 +112,11 @@ export class EditDiarioComponent implements OnInit {
         (res) => {
           console.log("DP actualizada:", res);
           this.dialogRef.close(res);
+          this._toastr.success('Registro actualizado correctamente');
         },
         (error) => {
           console.error("Error al actualizar DP:", error);
+          this._toastr.error('Hubo un error al actualizar el registro');
         }
       );
     }
