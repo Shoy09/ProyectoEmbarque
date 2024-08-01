@@ -109,9 +109,9 @@ export class SeguimientoPescaComponent {
   }
 
   navigateToFlotaDP(flotaDPId: number): void {
+    console.log('Navegando a flota con ID:', flotaDPId); // Para debug
     this.router.navigate(['/db-flota', flotaDPId]);
   }
-
 
   openFomrCreate(): void {
     const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
@@ -189,7 +189,5 @@ export class SeguimientoPescaComponent {
     this.dataSource.data = this.diario;
     this.dataSource.paginator!.firstPage();
   }
-
-
 
 }

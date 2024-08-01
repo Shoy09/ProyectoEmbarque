@@ -17,7 +17,31 @@
   </div>
 
   <div class="filter-container">
-    <!-- Aquí puedes agregar filtros si es necesario -->
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Filtra por Embarcación</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Santa Monica I" #input>
+    </mat-form-field>
+  </div>
+
+  <div class="filter-container">
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha Inicio</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" placeholder="Inicio" [(ngModel)]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha Fin</mat-label>
+      <input matInput [matDatepicker]="endDatePicker" placeholder="Fin" [(ngModel)]="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+    <div class="container-b">
+      <button mat-raised-button color="primary" class="filter-item filter-button primary" (click)="applyDateFilter()">Aplicar</button>
+      <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button warn" (click)="clearDateFilter()">Quitar Filtro</button>
+    </div>
+
   </div>
 
   <!-- Tabla para listar los registros de FlotaDP -->
@@ -254,7 +278,9 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{'selected-row': row.id === flotaDPId}"
+      (click)="selectFlota(row.id)"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
   </div>

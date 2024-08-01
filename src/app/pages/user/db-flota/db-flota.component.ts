@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { FlotaService } from 'app/core/services/flota.service';
 import { CreateDbFlotaComponent } from './create-db-flota/create-db-flota.component';
-import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
@@ -14,6 +12,12 @@ import { CreateDiarioComponent } from '../seguimiento-pesca/create-diario/create
 import { IDiarioPesca } from 'app/core/models/diarioPesca.model';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-db-flota',
@@ -22,12 +26,19 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatNativeDateModule
   ],
   templateUrl: './db-flota.component.html',
   styleUrl: './db-flota.component.css'
 })
 export class DbFlotaComponent {
+
   private dialog = inject(MatDialog);
 
   flotas: FlotaDP[] = [];
@@ -41,14 +52,19 @@ export class DbFlotaComponent {
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
     'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot','lances'
   ];
+  flotaDPId!: number;
+  isDateFiltered = false;
+  startDate! : Date;
+  endDate!: Date;
 
   dataSource!: MatTableDataSource<FlotaDP>
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private serviceFlota: FlotaService,
-    //private serviceGastoGenerales: CostoXGalonService,
-    private embarcacionesService: EmbarcacionesService
+    private embarcacionesService: EmbarcacionesService,
+    private route: ActivatedRoute,
+    private router: Router
   ){}
 
   ngOnInit(): void {
@@ -56,6 +72,32 @@ export class DbFlotaComponent {
     this.loadEmbarcaciones();
     this.loadZonaPesca();
     this.dataSource = new MatTableDataSource<FlotaDP>([]);
+    this.route.params.subscribe(params => {
+      this.flotaDPId = +params['flotaDPId'];
+      this.loadFlotaData();
+    });
+  }
+
+  loadFlotaData(): void {
+    this.serviceFlota.getFlotas().subscribe(
+      (allFlotas: FlotaDP[]) => {
+        this.dataSource.data = allFlotas;
+        // Si quieres que la fila seleccionada esté visible, puedes scrollear hasta ella
+      },
+      error => {
+        console.error('Error al cargar los datos de las flotas:', error);
+      }
+    );
+  }
+
+  resetFilter(): void {
+    this.dataSource.filter = '';
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
+}
+
+  selectFlota(id: number): void {
   }
 
   loadEmbarcaciones(): void {
@@ -107,13 +149,6 @@ export class DbFlotaComponent {
     return [];
   }
 
-  //getFlotaDP() {
-    //this.serviceFlota.getFlotas().subscribe(data => {
-      //const datos = data.reverse();
-      //this.dataSource = new MatTableDataSource(datos);
-   // });
-  //}
-
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {
       disableClose: true // Evita que se cierre al hacer clic fuera
@@ -133,6 +168,37 @@ export class DbFlotaComponent {
       width: '600px', // ajusta el ancho según tus necesidades
       data: { flotaDP_id: flotaDP.id} // Pasa el id de la instancia de FlotaDP seleccionada
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  applyDateFilter() {
+    if (this.startDate && this.endDate) {
+      this.isDateFiltered = true; // Actualiza el estado del filtro
+      this.dataSource.data = this.flotas.filter(flotas => {
+        const fecha = new Date(flotas.fecha);
+        return fecha >= this.startDate && fecha <= this.endDate;
+      });
+      this.dataSource.paginator!.firstPage();
+    }
+  }
+
+  clearDateFilter() {
+    // Restablece los controles de fecha
+    this.startDate = null!;
+    this.endDate = null!;
+    this.isDateFiltered = false; // Actualiza el estado del filtro
+
+    // Restablece los datos filtrados
+    this.dataSource.data = this.flotas;
+    this.dataSource.paginator!.firstPage();
   }
 
   ngAfterViewInit() {
