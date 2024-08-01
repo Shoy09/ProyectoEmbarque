@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DerechoPI } from 'app/core/models/derechoP.model';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-dere-pesca',
@@ -17,6 +18,7 @@ export class EditDerePescaComponent {
   formEDePesca: FormGroup;
 
   constructor(
+    private _toastr: ToastrService,
     private formBuilder: FormBuilder,
     private serviceDP: CostoXGalonService,
     public dialogRef: MatDialogRef<EditDerePescaComponent>,
@@ -46,12 +48,18 @@ export class EditDerePescaComponent {
         (res) => {
           console.log("DP actualizada:", res);
           this.dialogRef.close(res);
+          this._toastr.success('Registro actualizado correctamente');
         },
         (error) => {
           console.error("Error al actualizar DP:", error);
+          this._toastr.error('Hubo un error al actualizar el registro');
         }
       );
     }
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
 }

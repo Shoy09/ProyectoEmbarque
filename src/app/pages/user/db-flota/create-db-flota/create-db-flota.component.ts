@@ -20,6 +20,7 @@ import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
 import { FlotaService } from 'app/core/services/flota.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-db-flota',
@@ -727,10 +728,21 @@ export class CreateDbFlotaComponent {
         // Resetear los formularios si es necesario
         this.firstFormGroup.reset();
         this.secondFormGroup.reset();
+        Swal.fire( // Muestra la alerta
+          'Éxito!',
+          'El registro se guardó correctamente.',
+          'success'
+        );
         },
         error => {
           console.error('Error creating Fleet', error);
           this.dataSaved.emit(false);
+          Swal.fire( // Muestra la alerta
+            'Error!',
+            'Hubo un problema al guardar el registro.',
+            'error'
+          );
+
         }
       );
     } else {

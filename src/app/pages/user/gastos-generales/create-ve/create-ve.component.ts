@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-ve',
@@ -43,6 +44,11 @@ export class CreateVEComponent {
           this.formCVZ.reset();
           this.dialogRef.close();
           this.dataSaved.emit(); // Emitir evento para notificar al componente padre
+          Swal.fire( // Muestra la alerta
+            'Éxito!',
+            'El registro se guardó correctamente.',
+            'success'
+          );
         }
       }, error => {
         console.error("Error al guardar:", error);

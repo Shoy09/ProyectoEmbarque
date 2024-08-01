@@ -1,24 +1,21 @@
-<div class="ccontainer-contact">
-  <div class="d-flex flex-wrap align-items-center justify-content-center rounded-end bg-white p-4 form-container">
+<div class="dialog-content">
+  <div class="form-container">
     <form [formGroup]="formEDePesca" (ngSubmit)="save()">
-      <div class="row mb-2">
-        <div class="col-md-4 mb-2">
-          <label class="mb-1 d-block text-xs font-weight-semibold">Nombre</label>
+
+      <div class="form-group">
+        <label class="mb-1 d-block text-xs font-weight-semibold">Nombre</label>
             <input type="text" placeholder="Nombre" class="form-control custom-focus-ring" formControlName="item">
         </div>
-      </div>
 
-      <div class="row mb-2">
-        <div class="col-md-4 mb-2">
+        <div class="form-group">
           <label class="mb-1 d-block text-xs font-weight-semibold">Costo</label>
             <input type="number" placeholder="costo" class="form-control custom-focus-ring" formControlName="costo">
         </div>
-      </div>
 
-      <div class="button-group">
-        <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Cancelar</button>
-        <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Enviar</button>
-      </div>
+        <div class="button-group">
+          <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formEDePesca.valid">Guardar</button>
+          <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
+        </div>
     </form>
 
   </div>

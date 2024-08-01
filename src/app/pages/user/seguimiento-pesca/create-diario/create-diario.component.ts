@@ -9,6 +9,7 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { DiarioPescaService } from 'app/core/services/diario-pesca.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -82,14 +83,25 @@ export class CreateDiarioComponent implements OnInit{
             this.dialogRef.close(res); // Cerramos el diálogo actual
             this.getDiarioPesca(); // Actualizamos la lista de registros
 
-            let respuesta = window.confirm("Registro enviado correctamente. ¿Desea agregar otro?");
-            if (respuesta) {
-              // Si el usuario quiere continuar, abrimos el diálogo nuevamente usando MatDialog
-              this.matDialog.open(CreateDiarioComponent, {
-                width: '500px',
-                data: { flotaDP_id: this.data.flotaDP_id }
-              });
-            }
+            Swal.fire({
+              title: 'Lance registrado correctamente!',
+              text: '¿Desea agregar otro lance?',
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonText: 'Sí, agregar otro',
+              cancelButtonText: 'No, cerrar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Si el usuario quiere continuar, abrimos el diálogo nuevamente usando MatDialog
+                this.matDialog.open(CreateDiarioComponent, {
+                  width: '500px',
+                  data: { flotaDP_id: this.data.flotaDP_id }
+                });
+              } else {
+                // Aquí puedes manejar la acción si el usuario elige no agregar otro registro
+                this.dialogRef.close(); // O cierra el diálogo actual si es necesario
+              }
+            });
           }
         },
         error => {

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-agua',
@@ -17,6 +18,7 @@ export class CreateAguaComponent {
   @Output() dataSaved = new EventEmitter<void>();
 
   constructor(
+    private _toastr: ToastrService,
     private serviceAgua: CostoXGalonService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<CreateAguaComponent>
@@ -36,10 +38,12 @@ export class CreateAguaComponent {
           console.log("Dato ingresado correctamente:", res);
           this.formCreateAgua.reset();
           this.dialogRef.close();
-          this.dataSaved.emit(); // Emitir evento para notificar al componente padre
+          this.dataSaved.emit();
+          this._toastr.success('Éxito!', 'Registro de agua guardado correctamente');
         }
       }, error => {
         console.error("Error al guardar:", error);
+        this._toastr.error('Error!', 'Hubo un error al guardar el registro del agua');
       });
     }
   }

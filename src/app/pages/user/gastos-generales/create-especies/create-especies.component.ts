@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { EspeciesService } from 'app/core/services/especies.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-especies',
@@ -17,6 +18,7 @@ export class CreateEspeciesComponent {
   @Output() dataSaved = new EventEmitter<void>();
 
   constructor(
+    private _toastr: ToastrService,
     private servicioEspecie: EspeciesService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<CreateEspeciesComponent>
@@ -38,9 +40,11 @@ export class CreateEspeciesComponent {
           this.formCreateEspecie.reset();
           this.dialogRef.close();
           this.dataSaved.emit(); // Emitir evento para notificar al componente padre
+          this._toastr.success('Éxito!', 'Registro guardado correctamente');
         }
       }, error => {
         console.error("Error al guardar:", error);
+        this._toastr.error('Error!', 'Hubo un error al guardar el registro');
       });
     }
   }

@@ -82,7 +82,6 @@ export class DbFlotaComponent {
     this.serviceFlota.getFlotas().subscribe(
       (allFlotas: FlotaDP[]) => {
         this.dataSource.data = allFlotas;
-        // Si quieres que la fila seleccionada esté visible, puedes scrollear hasta ella
       },
       error => {
         console.error('Error al cargar los datos de las flotas:', error);
@@ -95,7 +94,7 @@ export class DbFlotaComponent {
     if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
     }
-}
+  }
 
   selectFlota(id: number): void {
   }
@@ -128,12 +127,12 @@ export class DbFlotaComponent {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
         const flotasConNombres = data.map(flota => ({
-          ...flota,
+         ...flota,
           embarcacionNombre: this.embarcaciones.find(e => e.id === Number(flota.embarcacion))?.nombre || 'Desconocido',
           zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido',
         }));
 
-        const reversedData = flotasConNombres.reverse();
+        const reversedData = flotasConNombres.reverse(); // Corrección aquí
         this.flotas = reversedData;
         this.dataSource = new MatTableDataSource(this.flotas);
         this.dataSource.paginator = this.paginator;

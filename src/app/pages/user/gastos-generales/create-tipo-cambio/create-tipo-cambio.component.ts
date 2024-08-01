@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-tipo-cambio',
@@ -17,6 +18,7 @@ export class CreateTipoCambioComponent {
   @Output() dataSaved = new EventEmitter<void>();
 
   constructor(
+    private _toastr: ToastrService,
     private serviceTC: CostoXGalonService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<CreateTipoCambioComponent>
@@ -36,10 +38,12 @@ export class CreateTipoCambioComponent {
           console.log("Dato ingresado correctamente:", res);
           this.formTipoCambio.reset();
           this.dialogRef.close();
-          this.dataSaved.emit(); // Emitir evento para notificar al componente padre
+          this.dataSaved.emit();
+          this._toastr.success('Éxito!', 'Registro guardado correctamente');
         }
       }, error => {
         console.error("Error al guardar:", error);
+        this._toastr.error('Error!', 'Hubo un error al guardar el registro');
       });
     }
   }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-embarcaciones',
@@ -16,6 +17,7 @@ export class EditEmbarcacionesComponent {
   formPutEmbarcacion: FormGroup
 
   constructor(
+    private _toastr: ToastrService,
     private fomrBuilder: FormBuilder,
     private serviceEmbarcacion: EmbarcacionesService,
     private dialog: MatDialogRef<EditEmbarcacionesComponent>,
@@ -47,9 +49,11 @@ export class EditEmbarcacionesComponent {
         (res) => {
           console.log("DP actualizada:", res);
           this.dialog.close(res);
+          this._toastr.success('Registro actualizado correctamente');
         },
         (error) => {
           console.error("Error al actualizar DP:", error);
+          this._toastr.error('Hubo un error al actualizar el registro');
         }
       );
     }

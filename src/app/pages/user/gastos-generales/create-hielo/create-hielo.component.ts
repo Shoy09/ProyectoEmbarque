@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-hielo',
@@ -17,6 +18,7 @@ export class CreateHieloComponent {
   @Output() dataSaved = new EventEmitter<void>();
 
   constructor(
+    private _toastr: ToastrService,
     private serviceHielo: CostoXGalonService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<CreateHieloComponent>
@@ -36,10 +38,12 @@ export class CreateHieloComponent {
           console.log("Dato ingresado correctamente:", res);
           this.formCreateHielo.reset();
           this.dialogRef.close();
-          this.dataSaved.emit(); // Emitir evento para notificar al componente padre
+          this.dataSaved.emit();
+          this._toastr.success('Éxito!', 'Registro guardado correctamente');
         }
       }, error => {
         console.error("Error al guardar:", error);
+        this._toastr.error('Error!', 'Hubo un error al guardar el registro');
       });
     }
   }
