@@ -11,7 +11,6 @@ import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { EspeciesService } from 'app/core/services/especies.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-create-diario',
   standalone: true,
@@ -26,6 +25,9 @@ export class CreateDiarioComponent implements OnInit{
   embarcaciones: Embarcaciones[] = [];
   zona: ZonaPescaI[] = [];
   especies: Especies[] = [];
+  fecha: Date;
+  embarcacion: number;
+  nombreEmbarcacion: String = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +43,10 @@ export class CreateDiarioComponent implements OnInit{
     },
     private matDialog: MatDialog
   ){
+
+    this.fecha = data.fecha;
+    this.embarcacion = data.embarcacion;
+
     this.formCDP = this.formBuilder.group({
       embarcacion: [this.data.embarcacion, [Validators.required]],
       especie: ['', [Validators.required]],
@@ -63,7 +69,6 @@ export class CreateDiarioComponent implements OnInit{
   ngOnInit(): void {
     this.getEspecies();
     this.getEmbarcaciones();
-    this.getZonaPesca();
   }
 
   getDiarioPesca(){
@@ -73,12 +78,6 @@ export class CreateDiarioComponent implements OnInit{
   postDP() {
     if (this.formCDP.valid) {
       const value = this.formCDP.value;
-
-      // Si ya tenemos una fecha seleccionada por el usuario, no la sobrescribimos
-      if (!value.fecha) {
-        const fecha = new Date();
-        value.fecha = `${fecha.getFullYear()}-${('0' + (fecha.getMonth() + 1)).slice(-2)}-${('0' + fecha.getDate()).slice(-2)}`;
-      }
 
       this.diarioPescaService.postDiarioPesca(value).subscribe(
         res => {
@@ -100,11 +99,13 @@ export class CreateDiarioComponent implements OnInit{
                 // Si el usuario quiere continuar, abrimos el diálogo nuevamente usando MatDialog
                 this.matDialog.open(CreateDiarioComponent, {
                   width: '500px',
-                  data: { flotaDP_id: this.data.flotaDP_id }
+                  data: { flotaDP_id: this.data.flotaDP_id,
+                    embarcacion: this.data.embarcacion,
+                    fecha: this.data.fecha,
+                    zona_pesca: this.data.zona_pesca }
                 });
               } else {
-                // Aquí puedes manejar la acción si el usuario elige no agregar otro registro
-                this.dialogRef.close(); // O cierra el diálogo actual si es necesario
+                this.dialogRef.close();
               }
             });
           }
@@ -121,7 +122,6 @@ export class CreateDiarioComponent implements OnInit{
     this.especiesService.getDiarioPesca().subscribe(
       especies => {
         this.especies = especies;
-        // Aquí puedes realizar cualquier otra lógica necesaria con los datos de especies
       },
       error => {
         console.error('Error al obtener especies:', error);
@@ -133,7 +133,7 @@ export class CreateDiarioComponent implements OnInit{
     this.embarcacionesService.getEmbarcaciones().subscribe(
       embarcaciones => {
         this.embarcaciones = embarcaciones;
-        // Aquí puedes realizar cualquier otra lógica necesaria con los datos de especies
+        this.setNombreEmbarcacion();
       },
       error => {
         console.error('Error al obtener embarcaciones:', error);
@@ -141,15 +141,11 @@ export class CreateDiarioComponent implements OnInit{
     );
   }
 
-  getZonaPesca(){
-    this.embarcacionesService.getZonaPesca().subscribe(
-      zona => {
-        this.zona = zona;
-      },
-      error => {
-        console.error('Error al obtener zona:', error);
-      }
-    )
+  setNombreEmbarcacion() {
+    const embarcacion = this.embarcaciones.find(e => e.id === this.embarcacion);
+    if (embarcacion) {
+      this.nombreEmbarcacion = embarcacion.nombre;
+    }
   }
 
   cancel() {

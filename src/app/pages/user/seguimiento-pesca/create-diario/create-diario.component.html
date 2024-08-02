@@ -36,6 +36,7 @@
   transform: scale(0.98);
 }
 
+
 /* Habilitar el desplazamiento en dispositivos móviles */
 @media (max-width: 576px) {
   .form-container {
@@ -57,7 +58,10 @@
 <div class="ccontainer-contact">
   <div class="d-flex flex-wrap align-items-center justify-content-center rounded-end bg-white p-4 form-container">
     <div class="w-100">
-      <h2 class="h4 font-weight-semibold text-center mb-4">Agrega Lance de DP</h2>
+      <h4 class="h2 font-weight-semibold text-center mb-4">
+        Agregar Lance a {{ nombreEmbarcacion }} - {{ fecha | date:'dd/MM/yyyy' }}
+      </h4>
+
       <form [formGroup]="formCDP" (ngSubmit)="postDP()">
         <div class="row mb-2">
 
