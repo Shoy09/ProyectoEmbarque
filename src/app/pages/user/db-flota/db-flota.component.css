@@ -34,3 +34,186 @@
   z-index: 0; /* Debajo del h1 */
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+.hide-additional-fields {
+  display: none;
+}
+
+
+.agregar-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.agregar-container h3 {
+  margin-right: 10px;
+  color: #0A4F81;
+  line-height: 1;
+}
+
+.btn-celeste {
+  background-color: #004fa4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  line-height: 1;
+  display: flex;
+  align-items: center; /* Centra el contenido del botón verticalmente */
+}
+
+/*tabla ng material*/
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  padding: 8px;
+  border: 1px solid #ddd;}
+
+.mat-elevation-z8 {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.dd{
+  background-color: white;
+}
+body {
+  background-color: white;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-item {
+  flex: 0 1 auto;
+  min-width: 150px;
+}
+
+button.filter-item {
+  flex: 0 0 auto;
+  height: 40px;
+  line-height: 1.5;
+  padding: 0 20px;}
+
+
+.table-container {
+  margin-top: 25px;
+  width: 100%;
+  overflow: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+.mat-cell {
+  text-align: center;
+}
+
+.btn-celeste {
+  background-color: #004fa4;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button.mat-button {
+  margin-right: 5px;
+}
+
+.icon-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.selected-row {
+  background-color: #e6f7ff !important;
+}
+
+.mat-row:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.container-b {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+.filter-button {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  background-color: white;
+  color: #3f51b5;
+  box-shadow: 0 2px 4px rgba(130, 202, 236, 0.1);
+}
+
+.filter-button.primary {
+  background-color: white;
+  color: #004fa4;
+  border: 2px solid #004fa4;
+}
+
+.filter-button.primary:hover {
+  background-color: #004fa4;
+  color: white;
+  box-shadow: 0 2px 4px rgba(123, 191, 227, 0.2);
+}
+
+
+.filter-button.warn {
+  background-color: #ffc107;
+  color: black;
+}
+
+.filter-button.warn:hover {
+  background-color: #ffa000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.filter-button:hover {
+  transform: translateY(-2px);
+}
+
+
+.filter-button:active {
+  transform: translateY(1px);
+}
+
+.custom-icon-button {
+  background-color: transparent;
+  border: none;
+  padding: 4px;
+  border-radius: 50%;
+}

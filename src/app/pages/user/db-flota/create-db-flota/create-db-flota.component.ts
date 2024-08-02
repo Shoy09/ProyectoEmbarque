@@ -393,17 +393,14 @@ export class CreateDbFlotaComponent {
     const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
     const toneladasRecibidas = Number(this.toneladasRecibidas) || 0;
 
-    // Asegúrate de que toneladasRecibidas no sea cero para evitar división por cero
-    if (toneladasRecibidas <= 0) {
-      console.error('Error: Las toneladas recibidas deben ser mayores que cero para calcular el costo por tonelada.');
-      this.secondFormGroup.patchValue({ costo_tm_captura: 0 }); // Establece costo_tm_captura a 0 si hay un error
-      return;
-    }
-
     const costoPorCaptura = totalCosto / toneladasRecibidas;
+
 
     // Redondea el resultado a dos decimales y actualiza el formulario
     const costoPorCapturaRedondeado = parseFloat(costoPorCaptura.toFixed(2));
+
+    console.log(`Calculando : ${totalCosto} / ${toneladasRecibidas} = ${costoPorCapturaRedondeado}`);
+
     this.secondFormGroup.patchValue({ costo_tm_captura: costoPorCapturaRedondeado });
 
   }
@@ -415,7 +412,7 @@ export class CreateDbFlotaComponent {
 
     if (toneladasProcesadas <= 0) {
       console.error('Error: Las toneladas recibidas deben ser mayores que cero para calcular el costo por tonelada.');
-      this.secondFormGroup.patchValue({ costo_tm_captura: 0 }); // Establece costo_tm_captura a 0 si hay un error
+      this.secondFormGroup.patchValue({ csot: 0 }); // Establece costo_tm_captura a 0 si hay un error
       return;
     }
 

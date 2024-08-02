@@ -1,176 +1,4 @@
-<style>
-/**/
-.agregar-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
 
-.agregar-container h3 {
-  margin-right: 10px;
-  color: #0A4F81;
-  line-height: 1;
-}
-
-.btn-celeste {
-  background-color: #004fa4;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  line-height: 1;
-  display: flex;
-  align-items: center; /* Centra el contenido del botón verticalmente */
-}
-
-/*tabla ng material*/
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-td, th {
-  padding: 8px;
-  border: 1px solid #ddd;}
-
-.mat-elevation-z8 {
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.dd{
-  background-color: white;
-}
-body {
-  background-color: white;
-}
-
-.filter-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.filter-item {
-  flex: 0 1 auto;
-  min-width: 150px;
-}
-
-button.filter-item {
-  flex: 0 0 auto;
-  height: 40px;
-  line-height: 1.5;
-  padding: 0 20px;}
-
-
-.table-container {
-  margin-top: 25px;
-  width: 100%;
-  overflow: auto;
-}
-
-.mat-table {
-  width: 100%;
-}
-
-.mat-header-cell {
-  font-weight: bold;
-  background-color: #f5f5f5;
-}
-
-.mat-cell {
-  text-align: center;
-}
-
-.btn-celeste {
-  background-color: #004fa4;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-button.mat-button {
-  margin-right: 5px;
-}
-
-.icon-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.selected-row {
-  background-color: #e6f7ff !important;
-}
-
-.mat-row:hover {
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-
-.container-b {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-
-.filter-button {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  outline: none;
-  background-color: white;
-  color: #3f51b5;
-  box-shadow: 0 2px 4px rgba(130, 202, 236, 0.1);
-}
-
-.filter-button.primary {
-  background-color: white;
-  color: #004fa4;
-  border: 2px solid #004fa4;
-}
-
-.filter-button.primary:hover {
-  background-color: #004fa4;
-  color: white;
-  box-shadow: 0 2px 4px rgba(123, 191, 227, 0.2);
-}
-
-
-.filter-button.warn {
-  background-color: #ffc107;
-  color: black;
-}
-
-.filter-button.warn:hover {
-  background-color: #ffa000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.filter-button:hover {
-  transform: translateY(-2px);
-}
-
-
-.filter-button:active {
-  transform: translateY(1px);
-}
-</style>
 
 <div class="dd">
   <div class="hero-section">
@@ -247,12 +75,6 @@ button.mat-button {
         <td mat-cell *matCellDef="let row"> {{row.horas_faena}} h</td>
       </ng-container>
 
-      <!-- Columna Tipo de Cambio -->
-      <ng-container matColumnDef="tipo_cambio">
-        <th mat-header-cell *matHeaderCellDef> Tipo de Cambio </th>
-        <td mat-cell *matCellDef="let row"> S/ {{row.tipo_cambio}} </td>
-      </ng-container>
-
       <!-- Columna Kilos Declarados -->
       <ng-container matColumnDef="kilos_declarados">
         <th mat-header-cell *matHeaderCellDef> Kilos Declarados </th>
@@ -291,7 +113,7 @@ button.mat-button {
 
       <!-- Columna Merluza Descarte -->
       <ng-container matColumnDef="merluza_descarte">
-        <th mat-header-cell *matHeaderCellDef> Merluza Descarte (kg) </th>
+        <th mat-header-cell *matHeaderCellDef> Merluza NP (kg) </th>
         <td mat-cell *matCellDef="let row">
           <ng-container *ngIf="row.merluza_descarte !== null && row.merluza_descarte !== undefined && row.merluza_descarte !== ''">
             {{ row.merluza_descarte }} kg
@@ -301,13 +123,13 @@ button.mat-button {
 
       <!-- Columna Otro -->
       <ng-container matColumnDef="otro">
-        <th mat-header-cell *matHeaderCellDef> Otro </th>
+        <th mat-header-cell *matHeaderCellDef>Especie A</th>
         <td mat-cell *matCellDef="let row"> {{row.otro ?? ' '}} </td>
       </ng-container>
 
       <!-- Columna Kilo Otro -->
       <ng-container matColumnDef="kilo_otro">
-        <th mat-header-cell *matHeaderCellDef> Kilo Otro </th>
+        <th mat-header-cell *matHeaderCellDef>Especie A (kg) </th>
         <td mat-cell *matCellDef="let row">
           <ng-container *ngIf="row.kilo_otro !== null && row.kilo_otro !== undefined && row.kilo_otro !== ''">
             {{ row.kilo_otro }} kg
@@ -316,7 +138,7 @@ button.mat-button {
       </ng-container>
 
       <ng-container matColumnDef="precio_otro">
-        <th mat-header-cell *matHeaderCellDef>Precio de Especie</th>
+        <th mat-header-cell *matHeaderCellDef>EspecieA (S/)</th>
         <td mat-cell *matCellDef="let row">
           <ng-container *ngIf="row.precio_otro !== null && row.precio_otro !== undefined && row.precio_otro !== ''">
             S/{{ row.precio_otro }}
@@ -341,87 +163,100 @@ button.mat-button {
         <td mat-cell *matCellDef="let row"> {{row.toneladas_recibidas}} t</td>
       </ng-container>
 
-      <ng-container matColumnDef="participacion">
-        <th mat-header-cell *matHeaderCellDef> Participación </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.participacion}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="bonificacion">
-        <th mat-header-cell *matHeaderCellDef> Bonificación </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.bonificacion}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="total_participacion">
-        <th mat-header-cell *matHeaderCellDef> Total Participación </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.total_participacion}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="aporte_REP">
-        <th mat-header-cell *matHeaderCellDef> REP </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.aporte_REP}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="gratificacion">
-        <th mat-header-cell *matHeaderCellDef> Gratificacion </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.gratificacion}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="vacaciones">
-        <th mat-header-cell *matHeaderCellDef> Vacaciones </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.vacaciones}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="cts">
-        <th mat-header-cell *matHeaderCellDef> CTS </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.cts}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="essalud">
-        <th mat-header-cell *matHeaderCellDef> essalud </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.essalud}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="senati">
-        <th mat-header-cell *matHeaderCellDef> senati </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.senati}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="SCTR_SAL">
-        <th mat-header-cell *matHeaderCellDef> SCTR_SAL </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.SCTR_SAL}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="SCTR_PEN">
-        <th mat-header-cell *matHeaderCellDef> SCTR_PEN </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.SCTR_PEN}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="poliza_seguro">
-        <th mat-header-cell *matHeaderCellDef> poliza_seguro </th>
-        <td mat-cell *matCellDef="let row"> S/{{row.poliza_seguro}} </td>
-      </ng-container>
-
       <!-- Columna Total Tripulación -->
       <ng-container matColumnDef="total_tripulacion">
-        <th mat-header-cell *matHeaderCellDef> Total Tripulación </th>
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-icon-button class="custom-icon-button" (click)="toggleColumnsVisibility()">
+            <mat-icon>{{ areColumnsVisible ? 'remove' : 'add' }}</mat-icon>
+          </button>
+          Total Tripulación
+        </th>
         <td mat-cell *matCellDef="let row"> S/{{row.total_tripulacion}} </td>
       </ng-container>
 
-      <!-- Columna Consumo Gasolina -->
+      <ng-container *ngIf="areColumnsVisible">
+        <ng-container matColumnDef="participacion">
+          <th mat-header-cell *matHeaderCellDef> Participación </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.participacion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bonificacion">
+          <th mat-header-cell *matHeaderCellDef> Bonificación </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.bonificacion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total_participacion">
+          <th mat-header-cell *matHeaderCellDef> Total Participación </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.total_participacion}} </td>
+        </ng-container>
+
+        <!-- Resto de columnas ocultables -->
+        <ng-container matColumnDef="aporte_REP">
+          <th mat-header-cell *matHeaderCellDef> REP </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.aporte_REP}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gratificacion">
+          <th mat-header-cell *matHeaderCellDef> Gratificación </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.gratificacion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacaciones">
+          <th mat-header-cell *matHeaderCellDef> Vacaciones </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.vacaciones}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cts">
+          <th mat-header-cell *matHeaderCellDef> CTS </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.cts}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="essalud">
+          <th mat-header-cell *matHeaderCellDef> essalud </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.essalud}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="senati">
+          <th mat-header-cell *matHeaderCellDef> senati </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.senati}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="SCTR_SAL">
+          <th mat-header-cell *matHeaderCellDef> SCTR_SAL </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.SCTR_SAL}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="SCTR_PEN">
+          <th mat-header-cell *matHeaderCellDef> SCTR_PEN </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.SCTR_PEN}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="poliza_seguro">
+          <th mat-header-cell *matHeaderCellDef> poliza_seguro </th>
+          <td mat-cell *matCellDef="let row"> S/{{row.poliza_seguro}} </td>
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container matColumnDef="tipo_cambio">
+        <th mat-header-cell *matHeaderCellDef> Tipo de Cambio </th>
+        <td mat-cell *matCellDef="let row"> S/ {{row.tipo_cambio}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="consumo_gasolina">
         <th mat-header-cell *matHeaderCellDef> Galones Gasolina </th>
         <td mat-cell *matCellDef="let row"> {{row.consumo_gasolina}} gal. </td>
+      </ng-container>
+
+      <ng-container matColumnDef="galon_hora">
+        <th mat-header-cell *matHeaderCellDef>Galon por H.</th>
+        <td mat-cell *matCellDef="let row"> {{row.galon_hora}} gal.</td>
       </ng-container>
 
       <!-- Columna Total Gasolina -->
       <ng-container matColumnDef="total_gasolina">
         <th mat-header-cell *matHeaderCellDef> Total Gasolina </th>
         <td mat-cell *matCellDef="let row"> S/{{row.total_gasolina}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="galon_hora">
-        <th mat-header-cell *matHeaderCellDef>Galon por H.</th>
-        <td mat-cell *matCellDef="let row"> {{row.galon_hora}} gal.</td>
       </ng-container>
 
       <!-- Columna Consumo Hielo -->
@@ -490,7 +325,7 @@ button.mat-button {
       </ng-container>
 
       <ng-container matColumnDef="csot">
-        <th mat-header-cell *matHeaderCellDef>CSOT</th>
+        <th mat-header-cell *matHeaderCellDef>Costo por captura Procesada</th>
         <td mat-cell *matCellDef="let row"> S/{{row.csot}} </td>
       </ng-container>
 

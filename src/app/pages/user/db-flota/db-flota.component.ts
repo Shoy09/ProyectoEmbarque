@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-db-flota',
@@ -32,7 +33,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule
   ],
   templateUrl: './db-flota.component.html',
   styleUrl: './db-flota.component.css'
@@ -43,14 +45,19 @@ export class DbFlotaComponent {
 
   flotas: FlotaDP[] = [];
   embarcaciones: Embarcaciones[] = [];
-  zona_pesca: ZonaPescaI[] = []
+  zona_pesca: ZonaPescaI[] = [];
+  areColumnsVisible: boolean = false;
+
   displayedColumns: string[] = [
-    'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
-    'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro', 'precio_otro' ,'precio_basico',
-    'toneladas_procesadas', 'toneladas_recibidas', 'participacion','bonificacion', 'total_participacion', 'aporte_REP','gratificacion', 'vacaciones', 'cts', 'essalud', 'senati', 'SCTR_SAL', 'SCTR_PEN', 'poliza_seguro','total_tripulacion', 'consumo_gasolina',
-    'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
-    'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
-    'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot','lances'
+    'fecha', 'embarcacion', 'zona_pesca', 'horas_faena'
+    , 'kilos_declarados', 'merluza', 'bereche',
+    'volador', 'merluza_descarte', 'otro', 'kilo_otro',
+    'precio_otro', 'precio_basico', 'toneladas_procesadas',
+    'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina', 'galon_hora',
+    'total_gasolina', 'consumo_hielo', 'total_hielo',
+    'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
+    'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
+    'total_costo', 'costo_tm_captura', 'csot', 'lances'
   ];
   flotaDPId!: number;
   isDateFiltered = false;
@@ -146,6 +153,44 @@ export class DbFlotaComponent {
 
   getLancesForFlota(flotaId: number): IDiarioPesca[] {
     return [];
+  }
+
+  toggleColumnsVisibility(): void {
+    this.areColumnsVisible = !this.areColumnsVisible;
+    this.updateDisplayedColumns();
+  }
+
+  updateDisplayedColumns(): void {
+    this.displayedColumns = [
+      'fecha', 'embarcacion', 'zona_pesca', 'horas_faena',
+      'kilos_declarados', 'merluza', 'bereche',
+      'volador', 'merluza_descarte', 'otro', 'kilo_otro',
+      'precio_otro', 'precio_basico', 'toneladas_procesadas',
+      'toneladas_recibidas', 'total_tripulacion',
+      'tipo_cambio', 'consumo_gasolina',
+      'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
+      'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
+      'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
+      'total_costo', 'costo_tm_captura', 'csot', 'lances'
+    ];
+
+    // Si las columnas están visibles, agrega las columnas adicionales
+    if (this.areColumnsVisible) {
+      this.displayedColumns = [
+        'fecha', 'embarcacion', 'zona_pesca', 'horas_faena',
+        'kilos_declarados', 'merluza', 'bereche',
+        'volador', 'merluza_descarte', 'otro', 'kilo_otro',
+        'precio_otro', 'precio_basico', 'toneladas_procesadas',
+        'toneladas_recibidas','participacion', 'bonificacion', 'total_participacion', 'aporte_REP',
+        'gratificacion', 'vacaciones', 'cts', 'essalud', 'senati', 'SCTR_SAL',
+        'SCTR_PEN', 'poliza_seguro', 'total_tripulacion', 'tipo_cambio','consumo_gasolina',
+        'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
+        'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
+        'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
+        'total_costo', 'costo_tm_captura', 'csot', 'lances',
+
+      ];
+    }
   }
 
   openCreateFormFlota(): void {
