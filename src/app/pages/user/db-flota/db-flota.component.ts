@@ -210,7 +210,12 @@ export class DbFlotaComponent {
   openFomrCreateLances(flotaDP: FlotaDP): void {
     const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
       width: '600px', // ajusta el ancho según tus necesidades
-      data: { flotaDP_id: flotaDP.id} // Pasa el id de la instancia de FlotaDP seleccionada
+      data: {
+        flotaDP_id: flotaDP.id,
+        fecha: flotaDP.fecha,
+        embarcacion: flotaDP.embarcacion,
+        zona_pesca: flotaDP.zona_pesca
+      },
     });
   }
 

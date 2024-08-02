@@ -53,7 +53,7 @@
       <!-- Columna Fecha -->
       <ng-container matColumnDef="fecha">
         <th mat-header-cell *matHeaderCellDef> Fecha </th>
-        <td mat-cell *matCellDef="let row"> {{row.fecha}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </td>
       </ng-container>
 
       <!-- Columna Embarcación -->
@@ -123,8 +123,10 @@
 
       <!-- Columna Otro -->
       <ng-container matColumnDef="otro">
-        <th mat-header-cell *matHeaderCellDef>Especie A</th>
-        <td mat-cell *matCellDef="let row"> {{row.otro ?? ' '}} </td>
+        <th mat-header-cell *matHeaderCellDef class="green-pastel">Especie A</th>
+        <td mat-cell *matCellDef="let row" class="green-pastel">
+          {{ row.otro ?? ' ' }}
+        </td>
       </ng-container>
 
       <!-- Columna Kilo Otro -->

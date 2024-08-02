@@ -62,35 +62,15 @@
         <div class="row mb-2">
 
           <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
-            <select class="form-control custom-focus-ring" formControlName="embarcacion">
-              <option value="">Seleccione Embarcacion</option>
-              <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
-            </select>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Fecha de Faena</label>
-            <input type="date" class="form-control custom-focus-ring" formControlName="fecha" [value]="''">
-          </div>
-          <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">N° de Lance</label>
             <input type="number" placeholder="N° de alcance" class="form-control custom-focus-ring" formControlName="numero_alcance">
           </div>
-        </div>
-        <div class="row mb-2">
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
             <select class="form-control custom-focus-ring" formControlName="especie">
               <option value="">Seleccione Especie</option>
               <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
-            </select>
-          </div>
-
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
-            <select class="form-control custom-focus-ring" formControlName="zona_pesca">
-              <option value="">Seleccione su Zona</option>
-              <option *ngFor="let zona of zona" [value]="zona.id">{{ zona.nombre }}</option>
             </select>
           </div>
 

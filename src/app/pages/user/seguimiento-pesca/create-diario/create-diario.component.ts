@@ -33,15 +33,20 @@ export class CreateDiarioComponent implements OnInit{
     private embarcacionesService: EmbarcacionesService,
     private diarioPescaService: DiarioPescaService,
     public dialogRef: MatDialogRef<CreateDiarioComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { flotaDP_id: number },
+    @Inject(MAT_DIALOG_DATA) public data: {
+      flotaDP_id: number,
+      embarcacion: number,
+      fecha: Date,
+      zona_pesca:number,
+    },
     private matDialog: MatDialog
   ){
     this.formCDP = this.formBuilder.group({
-      embarcacion: ['', [Validators.required]],
+      embarcacion: [this.data.embarcacion, [Validators.required]],
       especie: ['', [Validators.required]],
-      fecha: ['', [Validators.required]],
+      fecha: [this.data.fecha, [Validators.required]],
       numero_alcance: ['', [Validators.required]],
-      zona_pesca: ['', [Validators.required]],
+      zona_pesca: [this.data.zona_pesca, [Validators.required]],
       estrato: ['', [Validators.required]],
       profundidad: ['', [Validators.required]],
       tiempo_efectivo: ['', [Validators.required]],
