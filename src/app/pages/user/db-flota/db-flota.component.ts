@@ -19,6 +19,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { EditFlotaComponent } from './edit-flota/edit-flota.component';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-db-flota',
@@ -57,7 +60,7 @@ export class DbFlotaComponent {
     'total_gasolina', 'consumo_hielo', 'total_hielo',
     'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
     'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-    'total_costo', 'costo_tm_captura', 'csot', 'lances'
+    'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
   ];
   flotaDPId!: number;
   isDateFiltered = false;
@@ -68,7 +71,9 @@ export class DbFlotaComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private serviceFlota: FlotaService,
+  constructor(
+    private _toastr: ToastrService,
+    private serviceFlota: FlotaService,
     private embarcacionesService: EmbarcacionesService,
     private route: ActivatedRoute,
     private router: Router
@@ -171,7 +176,7 @@ export class DbFlotaComponent {
       'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
       'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
       'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-      'total_costo', 'costo_tm_captura', 'csot', 'lances'
+      'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
     ];
 
     // Si las columnas están visibles, agrega las columnas adicionales
@@ -187,7 +192,7 @@ export class DbFlotaComponent {
         'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
         'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
         'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-        'total_costo', 'costo_tm_captura', 'csot', 'lances',
+        'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
 
       ];
     }
@@ -217,6 +222,37 @@ export class DbFlotaComponent {
         zona_pesca: flotaDP.zona_pesca
       },
     });
+  }
+
+  openFomrEditFlota(flota: FlotaDP){
+    const edit = this.dialog.open(EditFlotaComponent, {
+      data: flota
+    });
+  }
+
+  deleteFlota(id: number){
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar esta Flota?',
+      text: "Una vez eliminada, no podrás recuperarla.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.serviceFlota.deleteFlota(id).subscribe(
+          () => {
+            console.log('Flota eliminado correctamente');
+            this.loadFlotas();
+            this._toastr.success('Flota eliminado correctamente');
+          },
+          error => {
+            console.error('Error al eliminar el sondeo:', error);
+          }
+        );
+      }
+    });
+
   }
 
   applyFilter(event: Event) {

@@ -52,7 +52,7 @@
       justify-content: center; /* Alinea los botones al centro en pantallas pequeñas */
     }
   }
-  
+
 </style>
 <div class="ccontainer-contact">
   <div class="d-flex flex-wrap align-items-center justify-content-center rounded-end bg-white p-4 form-container">
@@ -78,7 +78,7 @@
 
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Fecha</label>
-            <input type="date" class="form-control custom-focus-ring" formControlName="fecha">
+            <input type="date" class="form-control custom-focus-ring" formControlName="fecha" readonly>
           </div>
         </div>
         <div class="row mb-2">
@@ -88,7 +88,7 @@
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
-            <select class="form-control custom-focus-ring" formControlName="zona_pesca">
+            <select class="form-control custom-focus-ring" formControlName="zona_pesca" readonly>
               <option value="-1">Seleccione Zona de Pesca</option>
               <option *ngFor="let zona of zona" [value]="zona.id">{{ zona.nombre }}</option>
             </select>

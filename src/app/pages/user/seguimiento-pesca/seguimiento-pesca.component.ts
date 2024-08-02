@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-seguimiento-pesca',
@@ -51,7 +53,9 @@ export class SeguimientoPescaComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private diarioPescaService: DiarioPescaService,
+  constructor(
+    private _toastr: ToastrService,
+    private diarioPescaService: DiarioPescaService,
     private embarcacionesService: EmbarcacionesService,
     private especieService: EspeciesService,
     private changeDetector: ChangeDetectorRef,
@@ -138,18 +142,30 @@ export class SeguimientoPescaComponent {
     });
   }
 
+
+  // Suponiendo que esta es parte de un componente Angular
   deleteDiarioPesca(id: number) {
-    if (confirm('¿Estás seguro de que quieres eliminar este Sondeo?')) {
-      this.diarioPescaService.deleteDiarioPesca(id).subscribe(
-        () => {
-          console.log('Sondeo eliminado correctamente');
-          this.getDiarioPesca(); // Recargar la lista después de eliminar
-        },
-        error => {
-          console.error('Error al eliminar el sondeo:', error);
-        }
-      );
-    }
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar este Lance?',
+      text: "Una vez eliminado, no podrás recuperarlo.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.diarioPescaService.deleteDiarioPesca(id).subscribe(
+          () => {
+            console.log('Lance eliminado correctamente');
+            this.getDiarioPesca();
+            this._toastr.success('Lance eliminado correctamente');
+          },
+          error => {
+            console.error('Error al eliminar el sondeo:', error);
+          }
+        );
+      }
+    });
   }
 
   ngAfterViewInit() {
