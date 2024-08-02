@@ -47,7 +47,7 @@ export class DbFlotaComponent {
   displayedColumns: string[] = [
     'fecha','embarcacion', 'zona_pesca', 'horas_faena', 'tipo_cambio', 'kilos_declarados',
     'merluza', 'bereche', 'volador', 'merluza_descarte', 'otro', 'kilo_otro', 'precio_otro' ,'precio_basico',
-    'toneladas_procesadas', 'toneladas_recibidas', 'participacion', 'total_participacion','total_tripulacion', 'consumo_gasolina',
+    'toneladas_procesadas', 'toneladas_recibidas', 'participacion','bonificacion', 'total_participacion', 'aporte_REP','gratificacion', 'vacaciones', 'cts', 'essalud', 'senati', 'SCTR_SAL', 'SCTR_PEN', 'poliza_seguro','total_tripulacion', 'consumo_gasolina',
     'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo', 'consumo_agua', 'total_agua',
     'consumo_viveres', 'total_vivieres', 'dias_inspeccion', 'total_servicio_inspeccion',
     'total_derecho_pesca', 'total_costo', 'costo_tm_captura', 'csot','lances'

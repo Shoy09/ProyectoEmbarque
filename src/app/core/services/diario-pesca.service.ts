@@ -13,8 +13,8 @@ export class DiarioPescaService {
     return this._refresh$;
   }
 
-  private url: string = 'https://patt.pythonanywhere.com/api/diarios-de-pesca/'
-  //private url: string = 'http://127.0.0.1:8000/api/diarios-de-pesca/'
+  //private url: string = 'https://patt.pythonanywhere.com/api/diarios-de-pesca/'
+  private url: string = 'http://127.0.0.1:8000/api/diarios-de-pesca/'
 
   constructor(private http: HttpClient)  {}
 

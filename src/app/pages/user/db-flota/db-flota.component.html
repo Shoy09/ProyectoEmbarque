@@ -1,8 +1,5 @@
 <style>
-
 /**/
-
-
 .agregar-container {
   display: flex;
   align-items: center;
@@ -349,9 +346,59 @@ button.mat-button {
         <td mat-cell *matCellDef="let row"> S/{{row.participacion}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="bonificacion">
+        <th mat-header-cell *matHeaderCellDef> Bonificación </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.bonificacion}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="total_participacion">
         <th mat-header-cell *matHeaderCellDef> Total Participación </th>
         <td mat-cell *matCellDef="let row"> S/{{row.total_participacion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="aporte_REP">
+        <th mat-header-cell *matHeaderCellDef> REP </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.aporte_REP}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gratificacion">
+        <th mat-header-cell *matHeaderCellDef> Gratificacion </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.gratificacion}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vacaciones">
+        <th mat-header-cell *matHeaderCellDef> Vacaciones </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.vacaciones}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cts">
+        <th mat-header-cell *matHeaderCellDef> CTS </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.cts}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="essalud">
+        <th mat-header-cell *matHeaderCellDef> essalud </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.essalud}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="senati">
+        <th mat-header-cell *matHeaderCellDef> senati </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.senati}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="SCTR_SAL">
+        <th mat-header-cell *matHeaderCellDef> SCTR_SAL </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.SCTR_SAL}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="SCTR_PEN">
+        <th mat-header-cell *matHeaderCellDef> SCTR_PEN </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.SCTR_PEN}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="poliza_seguro">
+        <th mat-header-cell *matHeaderCellDef> poliza_seguro </th>
+        <td mat-cell *matCellDef="let row"> S/{{row.poliza_seguro}} </td>
       </ng-container>
 
       <!-- Columna Total Tripulación -->

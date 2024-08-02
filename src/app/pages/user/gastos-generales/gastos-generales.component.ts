@@ -271,8 +271,8 @@ export class GastosGeneralesComponent {
   }
 
   loadServiInspe(){
-    this.costoGalonGasolina.getTarifas().subscribe(data => {
-      this.dataSourceTarifas.data = data
+    this.costoGalonGasolina.getM().subscribe(data => {
+      this.dataSourceMecanismo.data = data
     })
   }
 

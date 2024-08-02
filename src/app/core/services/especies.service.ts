@@ -13,8 +13,8 @@ export class EspeciesService {
     return this._refresh$;
   }
 
-  private url: string = 'https://patt.pythonanywhere.com/api/especies/';
-  //private url: string = 'http://127.0.0.1:8000/api/especies/';
+  //private url: string = 'https://patt.pythonanywhere.com/api/especies/';
+  private url: string = 'http://127.0.0.1:8000/api/especies/';
   private especiesCache: Especies[] | null = null;
 
   constructor(private http: HttpClient) {}

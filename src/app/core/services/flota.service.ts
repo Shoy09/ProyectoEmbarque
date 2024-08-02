@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 })
 export class FlotaService {
 
-  private baseUrl = 'https://patt.pythonanywhere.com/api/flotadp/';
-  //private baseUrl = 'http://127.0.0.1:8000/api/flotadp/';
+  //private baseUrl = 'https://patt.pythonanywhere.com/api/flotadp/';
+  private baseUrl = 'http://127.0.0.1:8000/api/flotadp/';
 
   constructor(private http: HttpClient) { }
 

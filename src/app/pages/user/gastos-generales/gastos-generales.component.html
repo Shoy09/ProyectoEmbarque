@@ -170,7 +170,7 @@ th.mat-sort-header {
 
         <!-- Costo Column -->
         <ng-container matColumnDef="costo_zarpe">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por Zarpe </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por Zarpe en Viveres </th>
           <td mat-cell *matCellDef="let row"> S/{{row.costo_zarpe}} </td>
         </ng-container>
 
@@ -187,7 +187,7 @@ th.mat-sort-header {
         </ng-container>
 
         <ng-container matColumnDef="boner">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Capacidad de Boner </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad de Boner </th>
           <td mat-cell *matCellDef="let row"> {{row.boner}} </td>
         </ng-container>
 
@@ -410,8 +410,8 @@ th.mat-sort-header {
         </ng-container>
 
         <ng-container matColumnDef="tarifa">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo por día</th>
-          <td mat-cell *matCellDef="let row"> S/{{row.tarifa}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tarifa</th>
+          <td mat-cell *matCellDef="let row"> % {{row.tarifa}} </td>
         </ng-container>
 
         <ng-container matColumnDef="acciones">

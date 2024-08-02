@@ -14,12 +14,12 @@ export class EmbarcacionesService {
     return this._refresh$;
   }
 
-  private url: string = 'https://patt.pythonanywhere.com/api/embarcaciones/'
-  //private url: string = 'http://127.0.0.1:8000/api/embarcaciones/'
+  //private url: string = 'https://patt.pythonanywhere.com/api/embarcaciones/'
+  private url: string = 'http://127.0.0.1:8000/api/embarcaciones/'
   private embarcacionesCache: Embarcaciones[] | null = null;
 
-  private url_zona_pesca: string = 'https://patt.pythonanywhere.com/api/zona-pesca/'
-  //private url_zona_pesca: string = 'http://127.0.0.1:8000/api/zona-pesca/'
+  //private url_zona_pesca: string = 'https://patt.pythonanywhere.com/api/zona-pesca/'
+  private url_zona_pesca: string = 'http://127.0.0.1:8000/api/zona-pesca/'
   private zonaPescaCache: ZonaPescaI[] | null = null;
 
   constructor(private http: HttpClient)  {}
