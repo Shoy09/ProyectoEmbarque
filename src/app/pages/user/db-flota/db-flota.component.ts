@@ -60,7 +60,7 @@ export class DbFlotaComponent {
     'total_gasolina', 'consumo_hielo', 'total_hielo',
     'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
     'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-    'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
+    'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances', 'acciones'
   ];
   flotaDPId!: number;
   isDateFiltered = false;
@@ -88,6 +88,10 @@ export class DbFlotaComponent {
       this.flotaDPId = +params['flotaDPId'];
       this.loadFlotaData();
     });
+  }
+
+  verLances(flotaId: number) {
+    this.router.navigate(['/ss', flotaId]);
   }
 
   loadFlotaData(): void {
@@ -176,7 +180,7 @@ export class DbFlotaComponent {
       'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
       'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
       'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-      'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
+      'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances','acciones'
     ];
 
     // Si las columnas están visibles, agrega las columnas adicionales
@@ -192,7 +196,7 @@ export class DbFlotaComponent {
         'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
         'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
         'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-        'total_costo', 'costo_tm_captura', 'csot', 'lances', 'acciones'
+        'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances', 'acciones'
 
       ];
     }

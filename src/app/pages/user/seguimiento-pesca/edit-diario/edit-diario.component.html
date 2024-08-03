@@ -27,6 +27,11 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
 
+  .cancel-button {
+  background-color: #ff7676;
+  color: white;
+  border-radius: 6px;
+  }
   .btn-contact:hover {
     background-color: #357ab8;
   }
@@ -148,8 +153,8 @@
           </div>
         </div>
         <div class="button-group">
-          <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Cancelar</button>
-          <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact">Enviar</button>
+          <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact" cdkFocusInitial [disabled]="!formEDP.valid">Enviar</button>
+          <button type="button" class="cancel-button mb-2 w-100" (click)="cancel()">Cancelar</button>
         </div>
       </form>
     </div>

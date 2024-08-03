@@ -17,7 +17,7 @@ import { EspeciesService } from 'app/core/services/especies.service';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -59,28 +59,78 @@ export class SeguimientoPescaComponent {
     private embarcacionesService: EmbarcacionesService,
     private especieService: EspeciesService,
     private changeDetector: ChangeDetectorRef,
-    private router: Router) {
+    private router: Router,
+    private route: ActivatedRoute
+  ){
     this.dataSource = new MatTableDataSource<IDiarioPesca>();
   }
 
 
   ngOnInit(): void {
-    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
-      this.diarioPescaService.getDiarioPesca().subscribe(diarios => {
-        const diariosConNombres: IDiarioPesca[] = diarios.map(diario => ({
-          ...diario,
-          embarcacion: Number(diario.embarcacion), // Asegúrate de que embarcacion sea number si así lo requiere tu interfaz IDiarioPesca
-          especie: Number(diario.especie), // Asegúrate de que especie sea number si así lo requiere tu interfaz IDiarioPesca
-          zona: Number(diario.zona_pesca),
-          embarcacionNombre: embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido',
-          // Agrega más propiedades según tu interfaz IDiarioPesca
-        }));
+    this.route.params.subscribe(params => {
+      const flotaDPId = params['flotaDPId'];
+      if (flotaDPId) {
+        // Si hay un flotaDPId, carga solo los lances de esa FlotaDP
+        this.loadLancesForFlotaDP(flotaDPId);
+      } else {
+        // Si no hay flotaDPId, carga todos los lances como antes
+        this.loadAllLances();
+      }
+    });
+  }
 
-        this.dataSource = new MatTableDataSource<IDiarioPesca>(diariosConNombres);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+
+  loadLancesForFlotaDP(flotaDPId: number): void {
+    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
+      this.especieService.getDiarioPesca().subscribe(especies => {
+        this.embarcacionesService.getZonaPesca().subscribe(zona => {
+          this.diarioPescaService.getDiariosPescaPorFlota(flotaDPId).subscribe(
+            diarios => {
+              this.processAndDisplayDiarios(diarios, embarcaciones, especies, zona);
+            },
+            error => {
+              console.error('Error al cargar los lances para FlotaDP:', error);
+              this._toastr.error('Error al cargar los lances');
+            }
+          );
+        });
       });
     });
+  }
+
+  loadAllLances(): void {
+    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
+      this.especieService.getDiarioPesca().subscribe(especies => {
+        this.embarcacionesService.getZonaPesca().subscribe(zona => {
+          this.diarioPescaService.getDiarioPesca().subscribe(
+            diarios => {
+              this.processAndDisplayDiarios(diarios, embarcaciones, especies, zona);
+            },
+            error => {
+              console.error('Error al cargar todos los lances:', error);
+              this._toastr.error('Error al cargar los lances');
+            }
+          );
+        });
+      });
+    });
+  }
+
+  processAndDisplayDiarios(diarios: IDiarioPesca[], embarcaciones?: any[], especies?: any[], zonas?: any[]): void {
+    const diariosConNombres = diarios.map(diario => ({
+      ...diario,
+      embarcacion: Number(diario.embarcacion),
+      especie: Number(diario.especie),
+      zona: Number(diario.zona_pesca),
+      embarcacionNombre: embarcaciones ? embarcaciones.find(e => Number(e.id) === Number(diario.embarcacion))?.nombre || 'Desconocido' : 'Desconocido',
+      especieNombre: especies ? especies.find(e => Number(e.id) === Number(diario.especie))?.nombre || 'Desconocido' : 'Desconocido',
+      zonaNombre: zonas ? zonas.find(e => Number(e.id) === Number(diario.zona_pesca))?.nombre || 'Desconocido' : 'Desconocido',
+    }));
+
+    diariosConNombres.reverse();
+    this.diario = diariosConNombres;
+    this.dataSource.data = diariosConNombres;
+    this.changeDetector.detectChanges();
   }
 
 
@@ -117,33 +167,27 @@ export class SeguimientoPescaComponent {
     this.router.navigate(['/db-flota', flotaDPId]);
   }
 
-  openFomrCreate(): void {
-    const dialogRefCreate = this.dialog.open(CreateDiarioComponent, {
-      width: '600px', // ajusta el ancho según tus necesidades
-      data: {} as IDiarioPesca // si no necesitas pasar datos inicialmente
-    });
-
-    dialogRefCreate.afterClosed().subscribe(result => {
-      if (result) {
-        this.getDiarioPesca(true);
-      }
-    });
-  }
-
-  openFomrUpdate(diario: IDiarioPesca){
+  openFomrUpdate(diario: IDiarioPesca) {
     const dialogRefUpdate = this.dialog.open(EditDiarioComponent, {
       data: diario
     });
 
-    dialogRefUpdate.afterClosed().subscribe(result => {
+    dialogRefUpdate.afterClosed().subscribe((result) => {
       if (result) {
-        this.getDiarioPesca();
+        if (result.canceled) {
+          // No hacer nada si se canceló
+          console.log('El diálogo fue cancelado.');
+        } else {
+          // Solo actualiza si el diálogo retorna un resultado (indicando una actualización exitosa)
+          this.getDiarioPesca();
+          this._toastr.success('Registro actualizado correctamente');
+        }
       }
     });
   }
 
 
-  // Suponiendo que esta es parte de un componente Angular
+
   deleteDiarioPesca(id: number) {
     Swal.fire({
       title: '¿Estás seguro de que quieres eliminar este Lance?',
@@ -171,9 +215,7 @@ export class SeguimientoPescaComponent {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.getDiarioPesca(); // Asegúrate de llamar a getDiarioPesca aquí para cargar los datos
   }
-
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

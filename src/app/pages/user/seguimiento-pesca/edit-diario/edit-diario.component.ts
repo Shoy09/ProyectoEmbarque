@@ -18,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './edit-diario.component.html',
   styleUrl: './edit-diario.component.css'
 })
-export class EditDiarioComponent implements OnInit {
+export class EditDiarioComponent{
 
   formEDP: FormGroup;
   especies: Especies[] = [];
@@ -108,18 +108,26 @@ export class EditDiarioComponent implements OnInit {
   save(): void {
     if (this.formEDP.valid) {
       const diario: IDiarioPesca = this.formEDP.value;
+
       this.diarioPE.putDiarioPesca(diario, this.data.id).subscribe(
         (res) => {
           console.log("DP actualizada:", res);
-          this.dialogRef.close(res);
-          this._toastr.success('Registro actualizado correctamente');
+          this.dialogRef.close(res); // Pasa el resultado al cerrar
         },
         (error) => {
           console.error("Error al actualizar DP:", error);
           this._toastr.error('Hubo un error al actualizar el registro');
+          this.dialogRef.close(); // Cierra sin pasar resultado en caso de error
         }
       );
     }
   }
+
+
+  cancel(): void {
+    this.dialogRef.close({ canceled: true });
+  }
+
+
 
 }

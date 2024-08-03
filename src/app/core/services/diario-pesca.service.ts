@@ -42,4 +42,8 @@ export class DiarioPescaService {
     return this.http.put<IDiarioPesca>(`${this.url}${id}/`, diario);
   }
 
+  getDiariosPescaPorFlota(flotaDP_id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}flota/${flotaDP_id}/`);
+  }
+
 }

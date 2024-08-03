@@ -12,11 +12,12 @@ export const routes: Routes = [
       path: '',
       component: UserComponent, // Componente principal que contiene la barra lateral y el contenido principal
       children: [
-        { path: 'ss', component: SeguimientoPescaComponent },
+        {path: 'ss', component: SeguimientoPescaComponent },
+        {path: 'ss/:flotaDPId', component: SeguimientoPescaComponent },
         {path: 'estadistica-sp', component: EstadisticaSPComponent},
         {path: 'gastos-generales', component: GastosGeneralesComponent},
         {path: 'db-flota', component: DbFlotaComponent},
-        { path: 'db-flota/:flotaDPId', component: DbFlotaComponent }
+        {path: 'db-flota/:flotaDPId', component: DbFlotaComponent }
 
       ]
     },

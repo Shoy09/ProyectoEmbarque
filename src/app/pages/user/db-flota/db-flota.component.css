@@ -126,6 +126,7 @@ button.mat-button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 10px;
 }
 
 .selected-row {
