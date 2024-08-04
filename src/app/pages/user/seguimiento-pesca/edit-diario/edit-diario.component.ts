@@ -24,6 +24,7 @@ export class EditDiarioComponent{
   especies: Especies[] = [];
   embarcaciones: Embarcaciones[] = [];
   zona: ZonaPescaI[] = [];
+  embarcacionNombre: String = '';
 
   constructor(
     private _toastr: ToastrService,
@@ -56,8 +57,22 @@ export class EditDiarioComponent{
   ngOnInit(): void {
     this.formEDP.patchValue(this.data); // Aplicamos los datos iniciales
     this.getEspecies();
-    this.getEmbarcaciones();
-    this.getZonaPesca();
+
+    this.embarcacionService.getEmbarcaciones().subscribe(
+      (embarcaciones: Embarcaciones[]) => {
+        this.embarcaciones = embarcaciones;
+        if (this.data && this.data.embarcacion) {
+          const embarcacion = embarcaciones.find(e => e.id === this.data.embarcacion);
+          if (embarcacion) {
+            this.embarcacionNombre = embarcacion.nombre;
+          }
+        }
+      },
+      (error: any) => {
+        console.error('Error al obtener embarcaciones:', error);
+      }
+    );
+    
   }
 
   getEspecies() {

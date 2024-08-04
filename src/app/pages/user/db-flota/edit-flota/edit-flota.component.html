@@ -1,1 +1,38 @@
-<p>edit-flota works!</p>
+<h1>Editar Flota</h1>
+<form [formGroup]="formEditFlota" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Fecha</mat-label>
+    <input matInput formControlName="fecha" type="date">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Consumo Viveres</mat-label>
+    <input matInput formControlName="consumo_viveres" type="number">
+  </mat-form-field>
+
+  <!-- Campos select para embarcacion y zona_pesca -->
+  <mat-form-field appearance="fill">
+    <mat-label>Embarcación</mat-label>
+    <mat-select formControlName="embarcacion">
+      <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
+        {{ embarcacion.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Zona de Pesca</mat-label>
+    <mat-select formControlName="zona_pesca">
+      <mat-option *ngFor="let zonaItem of zona" [value]="zonaItem.id">
+        {{ zonaItem.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Añade más campos según sea necesario -->
+
+  <div>
+    <button mat-raised-button color="primary" type="submit" [disabled]="formEditFlota.invalid">Guardar</button>
+    <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
+  </div>
+</form>

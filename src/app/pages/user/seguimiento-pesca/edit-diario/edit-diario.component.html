@@ -62,42 +62,27 @@
 <div class="ccontainer-contact">
   <div class="d-flex flex-wrap align-items-center justify-content-center rounded-end bg-white p-4 form-container">
     <div class="w-100">
-      <h1 class="h5 font-weight-semibold text-center mb-4">Editar Lance</h1>
+      <h4 class="h2 font-weight-semibold text-center mb-4">Editar Lance {{ embarcacionNombre }}</h4>
+
       <form [formGroup]="formEDP" (ngSubmit)="save()">
+          <!-- <div class="col-md-4 mb-2">
+            <label class="mb-1 d-block text-xs font-weight-semibold">Fecha</label>
+            <input type="date" class="form-control custom-focus-ring" formControlName="fecha" readonly>
+          </div> -->
+
         <div class="row mb-2">
 
           <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Embarcación</label>
-            <select class="form-control custom-focus-ring" formControlName="embarcacion">
-              <option value="-1">Seleccione Embarcaciones</option>
-              <option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</option>
-            </select>
+            <label class="mb-1 d-block text-xs font-weight-semibold">N° de alcance</label>
+            <input type="number" placeholder="N° de alcance" class="form-control custom-focus-ring" formControlName="numero_alcance">
           </div>
+
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Especie</label>
             <select class="form-control custom-focus-ring" formControlName="especie">
               <option value="-1">Seleccione Especie</option>
               <option *ngFor="let especie of especies" [value]="especie.id">{{ especie.nombre }}</option>
             </select>
-          </div>
-
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Fecha</label>
-            <input type="date" class="form-control custom-focus-ring" formControlName="fecha" readonly>
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">N° de alcance</label>
-            <input type="number" placeholder="N° de alcance" class="form-control custom-focus-ring" formControlName="numero_alcance">
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
-            <select class="form-control custom-focus-ring" formControlName="zona_pesca" readonly>
-              <option value="-1">Seleccione Zona de Pesca</option>
-              <option *ngFor="let zona of zona" [value]="zona.id">{{ zona.nombre }}</option>
-            </select>
-
           </div>
 
           <div class="col-md-4 mb-2">
@@ -109,6 +94,15 @@
               <option value="III">III</option>
             </select>
           </div>
+
+          <!-- <div class="col-md-4 mb-2">
+            <label class="mb-1 d-block text-xs font-weight-semibold">Zona de Pesca</label>
+            <select class="form-control custom-focus-ring" formControlName="zona_pesca" readonly>
+              <option value="-1">Seleccione Zona de Pesca</option>
+              <option *ngFor="let zona of zona" [value]="zona.id">{{ zona.nombre }}</option>
+            </select>
+          </div> -->
+
         </div>
         <div class="row mb-2">
           <div class="col-md-4 mb-2">
@@ -147,10 +141,7 @@
             <label class="mb-1 d-block text-xs font-weight-semibold">Captura en kg</label>
             <input type="number" class="form-control custom-focus-ring" formControlName="numero">
           </div>
-          <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Flota</label>
-            <input type="number" class="form-control custom-focus-ring" formControlName="flotaDP_id" readonly>
-          </div>
+          
         </div>
         <div class="button-group">
           <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact" cdkFocusInitial [disabled]="!formEDP.valid">Enviar</button>
