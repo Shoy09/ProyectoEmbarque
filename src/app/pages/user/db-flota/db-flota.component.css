@@ -221,3 +221,13 @@ button.mat-button {
   color: #39144a; /* Un verde oscuro para el texto */
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-icon-button {
+  margin-left: auto; /* Esto empuja el botón hacia la derecha */
+}
+

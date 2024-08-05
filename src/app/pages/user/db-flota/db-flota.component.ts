@@ -170,37 +170,28 @@ export class DbFlotaComponent {
   }
 
   updateDisplayedColumns(): void {
-    this.displayedColumns = [
-      'fecha', 'embarcacion', 'zona_pesca', 'horas_faena',
-      'kilos_declarados', 'merluza', 'precio_merluza', 'bereche', 'precio_bereche',
-      'volador', 'merluza_descarte', 'otro', 'kilo_otro',
-      'precio_otro', 'precio_basico', 'toneladas_procesadas',
-      'toneladas_recibidas', 'total_tripulacion',
-      'tipo_cambio', 'consumo_gasolina',
-      'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
-      'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
-      'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-      'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances','acciones'
+    const additionalColumns = [
+      'participacion', 'bonificacion', 'total_participacion',
+      'aporte_REP', 'gratificacion', 'vacaciones',
+      'cts', 'essalud', 'senati', 'SCTR_SAL',
+      'SCTR_PEN', 'poliza_seguro'
     ];
 
-    // Si las columnas están visibles, agrega las columnas adicionales
     if (this.areColumnsVisible) {
-      this.displayedColumns = [
-        'fecha', 'embarcacion', 'zona_pesca', 'horas_faena',
-        'kilos_declarados', 'merluza', 'bereche',
-        'volador', 'merluza_descarte', 'otro', 'kilo_otro',
-        'precio_otro', 'precio_basico', 'toneladas_procesadas',
-        'toneladas_recibidas','participacion', 'bonificacion', 'total_participacion', 'aporte_REP',
-        'gratificacion', 'vacaciones', 'cts', 'essalud', 'senati', 'SCTR_SAL',
-        'SCTR_PEN', 'poliza_seguro', 'total_tripulacion', 'tipo_cambio','consumo_gasolina',
-        'total_gasolina', 'galon_hora', 'consumo_hielo', 'total_hielo',
-        'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
-        'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
-        'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances', 'acciones'
+      // Removemos las columnas adicionales si ya existen para evitar duplicados
+      this.displayedColumns = this.displayedColumns.filter(column => !additionalColumns.includes(column));
 
-      ];
+      // Buscamos la posición de 'total_tripulacion'
+      const index = this.displayedColumns.indexOf('total_tripulacion');
+      // Insertamos las nuevas columnas antes de 'total_tripulacion'
+      this.displayedColumns.splice(index, 0, ...additionalColumns);
+
+    } else {
+      // Si se ocultan las columnas, las eliminamos de displayedColumns
+      this.displayedColumns = this.displayedColumns.filter(column => !additionalColumns.includes(column));
     }
   }
+
 
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {

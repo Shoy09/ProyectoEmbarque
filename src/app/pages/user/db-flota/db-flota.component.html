@@ -205,15 +205,18 @@
       <!-- Columna Total Tripulación -->
       <ng-container matColumnDef="total_tripulacion">
         <th mat-header-cell *matHeaderCellDef>
-          Total Tripulación
-          <button mat-icon-button class="custom-icon-button" style="display: flex; align-items: center; justify-content: center;">
-            <mat-icon>{{ areColumnsVisible ? 'remove' : 'add' }}</mat-icon>
-          </button>
+          <div class="header-content">
+            Total Tripulación
+            <button mat-icon-button class="custom-icon-button" (click)="toggleColumnsVisibility()">
+              <mat-icon>{{ areColumnsVisible ? 'remove' : 'add' }}</mat-icon>
+            </button>
+          </div>
         </th>
         <td mat-cell *matCellDef="let row"> S/{{row.total_tripulacion}} </td>
       </ng-container>
 
       <ng-container *ngIf="areColumnsVisible">
+
         <ng-container matColumnDef="participacion">
           <th mat-header-cell *matHeaderCellDef> Participación </th>
           <td mat-cell *matCellDef="let row"> S/{{row.participacion}} </td>
