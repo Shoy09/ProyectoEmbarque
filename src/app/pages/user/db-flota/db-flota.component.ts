@@ -53,8 +53,8 @@ export class DbFlotaComponent {
 
   displayedColumns: string[] = [
     'fecha', 'embarcacion', 'zona_pesca', 'horas_faena'
-    , 'kilos_declarados', 'merluza', 'bereche',
-    'volador', 'merluza_descarte', 'otro', 'kilo_otro',
+    , 'kilos_declarados', 'merluza', 'precio_merluza', 'bereche', 'precio_bereche',
+    'volador', 'precio_volador','merluza_descarte', 'precio_merluzaNP','otro', 'kilo_otro',
     'precio_otro', 'precio_basico', 'toneladas_procesadas',
     'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina', 'galon_hora',
     'total_gasolina', 'consumo_hielo', 'total_hielo',
@@ -172,7 +172,7 @@ export class DbFlotaComponent {
   updateDisplayedColumns(): void {
     this.displayedColumns = [
       'fecha', 'embarcacion', 'zona_pesca', 'horas_faena',
-      'kilos_declarados', 'merluza', 'bereche',
+      'kilos_declarados', 'merluza', 'precio_merluza', 'bereche', 'precio_bereche',
       'volador', 'merluza_descarte', 'otro', 'kilo_otro',
       'precio_otro', 'precio_basico', 'toneladas_procesadas',
       'toneladas_recibidas', 'total_tripulacion',

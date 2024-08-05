@@ -49,7 +49,7 @@ export class CreateDbFlotaComponent {
   precio_merluza?:number; //
   precio_bereche?:number; //
   precio_volador?:number; //
-  precio_merluza_NOPRO?:number; //
+  precio_merluzaNP?:number; //
   lastCosto?: CostoGalonGasoI;
   lastCostoHielo?: CostoTMHielo;
   lastCostoAgua?: CostoM3Agua;
@@ -76,9 +76,13 @@ export class CreateDbFlotaComponent {
     horas_faena: ['', Validators.required],
     kilos_declarados: ['', Validators.required],
     merluza: [''],
+    precio_merluza:[{ value: 0, disabled: true }, Validators.required],
     bereche: [''],
+    precio_bereche:[{ value: 0, disabled: true }, Validators.required],
     volador: [''],
+    precio_volador:[{ value: 0, disabled: true }, Validators.required],
     merluza_descarte: [''],
+    precio_merluzaNP:[{ value: 0, disabled: true }, Validators.required],
     otro: [''],
     kilo_otro: [''],
     precio_otro: [ ],
@@ -186,21 +190,26 @@ export class CreateDbFlotaComponent {
     });
   }
 
-  //PRECIOS DE LAS ESPECIES
   loadPreciosEspecies(): void {
     const especies = [
-        { nombre: 'merluza', propiedad: 'precio_merluza' },
-        { nombre: 'bereche', propiedad: 'precio_bereche' },
-        { nombre: 'volador', propiedad: 'precio_volador' },
-        { nombre: 'merluza%20np', propiedad: 'precio_merluza_NOPRO' },
+      { nombre: 'merluza', propiedad: 'precio_merluza', campo: 'merluza' },
+      { nombre: 'bereche', propiedad: 'precio_bereche', campo: 'bereche' },
+      { nombre: 'volador', propiedad: 'precio_volador', campo: 'volador' },
+      { nombre: 'merluza%20np', propiedad: 'precio_merluzaNP', campo: 'merluza_descarte' },
     ];
 
     especies.forEach(especie => {
-        this.serviceEspecies.getPrecioPorNombre(especie.nombre).subscribe(costo => {
-            // Aquí usamos type assertion para evitar el error de TypeScript
-            (this as any)[especie.propiedad] = costo;
-            this.calculateCostoBasico(); // Calcular el costo básico cada vez que se obtenga un precio
-        });
+      this.serviceEspecies.getPrecioPorNombre(especie.nombre).subscribe(costo => {
+        (this as any)[especie.propiedad] = costo;
+
+        // Solo actualiza el precio en el formulario si hay un valor para la especie
+        const cantidadEspecie = this.firstFormGroup.get(especie.campo)?.value;
+        if (cantidadEspecie) {
+          this.firstFormGroup.patchValue({ [especie.propiedad]: costo });
+        }
+
+        this.calculateCostoBasico();
+      });
     });
   }
 
@@ -213,14 +222,26 @@ export class CreateDbFlotaComponent {
 
     let costoBasico = 0;
 
-    if (merluza) costoBasico += this.precio_merluza || 0;
-    if (bereche) costoBasico += this.precio_bereche || 0;
-    if (volador) costoBasico += this.precio_volador || 0;
-    if (merluzaNPro) costoBasico += this.precio_merluza_NOPRO || 0;
+    if (merluza) {
+      costoBasico += this.precio_merluza || 0;
+      this.firstFormGroup.patchValue({ precio_merluza: this.precio_merluza });
+    }
+    if (bereche) {
+      costoBasico += this.precio_bereche || 0;
+      this.firstFormGroup.patchValue({ precio_bereche: this.precio_bereche });
+    }
+    if (volador) {
+      costoBasico += this.precio_volador || 0;
+      this.firstFormGroup.patchValue({ precio_volador: this.precio_volador });
+    }
+    if (merluzaNPro) {
+      costoBasico += this.precio_merluzaNP || 0;
+      this.firstFormGroup.patchValue({ precio_merluzaNP: this.precio_merluzaNP });
+    }
     if (precioOtro) costoBasico += precioOtro;
 
     this.firstFormGroup.patchValue({ costo_basico: parseFloat(costoBasico.toFixed(2)) });
-}
+  }
 
   //COMBUSTIBLE
   loadLastCosto() {
@@ -673,9 +694,13 @@ export class CreateDbFlotaComponent {
         horas_faena: formData.horas_faena || '',
         kilos_declarados: Number(formData.kilos_declarados),
         merluza: formData.merluza ? Number(formData.merluza) : undefined,
+        precio_merluza: formData.precio_merluza ? Number(formData.precio_merluza) : undefined,
         bereche: formData.bereche ? Number(formData.bereche) : undefined,
+        precio_bereche: formData.precio_bereche ? Number(formData.precio_bereche) : undefined,
         volador: formData.volador ? Number(formData.volador) : undefined,
+        precio_volador: formData.precio_volador ? Number(formData.precio_volador) : undefined,
         merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
+        precio_merluzaNP: formData.precio_merluzaNP ? Number(formData.precio_merluzaNP) : undefined,
         otro: formData.otro || undefined,
         kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
         precio_otro: formData.precio_otro ? Number(formData.precio_otro) : undefined,

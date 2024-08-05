@@ -7,9 +7,13 @@ export interface FlotaDP {
   horas_faena: string;
   kilos_declarados: number;
   merluza?: number;
+  precio_merluza?: number;
   bereche?: number;
+  precio_bereche?: number;
   volador?: number;
+  precio_volador?: number;
   merluza_descarte?: number;
+  precio_merluzaNP?: number;
   otro?: string;
   kilo_otro?: number;
   precio_otro?: number;
