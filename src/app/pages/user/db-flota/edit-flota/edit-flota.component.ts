@@ -30,6 +30,7 @@ import { FlotaService } from 'app/core/services/flota.service';
 export class EditFlotaComponent implements OnInit {
 
   embarcaciones: Embarcaciones[] = [];
+  embarcacionSeleccionada: Embarcaciones | undefined;
   zona: ZonaPescaI[] = [];
   showStepper: boolean = true;
 
@@ -101,25 +102,111 @@ export class EditFlotaComponent implements OnInit {
   ngOnInit(): void {
     const flotaData: any = { ...this.data };
 
-    flotaData.consumo_gasolina = flotaData.consumo_gasolina ?? null;
-    flotaData.consumo_viveres = flotaData.consumo_viveres ?? null;
-
     this.firstFormGroup.patchValue(flotaData);
     this.secondFormGroup.patchValue(flotaData);
     this.loadEmbarcaciones();
     this.loadZonas();
+
+    if (flotaData.embarcacion) {
+      this.onSelectEmbarcacion(flotaData.embarcacion);
+    }
   }
 
+  // CARGAR EMBARCACION
   loadEmbarcaciones(): void {
     this.embarcacionService.getEmbarcaciones().subscribe(data => {
       this.embarcaciones = data;
     });
   }
 
+  //CARGAR ZONAS
   loadZonas(): void {
     this.embarcacionService.getZonaPesca().subscribe(data => {
       this.zona = data;
     });
+  }
+
+  //COSTO X ESPECIES
+  editCostoBasico(): void {
+    const precio_merluza = Number(this.firstFormGroup.get('precio_merluza')?.value) || 0;
+    const precio_bereche = Number(this.firstFormGroup.get('precio_bereche')?.value) || 0;
+    const precio_volador = Number(this.firstFormGroup.get('precio_volador')?.value) || 0;
+    const precio_merluzaNP = Number(this.firstFormGroup.get('precio_merluzaNP')?.value) || 0;
+    const precio_otro = Number(this.firstFormGroup.get('precio_otro')?.value) || 0;
+
+    const costoEspecies = precio_merluza + precio_bereche + precio_volador + precio_merluzaNP + precio_otro
+
+    const redondeo = parseFloat(costoEspecies.toFixed(2))
+
+    this.firstFormGroup.patchValue({costo_basico: redondeo})
+  }
+
+  //EDIT TONELADAS
+  editToneladas(): void {
+    const totalMerluza = Number(this.firstFormGroup.get('merluza')?.value) || 0;
+    const totalBereche = Number(this.firstFormGroup.get('bereche')?.value) || 0;
+    const totalVolador = Number(this.firstFormGroup.get('volador')?.value) || 0;
+    const totalMerluzaDescarte = Number(this.firstFormGroup.get('merluza_descarte')?.value) || 0;
+    const totalKiloOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
+
+    const toneladasProcesadas = Number(((totalMerluza + totalBereche + totalVolador + totalKiloOtro) / 1000).toFixed(2));
+    const toneladasRecibidas = Number(( toneladasProcesadas + (totalMerluzaDescarte / 1000)).toFixed(2));
+
+    this.firstFormGroup.patchValue({ toneladas_procesadas: toneladasProcesadas, toneladas_recibidas: toneladasRecibidas})
+  }
+
+  //PARTICIPACIÓN
+  editParticipacion():void{
+    const toneladasRecibidas = Number(this.firstFormGroup.get('toneladas_recibidas')?.value) || 0;
+    const costoBasico = Number(this.firstFormGroup.get('costo_basico')?.value) || 0;
+    const participacion = toneladasRecibidas * costoBasico * 0.33
+    console.log(`Calculando totalVivieres: ${costoBasico} * ${toneladasRecibidas} * 0.33 = ${participacion}`);
+    const participacionRedondeada = parseFloat(participacion.toFixed(2));
+    this.firstFormGroup.patchValue({participacion: participacionRedondeada});
+  }
+
+  //BONIFICACIÓN
+  onSelectEmbarcacion(embarcacionId: number): void {
+    this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionId);
+    if (!this.embarcacionSeleccionada) {
+      console.log("No se encontró la embarcación con el ID proporcionado.");
+    }
+    this.calculateBonificacion();
+  }
+
+  calculateBonificacion(): void {
+    if (!this.embarcacionSeleccionada) {
+      console.log("No se ha seleccionado una embarcación.");
+      return;
+    }
+
+    const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
+    console.log(`Participación: ${participacion}`);
+
+    if (isNaN(participacion) || participacion === 0) {
+      console.log("La participación aún no está disponible.");
+      return;
+    }
+
+    const bonificacion = Number(this.embarcacionSeleccionada.bonificacion) || 0;
+    if (bonificacion > 0) {
+      const totalBonificacion = participacion / bonificacion;
+      const redondeo = parseFloat(totalBonificacion.toFixed(2))
+      console.log(`Calculando bonificación: (${participacion} / ${bonificacion}) =  ${totalBonificacion}`);
+      this.firstFormGroup.patchValue({ bonificacion: redondeo });
+    } else {
+      this.firstFormGroup.patchValue({ bonificacion: 0 });
+    }
+  }
+
+  //TOTAL PARTICIPACIÓN
+  editParticipaciónTotal():void{
+    const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
+    const bonificacion = Number(this.firstFormGroup.get('bonificacion')?.value) || 0;
+
+    const participacion_total = participacion + bonificacion
+    const redondeo = parseFloat(participacion_total.toFixed(2));
+    this.firstFormGroup.patchValue({total_participacion: redondeo })
   }
 
   closeStepper() {
@@ -131,6 +218,11 @@ export class EditFlotaComponent implements OnInit {
   }
 
   save(): void {
+    this.editCostoBasico()
+    this.editToneladas()
+    this.editParticipacion()
+    this.editParticipaciónTotal()
+
     // Obtener los valores de ambos formularios
     const formData = Object.assign({}, this.firstFormGroup.value, this.secondFormGroup.value);
 
@@ -190,7 +282,7 @@ export class EditFlotaComponent implements OnInit {
 
     this.serviceFlota.updateFlota(updateData, this.data.id).subscribe({
       next: () => {
-        
+
         this.dialogRef.close({ success: true });
       },
       error: (error) => {

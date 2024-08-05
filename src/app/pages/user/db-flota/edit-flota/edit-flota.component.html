@@ -1,6 +1,7 @@
 <div *ngIf="showStepper" class="stepper-container">
   <mat-stepper linear #stepper>
     <mat-step [stepControl]="firstFormGroup">
+
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Kilos recibidos</ng-template>
         <mat-form-field appearance="fill">
@@ -16,9 +17,9 @@
         <!-- Campos select para embarcacion y zona_pesca -->
         <mat-form-field appearance="fill">
           <mat-label>Embarcación</mat-label>
-          <mat-select formControlName="embarcacion">
+          <mat-select formControlName="embarcacion" (selectionChange)="onSelectEmbarcacion($event.value)">
             <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
-              {{ embarcacion.nombre }}
+              {{embarcacion.nombre}}
             </mat-option>
           </mat-select>
         </mat-form-field>
