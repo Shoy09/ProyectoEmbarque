@@ -143,7 +143,7 @@ export class DbFlotaComponent {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
         const flotasConNombres = data.map(flota => ({
-         ...flota,
+        ...flota,
           embarcacionNombre: this.embarcaciones.find(e => e.id === Number(flota.embarcacion))?.nombre || 'Desconocido',
           zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido',
         }));

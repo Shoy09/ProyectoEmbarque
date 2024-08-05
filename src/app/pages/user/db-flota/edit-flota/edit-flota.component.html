@@ -29,7 +29,70 @@
     </mat-select>
   </mat-form-field>
 
-  <!-- Añade más campos según sea necesario -->
+  <mat-form-field appearance="fill">
+    <mat-label>Horas de Faena</mat-label>
+    <input matInput formControlName="horas_faena" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Kilos Declarados</mat-label>
+    <input matInput formControlName="kilos_declarados" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Merluza (kg)</mat-label>
+    <input matInput formControlName="merluza" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Precio Merluza</mat-label>
+    <input matInput formControlName="precio_merluza" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Bereche (kg)</mat-label>
+    <input matInput formControlName="bereche" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Precio Bereche</mat-label>
+    <input matInput formControlName="precio_bereche" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Volador (kg)</mat-label>
+    <input matInput formControlName="volador" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Precio Volador</mat-label>
+    <input matInput formControlName="precio_volador" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Merluza NP (kg)</mat-label>
+    <input matInput formControlName="merluza_descarte" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Precio Merluza NP</mat-label>
+    <input matInput formControlName="precio_merluzaNP" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Especie A </mat-label>
+    <input matInput formControlName="otro" type="text">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Especie A (kg) </mat-label>
+    <input matInput formControlName="kilo_otro" type="number">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> Precio Especie A</mat-label>
+    <input matInput formControlName="precio_otro" type="number">
+  </mat-form-field>
 
   <div>
     <button mat-raised-button color="primary" type="submit" [disabled]="formEditFlota.invalid">Guardar</button>
