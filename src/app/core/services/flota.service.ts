@@ -29,7 +29,7 @@ export class FlotaService {
   }
 
   // Actualizar un FlotaDP existente
-  updateFlota(id: number, flota: FlotaDP): Observable<FlotaDP> {
+  updateFlota(flota: FlotaDP, id: any ): Observable<FlotaDP> {
     return this.http.put<FlotaDP>(`${this.baseUrl}${id}/`, flota);
   }
 

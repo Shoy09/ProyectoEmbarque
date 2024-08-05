@@ -192,7 +192,6 @@ export class DbFlotaComponent {
     }
   }
 
-
   openCreateFormFlota(): void {
     const dialogRefCreate = this.dialog.open(CreateDbFlotaComponent, {
       disableClose: true // Evita que se cierre al hacer clic fuera
@@ -222,6 +221,19 @@ export class DbFlotaComponent {
   openFomrEditFlota(flota: FlotaDP){
     const edit = this.dialog.open(EditFlotaComponent, {
       data: flota
+    });
+
+    edit.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.canceled) {
+          // No hacer nada si se canceló
+          console.log('El diálogo fue cancelado.');
+        } else {
+          // Solo actualiza si el diálogo retorna un resultado (indicando una actualización exitosa)
+          this.loadFlotas();
+          this._toastr.success('Registro actualizado correctamente');
+        }
+      }
     });
   }
 

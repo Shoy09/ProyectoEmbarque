@@ -72,7 +72,7 @@ export class EditDiarioComponent{
         console.error('Error al obtener embarcaciones:', error);
       }
     );
-    
+
   }
 
   getEspecies() {
@@ -108,7 +108,7 @@ export class EditDiarioComponent{
   getZonaPesca() {
     this.embarcacionService.getZonaPesca().subscribe(
       (zonas: ZonaPescaI[]) => {
-        console.log('Zonas obtenidas:', zonas); // Agrega esta línea para verificar
+        console.log('Zonas obtenidas:', zonas); 
         this.zona = zonas;
         if (this.data && this.data.zona_pesca) {
           this.formEDP.controls['zona_pesca'].setValue(this.data.zona_pesca);
