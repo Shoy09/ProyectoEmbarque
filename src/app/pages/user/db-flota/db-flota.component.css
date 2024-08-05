@@ -178,6 +178,46 @@ button.mat-button {
   border-radius: 50%;
 }
 
-.green-pastel {
-  background-color: #f7fef4; /* Verde pastel */
+
+.merluza-column,
+.precio-merluza-column {
+  background-color: #f4faf5; /* Un tono verde pastel */
 }
+
+.merluza-column, .mat-column-merluza,
+.precio-merluza-column, .mat-column-precio-merluza {
+  color: #1b5e20; /* Un verde oscuro para el texto */
+}
+
+.bereche-column{
+  background-color: #f6feff;
+}
+
+.bereche-column, .mat-column-bereche{
+  color: #1b3f5e; /* Un verde oscuro para el texto */
+}
+
+.volador-column{
+  background-color: #fdfeef;
+}
+
+.volador-column{
+  color: #4a4a14; /* Un verde oscuro para el texto */
+}
+
+.merluzaNP-column{
+  background-color: #fff6ef;
+}
+
+.merluzaNP-column{
+  color: #4a2314; /* Un verde oscuro para el texto */
+}
+
+.otraes-column{
+  background-color: #f5efff;
+}
+
+.otraes-column {
+  color: #39144a; /* Un verde oscuro para el texto */
+}
+
