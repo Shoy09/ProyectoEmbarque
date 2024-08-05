@@ -295,6 +295,11 @@
         <td mat-cell *matCellDef="let row"> {{row.galon_hora}} gal.</td>
       </ng-container>
 
+      <ng-container matColumnDef="costo_gasolina">
+        <th mat-header-cell *matHeaderCellDef>Costo Gasolina (gal).</th>
+        <td mat-cell *matCellDef="let row"> {{row.costo_gasolina}} gal.</td>
+      </ng-container>
+
       <!-- Columna Total Gasolina -->
       <ng-container matColumnDef="total_gasolina">
         <th mat-header-cell *matHeaderCellDef> Total Gasolina </th>
@@ -307,6 +312,11 @@
         <td mat-cell *matCellDef="let row"> {{row.consumo_hielo}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="costo_hilo">
+        <th mat-header-cell *matHeaderCellDef>Costo Hielo (tm).</th>
+        <td mat-cell *matCellDef="let row"> {{row.costo_hilo}} gal.</td>
+      </ng-container>
+
       <!-- Columna Total Hielo -->
       <ng-container matColumnDef="total_hielo">
         <th mat-header-cell *matHeaderCellDef> Total Hielo </th>
@@ -317,6 +327,11 @@
       <ng-container matColumnDef="consumo_agua">
         <th mat-header-cell *matHeaderCellDef> Consumo Agua </th>
         <td mat-cell *matCellDef="let row"> {{row.consumo_agua}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="costo_agua">
+        <th mat-header-cell *matHeaderCellDef>Costo Agua (gal).</th>
+        <td mat-cell *matCellDef="let row"> {{row.costo_agua}} gal.</td>
       </ng-container>
 
       <!-- Columna Total Agua -->

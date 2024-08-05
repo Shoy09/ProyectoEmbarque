@@ -34,11 +34,14 @@ export interface FlotaDP {
   poliza_seguro: number,
   total_tripulacion: number;
   consumo_gasolina: number;
+  costo_gasolina: number;
   total_gasolina: number;
   galon_hora: number;
   consumo_hielo: number;
+  costo_hilo:number;
   total_hielo: number;
   consumo_agua: number;
+  costo_agua:number;
   total_agua: number;
   consumo_viveres: number;
   total_vivieres: number;

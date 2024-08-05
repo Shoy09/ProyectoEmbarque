@@ -56,9 +56,9 @@ export class DbFlotaComponent {
     , 'kilos_declarados', 'merluza', 'precio_merluza', 'bereche', 'precio_bereche',
     'volador', 'precio_volador','merluza_descarte', 'precio_merluzaNP','otro', 'kilo_otro',
     'precio_otro', 'precio_basico', 'toneladas_procesadas',
-    'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina', 'galon_hora',
-    'total_gasolina', 'consumo_hielo', 'total_hielo',
-    'consumo_agua', 'total_agua', 'consumo_viveres', 'total_vivieres',
+    'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina','costo_gasolina', 'galon_hora',
+    'total_gasolina', 'consumo_hielo', 'costo_hilo', 'total_hielo',
+    'consumo_agua', 'costo_agua' , 'total_agua', 'consumo_viveres', 'total_vivieres',
     'dias_inspeccion', 'total_servicio_inspeccion', 'total_derecho_pesca',
     'total_costo', 'costo_tm_captura', 'csot', 'lances', 'verLances', 'acciones'
   ];
