@@ -320,6 +320,51 @@ export class EditFlotaComponent implements OnInit {
     }
   }
 
+  //TOTAL GASTOS
+  editCost(): void {
+    const totalDerechoPesca = Number(this.secondFormGroup.get('total_derecho_pesca')?.value) || 0;
+    const totalServicioInspeccion = Number(this.secondFormGroup.get('total_servicio_inspeccion')?.value) || 0;
+    const totalVivieres = Number(this.firstFormGroup.get('total_vivieres')?.value) || 0;
+    const totalAgua = Number(this.secondFormGroup.get('total_agua')?.value) || 0;
+    const totalHielo = Number(this.secondFormGroup.get('total_hielo')?.value) || 0;
+    const totalGasolina = Number(this.secondFormGroup.get('total_gasolina')?.value) || 0;
+    const totalTripulacion = Number(this.firstFormGroup.get('total_tripulacion')?.value) || 0;
+
+    // Calcula la suma total
+    const totalCost = totalDerechoPesca + totalServicioInspeccion + totalVivieres + totalAgua + totalHielo + totalGasolina + totalTripulacion;
+
+    // Redondea a dos decimales y actualiza el formulario
+    const totalCostRedondeado = parseFloat(totalCost.toFixed(2));
+    this.secondFormGroup.patchValue({ total_costo: totalCostRedondeado });
+  }
+
+  //COSTO CAPTURA
+  editCostoCaptura(): void {
+    const toneladasRecibidas = Number(this.firstFormGroup.get('toneladas_recibidas')?.value) || 0;
+    const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
+
+    const costoPorCaptura = totalCosto / toneladasRecibidas;
+    const costoPorCapturaRedondeado = parseFloat(costoPorCaptura.toFixed(2));
+    console.log(`Calculando : ${totalCosto} / ${toneladasRecibidas} = ${costoPorCapturaRedondeado}`);
+    this.secondFormGroup.patchValue({ costo_tm_captura: costoPorCapturaRedondeado });
+  }
+
+  //COSTO X CAPTURA PROCESADA
+  editCostoTP(): void {
+    const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
+    const toneladasProcesadas = Number(this.firstFormGroup.get('toneladas_procesadas')?.value) || 0;
+
+    if (toneladasProcesadas <= 0) {
+      console.error('Error: Las toneladas recibidas deben ser mayores que cero para calcular el costo por tonelada.');
+      this.secondFormGroup.patchValue({ csot: 0 }); // Establece costo_tm_captura a 0 si hay un error
+      return;
+    }
+
+    const csot = totalCosto / toneladasProcesadas
+
+    const costoPorCSOT = parseFloat(csot.toFixed(2));
+    this.secondFormGroup.patchValue({ csot: costoPorCSOT })
+  }
 
   closeStepper() {
     this.showStepper = false;
@@ -339,7 +384,9 @@ export class EditFlotaComponent implements OnInit {
     this.editAgua()
     this.editTotalInspeccion()
     this.editDerechoPesca()
-
+    this.editCost()
+    this.editCostoCaptura()
+    this.editCostoTP()
     // Obtener los valores de ambos formularios
     const formData = Object.assign({}, this.firstFormGroup.value, this.secondFormGroup.value);
 
