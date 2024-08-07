@@ -38,6 +38,11 @@ export class EditFlotaComponent implements OnInit {
   derechoPescaCosto?: number;
   bonificacionSeleccionada?: number;
   rep?: number;
+  esSalud?: number;
+  senati?: number;
+  SCTR_SAL?: number;
+  SCTR_PEN?: number;
+  p_seguro?: number;
   showStepper: boolean = true;
 
   constructor(
@@ -116,9 +121,13 @@ export class EditFlotaComponent implements OnInit {
     this.loadZonas();
     this.loadCostoDia();
     this.loadLastDerechoPesca();
-    this.loadREP()
+    this.loadREP();
+    this.loadEssalud();
+    this.loadSenati();
+    this.loadSCTRSAL();
+    this.loadSCTRPEN();
+    this.loadPoliSeguro();
   }
-
 
   // CARGAR EMBARCACION
   loadEmbarcaciones(): Promise<void> {
@@ -146,7 +155,6 @@ export class EditFlotaComponent implements OnInit {
       }, error => reject(error));
     });
   }
-
 
   //CARGAR ZONAS
   loadZonas(): void {
@@ -193,7 +201,7 @@ export class EditFlotaComponent implements OnInit {
     const participacionRedondeada = parseFloat(participacion.toFixed(2));
     this.firstFormGroup.patchValue({participacion: participacionRedondeada});
   }
-
+  //BONIFICACION
   calculateBonificacion(): void {
     // Realiza el cálculo solo si la bonificación y la participación están disponibles
     const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
@@ -211,7 +219,6 @@ export class EditFlotaComponent implements OnInit {
     }
   }
 
-
   //TOTAL PARTICIPACIÓN
   editParticipaciónTotal():void{
     const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
@@ -222,7 +229,9 @@ export class EditFlotaComponent implements OnInit {
     this.firstFormGroup.patchValue({total_participacion: redondeo })
   }
 
-  // -------------------------------------- TOTAL DE TRIPULACIÓN:
+  // -------------------------------------- TOTAL DE TRIPULACIÓN -------------------------------
+
+  //REP
   loadREP() {
     this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
       console.log('Valor de REP cargado:', costo_rep); // Verificar el valor cargado
@@ -239,8 +248,138 @@ export class EditFlotaComponent implements OnInit {
     this.firstFormGroup.patchValue({ aporte_REP: redondeo_REP });
   }
 
+  //GRATIFICACION
+  editGratificacion(): void {
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const gratificacion = total_participacion*1/6;
+    const redondeo = parseFloat(gratificacion.toFixed(2));
+    this.firstFormGroup.patchValue({gratificacion: redondeo})
+  }
 
+  //VACACIONES
+  editVacaciones(): void{
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = total_participacion * 1/12;
+    const redondeo = parseFloat(vacaciones.toFixed(2));
+    this.firstFormGroup.patchValue({vacaciones: redondeo})
+  }
 
+  //CTS
+  editCTS(): void{
+    const total_participacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const cts = total_participacion * 1/12;
+    const redondeo = parseFloat(cts.toFixed(2))
+    this.firstFormGroup.patchValue({cts: redondeo})
+  }
+
+  //ESSALUD
+  loadEssalud(){
+    this.costoXGalonService.getCostoTarifa('ESSALUD').subscribe(costo_essalud => {
+      this.esSalud = costo_essalud;
+      this.calculateEssalud();
+    });
+  }
+
+  calculateEssalud(): void{
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const valor_esSalud =this.esSalud || 0
+    const esSalud = (participacion_total + vacaciones)*valor_esSalud
+    const redondeo = parseFloat(esSalud.toFixed(2));
+    this.firstFormGroup.patchValue({essalud: redondeo })
+  }
+
+  //SENATI
+  loadSenati(){
+    this.costoXGalonService.getCostoTarifa('SENATI').subscribe(costo_senati => {
+      this.senati = costo_senati;
+      this.editSenati();
+    })
+  }
+
+  editSenati(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_senati = this.senati || 0;
+    const senati = (participacion_total + vacaciones + gratificacion) * valor_senati
+    const redondeo = parseFloat(senati.toFixed(2));
+    console.log(`Calculando totalVivieres: ${participacion_total} + ${vacaciones} + ${gratificacion}  / ${valor_senati}= ${redondeo}`);
+    this.firstFormGroup.patchValue({ senati: redondeo})
+  }
+
+  //SAL
+  loadSCTRSAL(){
+    this.costoXGalonService.getCostoTarifa('SCTR%20SAL').subscribe( costo_strlsal => {
+      this.SCTR_SAL = costo_strlsal;
+      this.editSAL();
+    })
+  }
+
+  editSAL(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_sctrsal = this.SCTR_SAL || 0;
+    const sctrSal = (participacion_total + vacaciones + gratificacion) * valor_sctrsal;
+    const redondeo = parseFloat(sctrSal.toFixed(2));
+    this.firstFormGroup.patchValue({SCTR_SAL:redondeo })
+  }
+
+  //PEN
+  loadSCTRPEN(){
+    this.costoXGalonService.getCostoTarifa('SCTR%20PEN').subscribe( costo_sctrpen => {
+      this.SCTR_PEN = costo_sctrpen;
+      this.editPEN();
+    })
+  }
+
+  editPEN(): void{
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_pen = this.SCTR_PEN || 0;
+    const sctrPen = (participacion_total + vacaciones + gratificacion) * valor_pen
+    const redondeo = parseFloat(sctrPen.toFixed(2));
+    this.firstFormGroup.patchValue({ SCTR_PEN: redondeo})
+  }
+
+  //POLIZA
+  loadPoliSeguro(){
+    this.costoXGalonService.getCostoTarifa('P.%20Seguro').subscribe( poliza_seguro => {
+      this.p_seguro = poliza_seguro;
+      this.editPoliza();
+    })
+  }
+
+  editPoliza(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) ||0;
+    const valor_PS = this.p_seguro || 0;
+    const poliza_seguro = (participacion_total + vacaciones + gratificacion) * valor_PS
+    const redondeo = parseFloat(poliza_seguro.toFixed(2));
+    this.firstFormGroup.patchValue({ poliza_seguro: redondeo })
+  }
+
+  editTotalTripulacion(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const rep = Number(this.firstFormGroup.get('aporte_REP')?.value) || 0;
+    const gratificacion = Number(this.firstFormGroup.get('gratificacion')?.value) || 0;
+    const vacaciones = Number(this.firstFormGroup.get('vacaciones')?.value) || 0
+    const cts = Number(this.firstFormGroup.get('cts')?.value) || 0;
+    const essalud = Number(this.firstFormGroup.get('essalud')?.value) || 0;
+    const senati = Number(this.firstFormGroup.get('senati')?.value) || 0;
+    const SCTR_SAL = Number(this.firstFormGroup.get('SCTR_SAL')?.value) || 0
+    const SCTR_PEN = Number(this.firstFormGroup.get('SCTR_PEN')?.value) || 0
+    const poliza_seguro = Number(this.firstFormGroup.get('poliza_seguro')?.value)
+
+    const total_tripulacion = participacion_total + rep + gratificacion + vacaciones + cts + essalud + senati + SCTR_SAL + SCTR_PEN + poliza_seguro
+
+    const redondeo = parseFloat(total_tripulacion.toFixed(2))
+
+    this.firstFormGroup.patchValue({total_tripulacion: redondeo})
+  }
 
   //GASOLINA
   editGasolina(): void{
@@ -395,6 +534,15 @@ export class EditFlotaComponent implements OnInit {
     this.editParticipacion()
     this.editParticipaciónTotal()
     this.calculateREP()
+    this.editGratificacion()
+    this.editVacaciones()
+    this.editCTS()
+    this.calculateEssalud()
+    this.editSenati()
+    this.editSAL()
+    this.editPEN()
+    this.editPoliza()
+    this.editTotalTripulacion()
     this.editGasolina()
     this.editHielo()
     this.editAgua()
