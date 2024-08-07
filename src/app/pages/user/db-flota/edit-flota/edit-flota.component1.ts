@@ -37,13 +37,13 @@ export class EditFlotaComponent implements OnInit {
   zona: ZonaPescaI[] = [];
   costoDia?: MecanismoI;
   derechoPescaCosto?: number;
-  showStepper: boolean = true;
+  rep?: number;
   esSalud?: number;
   senati?: number;
   SCTR_SAL?: number;
   SCTR_PEN?: number;
   p_seguro?: number;
-
+  showStepper: boolean = true;
   constructor(
     private formBuilder: FormBuilder,
     private serviceFlota: FlotaService,
@@ -118,6 +118,7 @@ export class EditFlotaComponent implements OnInit {
     this.loadEmbarcaciones();
     this.loadZonas();
     this.loadCostoDia();
+    this.loadREP();
     this.loadLastDerechoPesca();
     this.loadEssalud();
     this.loadSenati();
@@ -141,6 +142,14 @@ export class EditFlotaComponent implements OnInit {
       } else {
         console.log("No se encontró la embarcación seleccionada al cargar.");
       }
+    });
+  }
+
+  //
+  loadREP() {
+    this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
+      this.rep = costo_rep;
+      this.calculateREP();
     });
   }
 
@@ -219,12 +228,12 @@ export class EditFlotaComponent implements OnInit {
 
   }
 
-  calculateAporteREP(): void {
-    const totalParticipacion = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
-    const porcentajeREP = 0.05; // Ajusta este valor según sea necesario
-    const aporteREP = totalParticipacion * porcentajeREP;
-    const aporteREPRedondeado = parseFloat(aporteREP.toFixed(2));
-    this.firstFormGroup.patchValue({ aporte_REP: aporteREPRedondeado });
+  calculateREP(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const valor_REP = this.rep || 0;
+    const REP = participacion_total * valor_REP;
+    const redondeo = parseFloat(REP.toFixed(2));
+    this.firstFormGroup.patchValue({ aporte_REP: redondeo });
   }
 
 
@@ -521,7 +530,7 @@ export class EditFlotaComponent implements OnInit {
     this.editParticipacion()
     this.calculateBonificacion()
     this.editParticipacionTotal()
-    this.calculateAporteREP()
+    this.calculateREP()
     this.calculateGratificacion()
     this.calculateVacaciones()
     this.calculateCTS()
