@@ -148,10 +148,12 @@ export class EditFlotaComponent implements OnInit {
   //
   loadREP() {
     this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
+      console.log('Valor de REP cargado:', costo_rep); // Verificar el valor cargado
       this.rep = costo_rep;
       this.calculateREP();
     });
   }
+
 
   //CARGAR ZONAS
   loadZonas(): void {
@@ -221,24 +223,26 @@ export class EditFlotaComponent implements OnInit {
   editParticipacionTotal():void{
     const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
     const bonificacion = Number(this.firstFormGroup.get('bonificacion')?.value) || 0;
+    const valor_REP = this.rep || 0;
 
     const participacion_total = participacion + bonificacion
     const redondeo = parseFloat(participacion_total.toFixed(2));
     this.firstFormGroup.patchValue({total_participacion: redondeo })
 
-  }
-
-  calculateREP(): void {
-    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
-    const valor_REP = this.rep || 0;
     const REP = participacion_total * valor_REP;
-    const redondeo = parseFloat(REP.toFixed(2));
-    this.firstFormGroup.patchValue({ aporte_REP: redondeo });
-  }
+    const redondeo_rep = parseFloat(REP.toFixed(2));
+    this.firstFormGroup.patchValue({ aporte_REP: redondeo_rep });
 
+  }
 
   //  -----------------------------    GASTOS DE TRIPULACION ---------------
-
+  calculateREP(): void {
+      const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+      const valor_REP = this.rep || 0;
+      const REP = participacion_total * valor_REP;
+      const redondeo = parseFloat(REP.toFixed(2));
+      this.firstFormGroup.patchValue({ aporte_REP: redondeo });
+    }
 
 
   //GRATIFICACIÓN
@@ -607,10 +611,10 @@ export class EditFlotaComponent implements OnInit {
 
     // Filtra los campos undefined
     Object.keys(updateData).forEach(key => {
-  if ((updateData as FlotaDP & Record<string, any>)[key] === undefined) {
-    (updateData as FlotaDP & Record<string, any>)[key] = 0;
-  }
-  });
+    if ((updateData as FlotaDP & Record<string, any>)[key] === undefined) {
+      (updateData as FlotaDP & Record<string, any>)[key] = 0;
+    }
+    });
 
     // Enviar datos al servicio
     this.serviceFlota.updateFlota(updateData, updateData.id).subscribe(
