@@ -36,6 +36,8 @@ export class EditFlotaComponent implements OnInit {
   zona: ZonaPescaI[] = [];
   costoDia?: MecanismoI;
   derechoPescaCosto?: number;
+  bonificacionSeleccionada?: number;
+  rep?: number;
   showStepper: boolean = true;
 
   constructor(
@@ -109,30 +111,42 @@ export class EditFlotaComponent implements OnInit {
 
     this.firstFormGroup.patchValue(flotaData);
     this.secondFormGroup.patchValue(flotaData);
+
     this.loadEmbarcaciones();
     this.loadZonas();
     this.loadCostoDia();
     this.loadLastDerechoPesca();
-
-    this.firstFormGroup.get('consumo_viveres')?.valueChanges.subscribe(() => {
-      if (this.embarcacionSeleccionada) {
-        this.calculateTotalVivieres();
-      }
-    });
-
-    this.firstFormGroup.get('embarcacion')?.valueChanges.subscribe((embarcacionId) => {
-      if (embarcacionId) {
-        this.onSelectEmbarcacion(Number(embarcacionId));
-      }
-    });
+    this.loadREP()
   }
+
 
   // CARGAR EMBARCACION
-  loadEmbarcaciones(): void {
-    this.embarcacionService.getEmbarcaciones().subscribe(data => {
-      this.embarcaciones = data;
+  loadEmbarcaciones(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.embarcacionService.getEmbarcaciones().subscribe(data => {
+        this.embarcaciones = data;
+        console.log('Embarcaciones cargadas:', this.embarcaciones);
+
+        const embarcacionIdSeleccionada = Number(this.firstFormGroup.get('embarcacion')?.value) || 0;
+        console.log(`ID de embarcación seleccionada: ${embarcacionIdSeleccionada}`);
+
+        this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionIdSeleccionada);
+        console.log('Embarcación seleccionada:', this.embarcacionSeleccionada);
+
+        if (this.embarcacionSeleccionada) {
+          this.bonificacionSeleccionada = this.embarcacionSeleccionada.bonificacion;
+          console.log(`Bonificación de la embarcación seleccionada: ${this.bonificacionSeleccionada}`);
+        } else {
+          console.log("No se encontró la embarcación seleccionada al cargar.");
+        }
+
+        this.calculateBonificacion();
+
+        resolve(); // Resuelve la promesa cuando la carga de embarcaciones esté completa
+      }, error => reject(error));
     });
   }
+
 
   //CARGAR ZONAS
   loadZonas(): void {
@@ -180,42 +194,23 @@ export class EditFlotaComponent implements OnInit {
     this.firstFormGroup.patchValue({participacion: participacionRedondeada});
   }
 
-  //BONIFICACIÓN
-  onSelectEmbarcacion(embarcacionId: number): void {
-    this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionId);
-    if (!this.embarcacionSeleccionada) {
-      console.log("No se encontró la embarcación con el ID proporcionado.");
-      return;
-    }
-    console.log("Embarcación seleccionada:", this.embarcacionSeleccionada);
-    this.calculateBonificacion();
-    this.calculateTotalVivieres();
-  }
-
   calculateBonificacion(): void {
-    if (!this.embarcacionSeleccionada) {
-      console.log("No se ha seleccionado una embarcación.");
-      return;
-    }
-
+    // Realiza el cálculo solo si la bonificación y la participación están disponibles
     const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
     console.log(`Participación: ${participacion}`);
 
-    if (isNaN(participacion) || participacion === 0) {
-      console.log("La participación aún no está disponible.");
-      return;
-    }
-
-    const bonificacion = Number(this.embarcacionSeleccionada.bonificacion) || 0;
+    const bonificacion = Number(this.bonificacionSeleccionada) || 0;
     if (bonificacion > 0) {
       const totalBonificacion = participacion / bonificacion;
-      const redondeo = parseFloat(totalBonificacion.toFixed(2))
-      console.log(`Calculando bonificación: (${participacion} / ${bonificacion}) =  ${totalBonificacion}`);
+      const redondeo = parseFloat(totalBonificacion.toFixed(2));
+      console.log(`Calculando bonificación: (${participacion} / ${bonificacion}) = ${totalBonificacion}`);
       this.firstFormGroup.patchValue({ bonificacion: redondeo });
     } else {
       this.firstFormGroup.patchValue({ bonificacion: 0 });
+      console.log("La bonificación es 0, se establece la bonificación a 0.");
     }
   }
+
 
   //TOTAL PARTICIPACIÓN
   editParticipaciónTotal():void{
@@ -226,6 +221,26 @@ export class EditFlotaComponent implements OnInit {
     const redondeo = parseFloat(participacion_total.toFixed(2));
     this.firstFormGroup.patchValue({total_participacion: redondeo })
   }
+
+  // -------------------------------------- TOTAL DE TRIPULACIÓN:
+  loadREP() {
+    this.costoXGalonService.getCostoTarifa('REP').subscribe(costo_rep => {
+      console.log('Valor de REP cargado:', costo_rep); // Verificar el valor cargado
+      this.rep = costo_rep;
+      this.calculateREP();
+    });
+  }
+
+  calculateREP(): void {
+    const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
+    const valor_REP = this.rep || 0;
+    const REP = participacion_total * valor_REP;
+    const redondeo_REP = parseFloat(REP.toFixed(2));
+    this.firstFormGroup.patchValue({ aporte_REP: redondeo_REP });
+  }
+
+
+
 
   //GASOLINA
   editGasolina(): void{
@@ -379,6 +394,7 @@ export class EditFlotaComponent implements OnInit {
     this.editToneladas()
     this.editParticipacion()
     this.editParticipaciónTotal()
+    this.calculateREP()
     this.editGasolina()
     this.editHielo()
     this.editAgua()
