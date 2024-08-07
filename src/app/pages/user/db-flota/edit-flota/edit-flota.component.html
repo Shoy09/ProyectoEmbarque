@@ -17,7 +17,7 @@
         <!-- Campos select para embarcacion y zona_pesca -->
         <mat-form-field appearance="fill">
           <mat-label>Embarcación</mat-label>
-          <mat-select formControlName="embarcacion" (selectionChange)="onSelectEmbarcacion($event.value)">
+          <mat-select formControlName="embarcacion">
             <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
               {{embarcacion.nombre}}
             </mat-option>

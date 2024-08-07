@@ -1,4 +1,5 @@
 export interface FlotaDP {
+  
   id?: number;
   fecha: string;
   tipo_cambio: number;
@@ -6,17 +7,17 @@ export interface FlotaDP {
   zona_pesca: number;
   horas_faena: string;
   kilos_declarados: number;
-  merluza?: number;
-  precio_merluza?: number;
-  bereche?: number;
-  precio_bereche?: number;
-  volador?: number;
-  precio_volador?: number;
-  merluza_descarte?: number;
-  precio_merluzaNP?: number;
-  otro?: string;
-  kilo_otro?: number;
-  precio_otro?: number;
+  merluza?: number | null;
+  precio_merluza?: number | null;
+  bereche?: number | null;
+  precio_bereche?: number | null;
+  volador?: number | null;
+  precio_volador?: number | null;
+  merluza_descarte?: number | null;
+  precio_merluzaNP?: number | null;
+  otro?: string  | null;
+  kilo_otro?: number | null;
+  precio_otro?: number  | null;
   toneladas_procesadas: number;
   toneladas_recibidas: number;
   costo_basico: number;
