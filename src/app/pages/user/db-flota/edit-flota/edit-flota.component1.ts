@@ -240,8 +240,8 @@ export class EditFlotaComponent implements OnInit {
       const participacion_total = Number(this.firstFormGroup.get('total_participacion')?.value) || 0;
       const valor_REP = this.rep || 0;
       const REP = participacion_total * valor_REP;
-      const redondeo = parseFloat(REP.toFixed(2));
-      this.firstFormGroup.patchValue({ aporte_REP: redondeo });
+      const redondeo_REP = parseFloat(REP.toFixed(2));
+      this.firstFormGroup.patchValue({ aporte_REP: redondeo_REP });
     }
 
 
