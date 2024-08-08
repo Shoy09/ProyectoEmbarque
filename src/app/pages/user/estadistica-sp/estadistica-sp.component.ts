@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
+import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -27,7 +28,8 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
     MatButtonModule,
     MatSelectModule,
     FormsModule,
-  ],
+    EstadisticaPastelComponent
+],
   templateUrl: './estadistica-sp.component.html',
   styleUrl: './estadistica-sp.component.css'
 })
