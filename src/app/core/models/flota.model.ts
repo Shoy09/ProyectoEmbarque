@@ -1,5 +1,6 @@
+import { IDiarioPesca } from "./diarioPesca.model";
+
 export interface FlotaDP {
-  
   id?: number;
   fecha: string;
   tipo_cambio: number;
@@ -52,4 +53,5 @@ export interface FlotaDP {
   total_costo: number;
   costo_tm_captura: number;
   csot: number;
+  lances?: IDiarioPesca[];
 }

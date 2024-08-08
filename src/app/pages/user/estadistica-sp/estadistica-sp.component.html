@@ -1,1 +1,21 @@
-<canvas id="chart">{{ chart }}</canvas>
+<div class="chart-container">
+  <div class="filter-container">
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha Inicio</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" placeholder="Seleccione Fecha Inicio" [(ngModel)]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha Fin</mat-label>
+      <input matInput [matDatepicker]="endDatePicker" placeholder="Seleccione Fecha Fin" [(ngModel)]="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyDateFilter()">Aplicar Filtro</button>
+
+  </div>
+
+  <canvas id="chart"></canvas>
+</div>

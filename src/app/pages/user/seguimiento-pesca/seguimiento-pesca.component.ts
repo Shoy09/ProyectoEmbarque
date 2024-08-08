@@ -186,8 +186,6 @@ export class SeguimientoPescaComponent {
     });
   }
 
-
-
   deleteDiarioPesca(id: number) {
     Swal.fire({
       title: '¿Estás seguro de que quieres eliminar este Lance?',

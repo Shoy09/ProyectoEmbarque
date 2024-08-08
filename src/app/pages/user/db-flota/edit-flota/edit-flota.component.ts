@@ -304,7 +304,7 @@ export class EditFlotaComponent implements OnInit {
     const valor_senati = this.senati || 0;
     const senati = (participacion_total + vacaciones + gratificacion) * valor_senati
     const redondeo = parseFloat(senati.toFixed(2));
-    console.log(`Calculando totalVivieres: ${participacion_total} + ${vacaciones} + ${gratificacion}  / ${valor_senati}= ${redondeo}`);
+    console.log(`Calculando edit senati: ${participacion_total} + ${vacaciones} + ${gratificacion}  / ${valor_senati}= ${redondeo}`);
     this.firstFormGroup.patchValue({ senati: redondeo})
   }
 
@@ -546,6 +546,7 @@ export class EditFlotaComponent implements OnInit {
     this.editGasolina()
     this.editHielo()
     this.editAgua()
+    this.calculateTotalVivieres()
     this.editTotalInspeccion()
     this.editDerechoPesca()
     this.editCost()

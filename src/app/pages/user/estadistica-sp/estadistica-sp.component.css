@@ -1,0 +1,7 @@
+.chart-container {
+  top: 0; /* Desde el borde superior */
+  left: 0; /* Desde el borde izquierdo */
+  width: 70%; /* Ocupa un cuarto de la pantalla */
+  height: 100vh; /* Altura igual a la altura de la ventana */
+  overflow: auto; /* Permite desplazamiento si el contenido excede el tamaño del contenedor */
+}

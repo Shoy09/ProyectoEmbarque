@@ -37,4 +37,9 @@ export class FlotaService {
   deleteFlota(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}${id}/`);
   }
+
+  //TRAER LANCES Y FLOTAS
+  getFlotasLances(): Observable<FlotaDP[]> {
+    return this.http.get<FlotaDP[]>(`${this.baseUrl}lances/`);
+  }
 }
