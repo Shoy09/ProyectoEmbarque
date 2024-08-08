@@ -1,5 +1,6 @@
 <div class="chart-container">
-  <div class="filter-container">
+  <!-- Contenedor para los filtros de fechas -->
+  <div class="filters-and-selection">
     <mat-form-field appearance="outline" class="filter-item">
       <mat-label>Fecha Inicio</mat-label>
       <input matInput [matDatepicker]="startDatePicker" placeholder="Seleccione Fecha Inicio" [(ngModel)]="startDate">
@@ -13,9 +14,32 @@
       <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #endDatePicker></mat-datepicker>
     </mat-form-field>
-    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyDateFilter()">Aplicar Filtro</button>
+    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyFilters()">Aplicar Filtros</button>
 
+    <!-- Gráfico -->
+    <canvas id="chart" class="chart"></canvas>
   </div>
 
-  <canvas id="chart"></canvas>
+  <!-- Contenedor para los filtros de embarcaciones y zonas de pesca -->
+  <div class="filters-container">
+    <h3>Seleccionar Embarcaciones</h3>
+    <div *ngFor="let embarcacion of embarcaciones">
+      <button
+        class="custom-checkbox"
+        [class.checked]="selectedEmbarcaciones.has(embarcacion.id)"
+        (click)="toggleEmbarcacion(embarcacion.id)">
+        {{ embarcacion.nombre }}
+      </button>
+    </div>
+
+    <h3>Selecciona Zona Pesca</h3>
+    <div *ngFor="let zona of zona_p">
+      <button
+        class="custom-checkbox"
+        [class.checked]="selectedZona.has(zona.id)"
+        (click)="togleZonaPesca(zona.id)">
+        {{ zona.nombre }}
+      </button>
+    </div>
+  </div>
 </div>
