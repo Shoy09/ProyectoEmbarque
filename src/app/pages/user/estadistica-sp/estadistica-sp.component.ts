@@ -79,7 +79,7 @@ export class EstadisticaSPComponent implements OnInit{
     };
 
     this.chart = new Chart("chart", {
-      type: 'line',
+      type: 'bar',
       data: this.data
     });
   }
