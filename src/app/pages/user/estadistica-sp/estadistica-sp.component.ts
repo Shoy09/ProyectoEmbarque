@@ -85,6 +85,20 @@ export class EstadisticaSPComponent implements OnInit{
   }
 
   applyFilters() {
+
+    //se debe poner fecha para ejecutar el filtrado
+    if (!this.startDate || !this.endDate) {
+      this.data = {
+        labels: [],
+        datasets: []
+      };
+      if (this.chart) {
+        this.chart.data = this.data;
+        this.chart.update();
+      }
+      return;
+    }
+
     let filteredRecords = this.flota;
 
     // Filtrar por fechas
