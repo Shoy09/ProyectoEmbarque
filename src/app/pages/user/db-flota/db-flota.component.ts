@@ -220,7 +220,8 @@ export class DbFlotaComponent {
 
   openFomrEditFlota(flota: FlotaDP){
     const edit = this.dialog.open(EditFlotaComponent, {
-      data: flota
+      data: flota,
+      disableClose: true
     });
 
     edit.afterClosed().subscribe((result) => {

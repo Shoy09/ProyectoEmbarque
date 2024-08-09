@@ -1,13 +1,19 @@
-/* Añade este bloque de estilos en tu archivo CSS del componente */
-.stepper-container {
-  max-height: 80vh; /* Limita la altura máxima del contenedor para facilitar el desplazamiento */
-  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido excede la altura del contenedor */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto; /* Permitir desplazamiento vertical */
+  max-height: 70vh; /* Altura máxima ajustada para el contenedor del formulario */
+  padding: 16px; /* Espacio interno para el contenedor */
 }
 
-.mat-form-field {
-  margin-bottom: 16px; /* Añade un margen inferior a cada campo del formulario */
-  padding: 20px;
-  max-width: 300px;
-  margin-left: 20px;
-  margin-right: 30px;
+.half-width {
+  width: calc(50% - 16px);
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
 }

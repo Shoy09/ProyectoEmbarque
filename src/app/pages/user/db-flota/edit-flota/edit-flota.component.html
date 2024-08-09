@@ -4,102 +4,104 @@
 
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Kilos recibidos</ng-template>
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha</mat-label>
-          <input matInput formControlName="fecha" type="date">
-        </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Consumo Viveres</mat-label>
-          <input matInput formControlName="consumo_viveres" type="number">
-        </mat-form-field>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Fecha</mat-label>
+            <input matInput formControlName="fecha" type="date">
+          </mat-form-field>
 
-        <!-- Campos select para embarcacion y zona_pesca -->
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Embarcacion</mat-label>
-          <mat-select formControlName="embarcacion"
-                      (selectionChange)="onEmbarcacionChange($event.value)">
-            <mat-option value="">Seleccione Embarcacion</mat-option>
-            <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
-              {{ embarcacion.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Consumo Viveres</mat-label>
+            <input matInput formControlName="consumo_viveres" type="number">
+          </mat-form-field>
 
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Embarcacion</mat-label>
+            <mat-select formControlName="embarcacion"
+                        (selectionChange)="onEmbarcacionChange($event.value)">
+              <mat-option value="">Seleccione Embarcacion</mat-option>
+              <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
+                {{ embarcacion.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Zona de Pesca</mat-label>
-          <mat-select formControlName="zona_pesca">
-            <mat-option *ngFor="let zonaItem of zona" [value]="zonaItem.id">
-              {{ zonaItem.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Zona de Pesca</mat-label>
+            <mat-select formControlName="zona_pesca">
+              <mat-option *ngFor="let zonaItem of zona" [value]="zonaItem.id">
+                {{ zonaItem.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Horas de Faena</mat-label>
-          <input matInput formControlName="horas_faena" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Horas de Faena</mat-label>
+            <input matInput formControlName="horas_faena" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Kilos Declarados</mat-label>
-          <input matInput formControlName="kilos_declarados" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Kilos Declarados</mat-label>
+            <input matInput formControlName="kilos_declarados" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Merluza (kg)</mat-label>
-          <input matInput formControlName="merluza" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Merluza (kg)</mat-label>
+            <input matInput formControlName="merluza" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Precio Merluza</mat-label>
-          <input matInput formControlName="precio_merluza" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Precio Merluza</mat-label>
+            <input matInput formControlName="precio_merluza" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Bereche (kg)</mat-label>
-          <input matInput formControlName="bereche" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Bereche (kg)</mat-label>
+            <input matInput formControlName="bereche" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Precio Bereche</mat-label>
-          <input matInput formControlName="precio_bereche" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Precio Bereche</mat-label>
+            <input matInput formControlName="precio_bereche" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Volador (kg)</mat-label>
-          <input matInput formControlName="volador" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Volador (kg)</mat-label>
+            <input matInput formControlName="volador" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Precio Volador</mat-label>
-          <input matInput formControlName="precio_volador" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Precio Volador</mat-label>
+            <input matInput formControlName="precio_volador" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Merluza NP (kg)</mat-label>
-          <input matInput formControlName="merluza_descarte" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Merluza NP (kg)</mat-label>
+            <input matInput formControlName="merluza_descarte" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Precio Merluza NP</mat-label>
-          <input matInput formControlName="precio_merluzaNP" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Precio Merluza NP</mat-label>
+            <input matInput formControlName="precio_merluzaNP" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Especie A </mat-label>
-          <input matInput formControlName="otro" type="text">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Especie A </mat-label>
+            <input matInput formControlName="otro" type="text">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Especie A (kg) </mat-label>
-          <input matInput formControlName="kilo_otro" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Especie A (kg) </mat-label>
+            <input matInput formControlName="kilo_otro" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> Precio Especie A</mat-label>
-          <input matInput formControlName="precio_otro" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label> Precio Especie A</mat-label>
+            <input matInput formControlName="precio_otro" type="number">
+          </mat-form-field>
+
+        </div>
 
         <div class="button-group">
           <button mat-raised-button color="warn" (click)="closeStepper()">Cerrar</button>
@@ -113,49 +115,51 @@
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Gastos de Embarcación</ng-template>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Consumo de Gasolina (gal)</mat-label>
-          <input matInput formControlName="consumo_gasolina" type="number">
-        </mat-form-field>
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Consumo de Gasolina (gal)</mat-label>
+            <input matInput formControlName="consumo_gasolina" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Costo de galon de gasolina</mat-label>
-          <input matInput formControlName="costo_gasolina" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Costo de galon de gasolina</mat-label>
+            <input matInput formControlName="costo_gasolina" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>consumo_hielo</mat-label>
-          <input matInput formControlName="consumo_hielo" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>consumo_hielo</mat-label>
+            <input matInput formControlName="consumo_hielo" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Costo de Hielo</mat-label>
-          <input matInput formControlName="costo_hilo" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Costo de Hielo</mat-label>
+            <input matInput formControlName="costo_hilo" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>consumo_agua</mat-label>
-          <input matInput formControlName="consumo_agua" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>consumo_agua</mat-label>
+            <input matInput formControlName="consumo_agua" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Costo Agua</mat-label>
-          <input matInput formControlName="costo_agua" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Costo Agua</mat-label>
+            <input matInput formControlName="costo_agua" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>dias_inspeccion</mat-label>
-          <input matInput formControlName="dias_inspeccion" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>dias_inspeccion</mat-label>
+            <input matInput formControlName="dias_inspeccion" type="number">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>tipo_cambio</mat-label>
-          <input matInput formControlName="tipo_cambio" type="number">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>tipo_cambio</mat-label>
+            <input matInput formControlName="tipo_cambio" type="number">
+          </mat-form-field>
 
+        </div>
       </form>
 
-      <div>
+      <div class="button-group">
         <button mat-raised-button color="warn" (click)="closeStepper()">Cerrar</button>
         <button mat-button matStepperPrevious>Atrás</button>
         <button mat-button matStepperNext>Siguiente</button>
@@ -168,7 +172,6 @@
       <div>
         <button mat-raised-button color="primary" (click)="save()">Enviar Formulario</button>
         <button mat-button matStepperPrevious>Atrás</button>
-        <button mat-button (click)="stepper.reset()">Reiniciar</button>
         <button mat-raised-button color="warn" (click)="closeStepper()">Cerrar</button>
       </div>
     </mat-step>
