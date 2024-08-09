@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FlotaDP } from '../models/flota.model';
 import { Observable } from 'rxjs';
+import { IFlotaDPResponse } from '../models/t_materializadas.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,10 @@ export class FlotaService {
   //TRAER LANCES Y FLOTAS
   getFlotasLances(): Observable<FlotaDP[]> {
     return this.http.get<FlotaDP[]>(`${this.baseUrl}lances/`);
+  }
+
+  //TONELADAS MENSUALES Y SEMANALES
+  getToneladasMensualesSemanles(): Observable<IFlotaDPResponse[]> {
+    return this.http.get<IFlotaDPResponse[]>(`${this.baseUrl}tiempo/`);
   }
 }

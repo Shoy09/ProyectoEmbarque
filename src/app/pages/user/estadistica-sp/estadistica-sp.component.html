@@ -1,3 +1,4 @@
+<h3>Consumo de Embarcación</h3>
 <div class="chart-container">
   <!-- Contenedor para los filtros de fechas -->
   <div class="filters-and-selection">
@@ -16,6 +17,7 @@
       <mat-datepicker #endDatePicker></mat-datepicker>
     </mat-form-field>
     <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyFilters()">Aplicar Filtros</button>
+    <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button" (click)="clearFilter()">Quitar Filtro</button>
     </div>
 
 
@@ -52,3 +54,4 @@
 </div>
 
 <app-estadistica-pastel></app-estadistica-pastel>
+

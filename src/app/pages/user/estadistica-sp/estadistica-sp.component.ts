@@ -15,6 +15,7 @@ import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
+import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -28,7 +29,8 @@ import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pa
     MatButtonModule,
     MatSelectModule,
     FormsModule,
-    EstadisticaPastelComponent
+    EstadisticaPastelComponent,
+    EstadisticaMaterializacionComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrl: './estadistica-sp.component.css'
@@ -86,8 +88,16 @@ export class EstadisticaSPComponent implements OnInit{
     });
   }
 
-  applyFilters() {
+  clearFilter() {
+    // Restablecer los controles de fecha y los conjuntos de selección
+    this.startDate = null!;
+    this.endDate = null!;
+    this.selectedEmbarcaciones.clear();
+    this.selectedZona.clear();
+    this.isDateFiltered = false;
+  }
 
+  applyFilters() {
     //se debe poner fecha para ejecutar el filtrado
     if (!this.startDate || !this.endDate) {
       this.data = {
@@ -191,7 +201,11 @@ export class EstadisticaSPComponent implements OnInit{
     }
 
     console.log('Chart updated with filtered data');
+
+    // Actualizar el estado de filtrado
+    this.isDateFiltered = true; // Asegúrate de que esto sea apropiado para tu lógica de negocio
   }
+
 
   toggleEmbarcacion(embarcacionId: number) {
     if (this.selectedEmbarcaciones.has(embarcacionId)) {
@@ -210,6 +224,7 @@ export class EstadisticaSPComponent implements OnInit{
     }
     this.applyFilters();
   }
+
 }
 
 

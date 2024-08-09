@@ -1,55 +1,55 @@
-
+<div class="cry">
   <h3>Especies (kg)</h3>
-<div class="chart-container">
-  <div class="filters-container">
-    <h4>Seleccionar Embarcaciones</h4>
-    <div class="button-group">
-      <button
-          class="custom-checkbox"
-          *ngFor="let embarcacion of embarcaciones"
-          [class.checked]="selectedEmbarcaciones.has(embarcacion.id)"
-          (click)="toggleEmbarcacion(embarcacion.id)">
-          {{ embarcacion.nombre }}
-      </button>
+  <div class="chart-container">
+    <div class="filters-container">
+      <h4>Seleccionar Embarcaciones</h4>
+      <div class="button-group">
+        <button
+            class="custom-checkbox"
+            *ngFor="let embarcacion of embarcaciones"
+            [class.checked]="selectedEmbarcaciones.has(embarcacion.id)"
+            (click)="toggleEmbarcacion(embarcacion.id)">
+            {{ embarcacion.nombre }}
+        </button>
 
+      </div>
+
+      <h4>Selecciona Zona Pesca</h4>
+      <div class="button-group">
+        <button
+            class="custom-checkbox"
+            *ngFor="let zona of zona_p"
+            [class.checked]="selectedZona.has(zona.id)"
+            (click)="togleZonaPesca(zona.id)">
+            {{ zona.nombre }}
+        </button>
+      </div>
     </div>
 
-    <h4>Selecciona Zona Pesca</h4>
-    <div class="button-group">
-      <button
-          class="custom-checkbox"
-          *ngFor="let zona of zona_p"
-          [class.checked]="selectedZona.has(zona.id)"
-          (click)="togleZonaPesca(zona.id)">
-          {{ zona.nombre }}
-      </button>
-    </div>
-  </div>
+    <div class="filters-and-selection">
+      <div class="fecha">
+        <mat-form-field appearance="outline" class="filter-item">
+          <mat-label>Fecha de inicio</mat-label>
+          <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" placeholder="Seleccione Fecha de Inicio">
+          <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+          <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
 
-  <div class="filters-and-selection">
-    <div class="fecha">
-      <mat-form-field appearance="outline" class="filter-item">
-      <mat-label>Fecha de inicio</mat-label>
-      <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-      <mat-datepicker #pickerStart></mat-datepicker>
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-item">
+          <mat-label>Fecha de fin</mat-label>
+          <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" placeholder="Seleccione Fecha de Fin">
+          <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+      <button mat-raised-button color="primary" class="filter-item filter-button" (click)="filterPastel()">Aplicar Filtros</button>
+      </div>
+      <div class="grafico">
+        <canvas id="myChart"></canvas>
+      </div>
 
-    <mat-form-field appearance="outline" class="filter-item">
-      <mat-label>Fecha de fin</mat-label>
-      <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-      <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
-    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="filterPastel()">Aplicar Filtros</button>
     </div>
-    <div class="grafico">
-      <canvas id="myChart"></canvas>
-    </div>
-
   </div>
 </div>
-
 
 
 
