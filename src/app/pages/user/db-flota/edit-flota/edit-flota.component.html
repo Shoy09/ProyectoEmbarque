@@ -15,14 +15,17 @@
         </mat-form-field>
 
         <!-- Campos select para embarcacion y zona_pesca -->
-        <mat-form-field appearance="fill">
-          <mat-label>Embarcación</mat-label>
-          <mat-select formControlName="embarcacion">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Embarcacion</mat-label>
+          <mat-select formControlName="embarcacion"
+                      (selectionChange)="onEmbarcacionChange($event.value)">
+            <mat-option value="">Seleccione Embarcacion</mat-option>
             <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">
-              {{embarcacion.nombre}}
+              {{ embarcacion.nombre }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+
 
         <mat-form-field appearance="fill">
           <mat-label>Zona de Pesca</mat-label>

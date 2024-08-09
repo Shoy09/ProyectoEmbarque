@@ -95,6 +95,14 @@ export class EstadisticaPastelComponent implements OnInit{
         );
     }
 
+    // Filtrar las embarcaciones que están dentro de los registros filtrados
+    const availableEmbarcaciones = new Set<number>(filteredRecords.map(flota => flota.embarcacion));
+
+    // Si no hay embarcaciones seleccionadas, selecciona solo las que están disponibles
+    if (this.selectedEmbarcaciones.size === 0) {
+        this.selectedEmbarcaciones = availableEmbarcaciones;
+    }
+
     // Agrega las etiquetas para los datos del gráfico
     const labels = [
         'Merluza (kg)',
@@ -106,11 +114,6 @@ export class EstadisticaPastelComponent implements OnInit{
 
     // Objeto para almacenar los datos por embarcación
     const embarcacionesData: { [key: number]: number[] } = {};
-
-    // Si no hay embarcaciones seleccionadas, selecciona todas
-    if (this.selectedEmbarcaciones.size === 0) {
-        this.embarcaciones.forEach(e => this.selectedEmbarcaciones.add(e.id));
-    }
 
     // Calcula los totales para cada tipo y embarcación
     this.selectedEmbarcaciones.forEach(embarcacionId => {
@@ -143,6 +146,7 @@ export class EstadisticaPastelComponent implements OnInit{
 
     this.createPastel();
 }
+
 
 createPastel() {
     const ctx = document.getElementById('myChart') as HTMLCanvasElement;

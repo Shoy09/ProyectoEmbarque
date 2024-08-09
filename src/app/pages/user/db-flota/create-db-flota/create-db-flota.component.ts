@@ -148,6 +148,13 @@ export class CreateDbFlotaComponent {
     this.loadSCTRSAL();
     this.loadSCTRPEN();
     this.loadPoliSeguro();
+    this.firstFormGroup.get('consumo_viveres')?.valueChanges.subscribe(() => {
+      this.calculateTotalVivieres();
+    });
+
+    this.firstFormGroup.get('embarcacion')?.valueChanges.subscribe(() => {
+      this.calculateTotalVivieres();
+    });
   }
 
   getEmbarcaciones() {
@@ -317,18 +324,19 @@ export class CreateDbFlotaComponent {
   }
 
   //VIVERES POR EMBARCACIÓN
-  calculateTotalVivieres(embarcacionId: number): void {
+  calculateTotalVivieres(): void {
+    const embarcacionId = Number(this.firstFormGroup.get('embarcacion')?.value);
     const selectedEmbarcacion = this.embarcaciones.find(e => e.id === embarcacionId);
+
     if (selectedEmbarcacion) {
       const consumoViveres = Number(this.firstFormGroup.get('consumo_viveres')?.value) || 0;
-      console.log(`Consumo de Viveres: ${consumoViveres}`);
-
       const costoZarpe = selectedEmbarcacion.costo_zarpe;
       const totalVivieres = consumoViveres * costoZarpe;
-      console.log(`Calculando totalVivieres: ${consumoViveres} * ${costoZarpe} = ${totalVivieres}`);
       this.firstFormGroup.patchValue({ total_vivieres: totalVivieres });
     }
-  }
+}
+
+
 
   //SERVICIO DE INSPECCION
   loadCostoDia(): void {

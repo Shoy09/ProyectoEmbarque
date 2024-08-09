@@ -156,6 +156,19 @@ export class EditFlotaComponent implements OnInit {
     });
   }
 
+  onEmbarcacionChange(embarcacionId: number): void {
+    this.embarcacionSeleccionada = this.embarcaciones.find(e => e.id === embarcacionId);
+
+    if (this.embarcacionSeleccionada) {
+      this.bonificacionSeleccionada = this.embarcacionSeleccionada.bonificacion || 0;
+    } else {
+      this.bonificacionSeleccionada = 0;
+    }
+
+    this.calculateBonificacion();
+  }
+
+
   //CARGAR ZONAS
   loadZonas(): void {
     this.embarcacionService.getZonaPesca().subscribe(data => {
@@ -203,7 +216,6 @@ export class EditFlotaComponent implements OnInit {
   }
   //BONIFICACION
   calculateBonificacion(): void {
-    // Realiza el cálculo solo si la bonificación y la participación están disponibles
     const participacion = Number(this.firstFormGroup.get('participacion')?.value) || 0;
     console.log(`Participación: ${participacion}`);
 
@@ -218,6 +230,7 @@ export class EditFlotaComponent implements OnInit {
       console.log("La bonificación es 0, se establece la bonificación a 0.");
     }
   }
+
 
   //TOTAL PARTICIPACIÓN
   editParticipaciónTotal():void{
@@ -532,6 +545,7 @@ export class EditFlotaComponent implements OnInit {
     this.editCostoBasico()
     this.editToneladas()
     this.editParticipacion()
+    this.calculateBonificacion()
     this.editParticipaciónTotal()
     this.calculateREP()
     this.editGratificacion()
@@ -563,17 +577,17 @@ export class EditFlotaComponent implements OnInit {
         zona_pesca: Number(formData.zona_pesca),
         horas_faena: formData.horas_faena || '',
         kilos_declarados: Number(formData.kilos_declarados),
-        merluza: formData.merluza ? Number(formData.merluza) : undefined,
-        precio_merluza: formData.precio_merluza ? Number(formData.precio_merluza) : undefined,
-        bereche: formData.bereche ? Number(formData.bereche) : undefined,
-        precio_bereche: formData.precio_bereche ? Number(formData.precio_bereche) : undefined,
-        volador: formData.volador ? Number(formData.volador) : undefined,
-        precio_volador: formData.precio_volador ? Number(formData.precio_volador) : undefined,
-        merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
-        precio_merluzaNP: formData.precio_merluzaNP ? Number(formData.precio_merluzaNP) : undefined,
+        merluza: formData.merluza && Number(formData.merluza),
+        precio_merluza: formData.precio_merluza && Number(formData.precio_merluza),
+        bereche: formData.bereche && Number(formData.bereche),
+        precio_bereche: formData.precio_bereche && Number(formData.precio_bereche),
+        volador: formData.volador && Number(formData.volador),
+        precio_volador: formData.precio_volador && Number(formData.precio_volador),
+        merluza_descarte: formData.merluza_descarte && Number(formData.merluza_descarte),
+        precio_merluzaNP: formData.precio_merluzaNP && Number(formData.precio_merluzaNP),
         otro: formData.otro || undefined,
-        kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
-        precio_otro: formData.precio_otro ? Number(formData.precio_otro) : undefined,
+        kilo_otro: formData.kilo_otro && Number(formData.kilo_otro),
+        precio_otro: formData.precio_otro && Number(formData.precio_otro),
         toneladas_procesadas: Number(formData.toneladas_procesadas),
         toneladas_recibidas: Number(formData.toneladas_recibidas),
         costo_basico: Number(formData.costo_basico),

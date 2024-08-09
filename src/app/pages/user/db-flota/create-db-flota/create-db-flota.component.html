@@ -18,7 +18,7 @@
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Embarcacion</mat-label>
-            <mat-select formControlName="embarcacion" (selectionChange)="calculateTotalVivieres($event.value); onSelectEmbarcacion($event.value)">
+            <mat-select formControlName="embarcacion" (selectionChange)="calculateTotalVivieres(); onSelectEmbarcacion($event.value)">
               <mat-option value="">Seleccione Embarcacion</mat-option>
               <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.id">{{ embarcacion.nombre }}</mat-option>
             </mat-select>
