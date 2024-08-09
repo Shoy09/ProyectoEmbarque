@@ -3,6 +3,7 @@
   flex-direction: row; /* Alinea los contenedores horizontalmente */
   padding: 20px;
   box-sizing: border-box;
+  background: #f9f9f9;
 }
 
 .filters-and-selection {
@@ -15,7 +16,7 @@
 .filters-container {
   display: flex;
   flex-direction: column;
-  width: 40%; /* Ocupa el 30% del ancho disponible */
+  width: 30%; /* Ocupa el 30% del ancho disponible */
 }
 
 
@@ -67,11 +68,24 @@
   background-color: #eee;
 }
 
-h4{
+h4, h3{
   text-align: center;
   padding: 20px;
 }
+
 .custom-checkbox.checked {
   background-color: #dcdcdc;
   box-shadow: inset 0 0 0 1px #000;
 }
+.container{
+  background: #f9f9f9;
+}
+.grafico {
+  width: 100%;
+  height: 85%; /* Ajusta esta altura según tus necesidades */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+

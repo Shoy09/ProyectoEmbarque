@@ -1,23 +1,6 @@
+
+  <h3>Especies (kg)</h3>
 <div class="chart-container">
-  <div class="filters-and-selection">
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de inicio</mat-label>
-      <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-      <mat-datepicker #pickerStart></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de fin</mat-label>
-      <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-      <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="filterPastel()">Aplicar Filtros</button>
-    <canvas id="myChart"></canvas>
-  </div>
-
   <div class="filters-container">
     <h4>Seleccionar Embarcaciones</h4>
     <div class="button-group">
@@ -41,8 +24,30 @@
           {{ zona.nombre }}
       </button>
     </div>
+  </div>
+
+  <div class="filters-and-selection">
+    <div class="fecha">
+      <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha de inicio</mat-label>
+      <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Fecha de fin</mat-label>
+      <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="filterPastel()">Aplicar Filtros</button>
+    </div>
+    <div class="grafico">
+      <canvas id="myChart"></canvas>
     </div>
 
+  </div>
 </div>
 
 

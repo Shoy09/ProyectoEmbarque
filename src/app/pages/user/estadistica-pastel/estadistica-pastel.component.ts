@@ -66,106 +66,118 @@ export class EstadisticaPastelComponent implements OnInit{
     });
   }
 
-  createPastel() {
-    const ctx = document.getElementById('myChart') as HTMLCanvasElement;
-
-    const config: ChartConfiguration<'pie'> = {
-      type: 'pie',
-      data: this.data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                let label = context.label || '';
-                if (context.parsed) {
-                  label += ': ' + context.parsed;
-                }
-                return label;
-              }
-            }
-          }
-        }
-      }
-    };
-
-    if (this.chart) {
-      this.chart.destroy(); // Destruir el gráfico anterior antes de crear uno nuevo
-    }
-
-    this.chart = new Chart(ctx, config);
-  }
-
 
   filterPastel() {
     let filteredRecords = this.flota;
 
-    //fecha
-    if (this.startDate && this.endDate) {
-      filteredRecords = filteredRecords.filter(flota => {
-        const fecha = new Date(flota.fecha); // Asume que 'fecha' es una propiedad de 'flota'
-        return fecha >= this.startDate && fecha <= this.endDate;
-      });
+    if (!this.startDate || !this.endDate) {
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+        if (this.chart) {
+            this.chart.data = this.data;
+            this.chart.update();
+        }
+        return;
     }
 
-    //embarcaciones
-    if (this.selectedEmbarcaciones.size > 0) {
-      filteredRecords = filteredRecords.filter(flota =>
-        this.selectedEmbarcaciones.has(flota.embarcacion)
-      );
-    }
+    // Filtrado por fechas
+    filteredRecords = filteredRecords.filter(flota =>
+        new Date(flota.fecha) >= new Date(this.startDate) &&
+        new Date(flota.fecha) <= new Date(this.endDate)
+    );
 
-    //zonas de pesca
+    // Filtrado por zonas de pesca
     if (this.selectedZona.size > 0) {
-      filteredRecords = filteredRecords.filter(flota =>
-        this.selectedZona.has(flota.zona_pesca)
-      );
+        filteredRecords = filteredRecords.filter(flota =>
+            this.selectedZona.has(flota.zona_pesca)
+        );
     }
 
     // Agrega las etiquetas para los datos del gráfico
     const labels = [
-      'Merluza',
-      'Bereche',
-      'Volador',
-      'Merluza NP',
-      'Otra Especie (kg)'
+        'Merluza (kg)',
+        'Bereche (kg)',
+        'Volador (kg)',
+        'Merluza NP (kg)',
+        'Otra Especie (kg)'
     ];
 
-    // Calcula los totales para cada tipo
-    const totalMerluza = filteredRecords.reduce((sum, flota) => sum + flota.merluza!, 0);
-    const totalBereche = filteredRecords.reduce((sum, flota) => sum + flota.bereche!, 0);
-    const totalVolador = filteredRecords.reduce((sum, flota) => sum + flota.volador!, 0);
-    const totalMerluzaNP = filteredRecords.reduce((sum, flota) => sum + flota.merluza_descarte!, 0);
-    const totalOtro = filteredRecords.reduce((sum, flota) => sum + flota.kilo_otro!, 0);
+    // Objeto para almacenar los datos por embarcación
+    const embarcacionesData: { [key: number]: number[] } = {};
+
+    // Si no hay embarcaciones seleccionadas, selecciona todas
+    if (this.selectedEmbarcaciones.size === 0) {
+        this.embarcaciones.forEach(e => this.selectedEmbarcaciones.add(e.id));
+    }
+
+    // Calcula los totales para cada tipo y embarcación
+    this.selectedEmbarcaciones.forEach(embarcacionId => {
+        const embarcacionRecords = filteredRecords.filter(flota => flota.embarcacion === embarcacionId);
+        embarcacionesData[embarcacionId] = [
+            embarcacionRecords.reduce((sum, flota) => sum + flota.merluza!, 0),
+            embarcacionRecords.reduce((sum, flota) => sum + flota.bereche!, 0),
+            embarcacionRecords.reduce((sum, flota) => sum + flota.volador!, 0),
+            embarcacionRecords.reduce((sum, flota) => sum + flota.merluza_descarte!, 0),
+            embarcacionRecords.reduce((sum, flota) => sum + flota.kilo_otro!, 0)
+        ];
+    });
+
+    // Crear datasets para cada embarcación
+    const datasets = Array.from(this.selectedEmbarcaciones).map((embarcacionId, index) => {
+        const embarcacion = this.embarcaciones.find(e => e.id === embarcacionId);
+        return {
+            label: embarcacion ? embarcacion.nombre : `Embarcación ${embarcacionId}`,
+            data: embarcacionesData[embarcacionId],
+            backgroundColor: Utils.generateColors(5, index),
+            borderColor: Utils.generateBorderColors(5, index)
+        };
+    });
 
     // Datos para el gráfico
     this.data = {
-      labels: labels,
-      datasets: [{
-        data: [totalMerluza, totalBereche, totalVolador, totalMerluzaNP, totalOtro],
-        backgroundColor: [
-          Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-          Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
-          Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-          Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
-          Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
-        ],
-        borderColor: [
-          Utils.CHART_COLORS.blue,
-          Utils.CHART_COLORS.naranja,
-          Utils.CHART_COLORS.red,
-          Utils.CHART_COLORS.verde,
-          Utils.CHART_COLORS.morado,
-        ],
-      }]
+        labels: labels,
+        datasets: datasets
     };
 
-  this.createPastel();  // Llama a createPastel después de establecer this.data
-  }
+    this.createPastel();
+}
+
+createPastel() {
+    const ctx = document.getElementById('myChart') as HTMLCanvasElement;
+
+    const config: ChartConfiguration<'pie'> = {
+        type: 'pie',
+        data: this.data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.dataset.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(2);
+                            return `${label}: ${value} kg (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    if (this.chart) {
+        this.chart.destroy();
+    }
+
+    this.chart = new Chart(ctx, config);
+}
+
 
   toggleEmbarcacion(embarcacionId: number) {
     if (this.selectedEmbarcaciones.has(embarcacionId)) {
