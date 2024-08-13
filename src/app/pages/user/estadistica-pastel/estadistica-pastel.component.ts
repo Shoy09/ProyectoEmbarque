@@ -63,7 +63,7 @@ export class EstadisticaPastelComponent implements OnInit{
       this.serviceEmbarcaciones.getZonaPesca().subscribe(zonasPesca => {
         this.zona_p = zonasPesca;
 
-        this.serviceFlota.getFlotasLances().subscribe((flotas: FlotaDP[]) => {
+        this.serviceFlota.getFlotas().subscribe((flotas: FlotaDP[]) => {
           this.flota = flotas;
           this.extractEspecies();
           this.filterPastel();
