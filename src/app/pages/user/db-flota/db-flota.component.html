@@ -37,11 +37,11 @@
       <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #endDatePicker></mat-datepicker>
     </mat-form-field>
-    <div class="container-b">
-      <button mat-raised-button color="primary" class="filter-item filter-button primary" (click)="applyDateFilter()">Aplicar</button>
-      <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button warn" (click)="clearDateFilter()">Quitar Filtro</button>
-    </div>
 
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="filter-button primary" (click)="applyDateFilter()" style="margin: 13px;">Aplicar</button>
+      <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-button warn" (click)="clearDateFilter()"style="margin: 13px;">Quitar Filtro</button>
+    </div>
   </div>
 
   <!-- Tabla para listar los registros de FlotaDP -->
@@ -80,14 +80,13 @@
       </ng-container>
 
       <!-- Columna Merluza -->
-      <ng-container matColumnDef="especies">
-        <th mat-header-cell *matHeaderCellDef> Especies Registradas</th>
+      <ng-container *ngFor="let especieColumn of especiesColumns" [matColumnDef]="especieColumn">
+        <th mat-header-cell *matHeaderCellDef>{{ especieColumn.replace('especie_', '') }}</th>
         <td mat-cell *matCellDef="let row">
-          <ng-container *ngFor="let especie of row.especie">
-            <div *ngIf="especie.cantidad > 0">
-              {{ especie.nombre }}: {{ especie.cantidad }} kg
-              Precio : S/.{{ especie.precio }}
-            </div>
+          <ng-container *ngIf="row[especieColumn + '_cantidad'] !== 0">
+            {{ row[especieColumn + '_cantidad'] }} kg
+            <br>
+            S/ {{ row[especieColumn + '_precio'] }}
           </ng-container>
         </td>
       </ng-container>

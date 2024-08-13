@@ -33,18 +33,22 @@ export class CreateEspeciesComponent {
     if (this.formCreateEspecie.valid) {
       const value = this.formCreateEspecie.value;
       value.fecha = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
-      console.log("Datos a enviar:", value);
-      this.servicioEspecie.postEspecie(value).subscribe(res => {
-        if (res) {
+      this.servicioEspecie.postEspecie(value).subscribe({
+        next: (res) => {
           console.log("Dato ingresado correctamente:", res);
           this.formCreateEspecie.reset();
           this.dialogRef.close();
           this.dataSaved.emit(); // Emitir evento para notificar al componente padre
           this._toastr.success('Éxito!', 'Registro guardado correctamente');
+        },
+        error: (err) => {
+          console.error("Error al guardar:", err);
+          if (err.error.nombre) {
+            this._toastr.error('Error!', err.error.nombre);
+          } else {
+            this._toastr.error('Error!', 'Hubo un error al guardar el registro');
+          }
         }
-      }, error => {
-        console.error("Error al guardar:", error);
-        this._toastr.error('Error!', 'Hubo un error al guardar el registro');
       });
     }
   }

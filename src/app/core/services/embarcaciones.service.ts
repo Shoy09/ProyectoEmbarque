@@ -63,4 +63,8 @@ export class EmbarcacionesService {
   updateEmbarcaciones(embarcaciones: Embarcaciones, id:any): Observable<Embarcaciones>{
     return this.http.put<Embarcaciones>(`${this.url}${id}/`, embarcaciones);
   }
+
+  deleteEmbarcacion(id: number): Observable<void>{
+    return this.http.delete<void>(`${this.url}${id}/`);
+  }
 }

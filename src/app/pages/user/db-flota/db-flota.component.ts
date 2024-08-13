@@ -22,7 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { EditFlotaComponent } from './edit-flota/edit-flota.component';
-import { CreateProduccionToneladasComponent } from '../produccion-toneladas/create-produccion-toneladas/create-produccion-toneladas.component';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -51,11 +50,13 @@ export class DbFlotaComponent {
   flotas: FlotaDP[] = [];
   embarcaciones: Embarcaciones[] = [];
   zona_pesca: ZonaPescaI[] = [];
+  especiesColumns: string[] = [];
+  allDisplayedColumns: string[] = [];
   areColumnsVisible: boolean = false;
 
   displayedColumns: string[] = [
     'fecha', 'embarcacion', 'zona_pesca', 'horas_faena'
-    , 'kilos_declarados', 'especies',  'otro', 'kilo_otro',
+    , 'kilos_declarados',  'otro', 'kilo_otro',
     'precio_otro', 'precio_basico', 'toneladas_procesadas',
     'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina','costo_gasolina', 'galon_hora',
     'total_gasolina', 'consumo_hielo', 'costo_hilo', 'total_hielo',
@@ -144,13 +145,44 @@ export class DbFlotaComponent {
     this.serviceFlota.getFlotas().subscribe(
       (data: FlotaDP[]) => {
         const flotasConNombres = data.map(flota => ({
-        ...flota,
+          ...flota,
           embarcacionNombre: this.embarcaciones.find(e => e.id === Number(flota.embarcacion))?.nombre || 'Desconocido',
           zonaNombre: this.zona_pesca.find(z => z.id === Number(flota.zona_pesca))?.nombre || 'Desconocido',
         }));
 
-        const reversedData = flotasConNombres.reverse(); // Corrección aquí
-        this.flotas = reversedData;
+        const reversedData = flotasConNombres.reverse();
+
+        // Obtener todas las especies únicas
+        const allEspecies = new Set<string>();
+        reversedData.forEach(flota => {
+          flota.especie.forEach(esp => {
+            allEspecies.add(esp.nombre);
+          });
+        });
+
+        // Crear columnas para cada especie
+        this.especiesColumns = Array.from(allEspecies).map(esp => `especie_${esp}`);
+
+        // Actualizar displayedColumns
+        const otroIndex = this.displayedColumns.indexOf('otro');
+        this.displayedColumns = [
+          ...this.displayedColumns.slice(0, otroIndex),
+          ...this.especiesColumns,
+          ...this.displayedColumns.slice(otroIndex)
+        ];
+
+        // Agregar datos de especies a cada fila
+        const flotasConEspecies = reversedData.map(flota => {
+          const flotaConEspecies: any = { ...flota };
+          allEspecies.forEach(esp => {
+            const especie = flota.especie.find(e => e.nombre === esp);
+            flotaConEspecies[`especie_${esp}_cantidad`] = especie ? especie.cantidad : 0;
+            flotaConEspecies[`especie_${esp}_precio`] = especie ? especie.precio : 0;
+          });
+          return flotaConEspecies;
+        });
+
+        this.flotas = flotasConEspecies;
         this.dataSource = new MatTableDataSource(this.flotas);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -186,11 +218,18 @@ export class DbFlotaComponent {
       const index = this.displayedColumns.indexOf('total_tripulacion');
       // Insertamos las nuevas columnas antes de 'total_tripulacion'
       this.displayedColumns.splice(index, 0, ...additionalColumns);
-
     } else {
       // Si se ocultan las columnas, las eliminamos de displayedColumns
       this.displayedColumns = this.displayedColumns.filter(column => !additionalColumns.includes(column));
     }
+
+    // Aseguramos que las columnas de especies estén siempre presentes
+    const otroIndex = this.displayedColumns.indexOf('otro');
+    this.displayedColumns = [
+      ...this.displayedColumns.slice(0, otroIndex),
+      ...this.especiesColumns,
+      ...this.displayedColumns.slice(otroIndex)
+    ];
   }
 
   openCreateFormFlota(): void {

@@ -35,6 +35,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { TarifaCostoI } from 'app/core/models/tarifaCosto.model';
 import { EditGastTripuComponent } from './edit-gast-tripu/edit-gast-tripu.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -351,6 +352,28 @@ export class GastosGeneralesComponent {
     });
   }
 
+  deleteEspecie(id: number ){
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar esta Especie?',
+      text: "Una vez eliminado, no podrás recuperarlo.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.especiesService.deleteEspecie(id).subscribe(
+          () => {
+            console.log('Especie eliminado correctamente');
+            this.loadDataEspecie();          },
+          error => {
+            console.error('Error al eliminar el sondeo:', error);
+          }
+        );
+      }
+    });
+  }
+
   openPutEmbarcacion(PutEmbarcacion: Embarcaciones): void{
     const dialog = this.dialog.open(EditEmbarcacionesComponent, {
       data: PutEmbarcacion
@@ -358,6 +381,28 @@ export class GastosGeneralesComponent {
 
     dialog.afterClosed().subscribe(() => {
       this.getCostoViEm(); // Actualiza la tabla después de cerrar el diálogo
+    });
+  }
+
+  deleteEmbarcacion(id: number ){
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar esta Embarcacion?',
+      text: "Una vez eliminado, no podrás recuperarlo.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.embarcacionesService.deleteEmbarcacion(id).subscribe(
+          () => {
+            console.log('Especie eliminado correctamente');
+            this.getCostoViEm();          },
+          error => {
+            console.error('Error al eliminar el sondeo:', error);
+          }
+        );
+      }
     });
   }
 

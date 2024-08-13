@@ -226,17 +226,17 @@ export class CreateDbFlotaComponent {
   calculateCostoBasico(): void {
     let costoBasico = 0;
 
+    // Sumar precios de especies con cantidad mayor a cero
     this.especiesFormArray.controls.forEach((especieGroup: AbstractControl) => {
       const cantidad = Number(especieGroup.get('cantidad')?.value) || 0;
       const precio = Number(especieGroup.get('precio')?.value) || 0;
-      // Solo sumar el precio si la cantidad es mayor a cero
       if (cantidad > 0) {
-        costoBasico += precio;
+        costoBasico += precio; // Solo sumamos el precio si la cantidad es mayor a cero
       }
     });
 
-    // Añadir lógica para "otro"
-    const cantidadOtro = Number(this.firstFormGroup.get('otro')?.value) || 0;
+    // Añadir el precio de "otro" solo si la cantidad es mayor a cero
+    const cantidadOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
     const precioOtro = Number(this.firstFormGroup.get('precio_otro')?.value) || 0;
     if (cantidadOtro > 0) {
       costoBasico += precioOtro;

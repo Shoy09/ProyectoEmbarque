@@ -32,6 +32,31 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+  .hero-section {
+    height: 100px; /* Ajusta la altura según tus necesidades para dispositivos móviles */
+  }
+
+  .hero-section h1 {
+    display: none;
+  }
+
+  .hero-section::after {
+    content: "Bienvenido";
+    position: absolute;
+    z-index: 1;
+    color: hsl(0, 100%, 100%);
+    padding: 10px 20px;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px; /* Ajusta el tamaño de la fuente según tus necesidades */
+    top: 50%; /* Ajusta la posición vertical según tus necesidades */
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .agregar-container {
   display: flex;
   align-items: center;
@@ -98,6 +123,25 @@ button.filter-item {
   line-height: 1.5;
 }
 
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-item {
+    width: 100%;
+    max-width: none; /* Elimina el ancho máximo en pantallas móviles para usar el 100% */
+  }
+
+  .button-container {
+    flex-direction: column; /* Apila los botones verticalmente */
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+  }
+}
+
 
 .table-container {
   margin-top: 25px;
@@ -147,10 +191,15 @@ button.mat-button {
   box-shadow: 0 2px 4px rgba(130, 202, 236, 0.1);
 }
 
-.filter-button.primary {
+.filter-button.primary,
+.filter-button.warn {
   background-color: white;
   color: #004fa4;
   border: 2px solid #004fa4;
+  width: 200px;
+  height: 45px;
+  text-align: center;
+
 }
 
 .filter-button.primary:hover {
@@ -159,18 +208,6 @@ button.mat-button {
   box-shadow: 0 2px 4px rgba(123, 191, 227, 0.2);
 }
 
-
-.filter-button.warn {
-  background-color: #ffc107;
-  color: black;
-}
-
-.filter-button.warn:hover {
-  background-color: #ffa000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-
 .custom-icon-button {
   background-color: transparent;
   border: none;
@@ -178,40 +215,6 @@ button.mat-button {
   border-radius: 50%;
 }
 
-
-.merluza-column,
-.precio-merluza-column {
-  background-color: #f4faf5; /* Un tono verde pastel */
-}
-
-.merluza-column, .mat-column-merluza,
-.precio-merluza-column, .mat-column-precio-merluza {
-  color: #1b5e20; /* Un verde oscuro para el texto */
-}
-
-.bereche-column{
-  background-color: #f6feff;
-}
-
-.bereche-column, .mat-column-bereche{
-  color: #1b3f5e; /* Un verde oscuro para el texto */
-}
-
-.volador-column{
-  background-color: #fdfeef;
-}
-
-.volador-column{
-  color: #4a4a14; /* Un verde oscuro para el texto */
-}
-
-.merluzaNP-column{
-  background-color: #fff6ef;
-}
-
-.merluzaNP-column{
-  color: #4a2314; /* Un verde oscuro para el texto */
-}
 
 .otraes-column{
   background-color: #f5efff;
@@ -231,3 +234,10 @@ button.mat-button {
   margin-left: auto; /* Esto empuja el botón hacia la derecha */
 }
 
+
+.mat-table {
+  width: 100%; /* Asegura que la tabla ocupe el 100% del ancho del contenedor */
+}
+
+.mat-paginator {
+  margin-top: 10px;}
