@@ -51,4 +51,6 @@ export interface FlotaDP {
   costo_tm_captura: number;
   csot: number;
   lances?: IDiarioPesca[];
+  toneladas_procesadas_produccion?: number,
+  toneladas_NP?: number
 }

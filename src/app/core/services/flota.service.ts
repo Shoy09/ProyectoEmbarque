@@ -34,6 +34,9 @@ export class FlotaService {
     return this.http.put<FlotaDP>(`${this.baseUrl}${id}/`, flota);
   }
 
+  updateFlotaToneladas(updatedFields: Partial<FlotaDP>, id: number): Observable<FlotaDP> {
+    return this.http.patch<FlotaDP>(`${this.baseUrl}${id}/update-toneladas/`, updatedFields);
+  }
   // Eliminar un FlotaDP
   deleteFlota(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}${id}/`);

@@ -1,0 +1,57 @@
+.container-contact {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+.form-container {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+h4 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.row {
+  margin-bottom: 1rem;
+}
+
+.custom-focus-ring:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.button-group .btn {
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+  color: #fff;
+}
+
+.btn-submit {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+}
+
+.btn-submit:hover {
+  background-color: #218838;
+  color: #fff;
+}
+
+.w-45 {
+  width: 45%;
+}

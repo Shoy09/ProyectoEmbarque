@@ -1,0 +1,24 @@
+<div class="container-contact">
+<form [formGroup]="formCPT" (ngSubmit)="updateFlota()">
+  <h4 class="h2 font-weight-semibold text-center mb-4">
+    Toneladas Procesables de {{ nombreEmbarcacion }} - {{ fecha | date:'dd/MM/yyyy' }}
+  </h4>
+  <!-- Asegúrate de que los campos estén correctamente vinculados -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label class="mb-1 d-block text-xs font-weight-semibold">Toneladas Procesables</label>
+      <input type="number" placeholder="Toneladas" class="form-control custom-focus-ring" formControlName="toneladas_procesadas">
+    </div>
+
+    <div class="col-md-6">
+      <label class="mb-1 d-block text-xs font-weight-semibold">Toneladas Procesadas</label>
+      <input type="number" placeholder="Toneladas" class="form-control custom-focus-ring" formControlName="toneladas_procesadas_produccion">
+    </div>
+  </div>
+
+  <div class="button-group d-flex justify-content-between">
+    <button type="button" class="btn btn-danger w-45 custom-focus-ring btn-cancel" (click)="cancel()">Cancelar</button>
+    <button type="submit" class="btn btn-success w-45 custom-focus-ring btn-submit">Enviar</button>
+  </div>
+</form>
+</div>

@@ -1,5 +1,3 @@
-
-
 <div class="dd">
   <div class="hero-section">
     <h1>Bienvenido al Registro de Flota</h1>
@@ -83,7 +81,7 @@
 
       <!-- Columna Merluza -->
       <ng-container matColumnDef="especies">
-        <th mat-header-cell *matHeaderCellDef> Especies </th>
+        <th mat-header-cell *matHeaderCellDef> Especies Registradas</th>
         <td mat-cell *matCellDef="let row">
           <ng-container *ngFor="let especie of row.especie">
             <div *ngIf="especie.cantidad > 0">
@@ -99,7 +97,7 @@
         <th mat-header-cell *matHeaderCellDef class="otraes-column">Especie Adicional</th>
         <td mat-cell *matCellDef="let row" class="otraes-column">
           {{ row.otro ?? ' ' }}
-          
+
         </td>
       </ng-container>
 
@@ -129,7 +127,7 @@
 
       <!-- Columna Toneladas Procesadas -->
       <ng-container matColumnDef="toneladas_procesadas">
-        <th mat-header-cell *matHeaderCellDef> Toneladas Procesadas </th>
+        <th mat-header-cell *matHeaderCellDef> Toneladas Procesables </th>
         <td mat-cell *matCellDef="let row"> {{row.toneladas_procesadas}} t</td>
       </ng-container>
 

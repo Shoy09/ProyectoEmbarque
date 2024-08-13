@@ -22,6 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { EditFlotaComponent } from './edit-flota/edit-flota.component';
+import { CreateProduccionToneladasComponent } from '../produccion-toneladas/create-produccion-toneladas/create-produccion-toneladas.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-db-flota',
@@ -79,15 +81,14 @@ export class DbFlotaComponent {
   ){}
 
   ngOnInit(): void {
-    this.loadFlotas();
-    this.loadEmbarcaciones();
-    this.loadZonaPesca();
-    this.dataSource = new MatTableDataSource<FlotaDP>([]);
-    this.route.params.subscribe(params => {
-      this.flotaDPId = +params['flotaDPId'];
-      this.loadFlotaData();
+    forkJoin({
+      embarcaciones: this.embarcacionesService.getEmbarcaciones(),
+      zonaPesca: this.embarcacionesService.getZonaPesca(),
+    }).subscribe(({ embarcaciones, zonaPesca }) => {
+      this.embarcaciones = embarcaciones;
+      this.zona_pesca = zonaPesca;
+      this.loadFlotas();
     });
-
   }
 
   verLances(flotaId: number) {
@@ -292,10 +293,6 @@ export class DbFlotaComponent {
     // Restablece los datos filtrados
     this.dataSource.data = this.flotas;
     this.dataSource.paginator!.firstPage();
-  }
-
-  ngAfterViewInit() {
-    this.loadFlotas();
   }
 
 }

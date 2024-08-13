@@ -22,11 +22,10 @@ export class EspeciesService {
   getDiarioPesca(): Observable<Especies[]> {
     if (this.especiesCache) {
       return new Observable(observer => {
-        observer.next(this.especiesCache!); // Emitimos los datos almacenados
+        observer.next(this.especiesCache!);
         observer.complete();
       });
     } else {
-      // Si no tenemos los datos en caché, hacemos la solicitud HTTP
       return this.http.get<Especies[]>(this.url);
     }
   }

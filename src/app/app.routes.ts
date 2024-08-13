@@ -6,6 +6,7 @@ import { EstadisticaSPComponent } from '@pages/user/estadistica-sp/estadistica-s
 import { GastosGeneralesComponent } from '@pages/user/gastos-generales/gastos-generales.component';
 import { DbFlotaComponent } from '@pages/user/db-flota/db-flota.component';
 import { EstadisticaMaterializacionComponent } from '@pages/user/estadistica-materializacion/estadistica-materializacion.component';
+import { ProduccionToneladasComponent } from '@pages/user/produccion-toneladas/produccion-toneladas.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -19,8 +20,8 @@ export const routes: Routes = [
         {path: 'gastos-generales', component: GastosGeneralesComponent},
         {path: 'db-flota', component: DbFlotaComponent},
         {path: 'db-flota/:flotaDPId', component: DbFlotaComponent },
-        {path: 'materializacion', component: EstadisticaMaterializacionComponent}
-
+        {path: 'materializacion', component: EstadisticaMaterializacionComponent},
+        {path: 'produccion', component: ProduccionToneladasComponent}
       ]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
