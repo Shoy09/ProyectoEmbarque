@@ -1,48 +1,48 @@
 <nav class="sidebar" [ngClass]="{'open': isSidebarOpen}">
-    <div class="logo">
-        <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md" (click)="toggleSidebar()">
-        <span>Santa Monica</span>
-    </div>
+  <div class="logo">
+      <img src="/logo_santa.png" width="40px" alt="Logo" class="icon-md" (click)="toggleSidebar()">
+      <span>Santa Monica</span>
+  </div>
 
-    <div class="menu-section">
-        <ul>
-            <div class="user-profile">
-                <img src="/pp.jpeg" width="40px" alt="User" class="avatar-md">
-                <div>
-                    <span class="user-name">Patsy Delgado</span>
-                </div>
+  <div class="menu-section">
+      <ul>
+          <div class="user-profile">
+            <img [src]="getUserImage()" width="40px" height="40px" alt="User">
+            <div>
+              <span class="user-name">{{ apel_nomb }}</span>
             </div>
-        </ul>
-        <h3>SECCIONES</h3>
-        <ul>
-          <li routerLink="gastos-generales" routerLinkActive="active">
-            <i class="fas fa-money-bill-wave custom-icon"></i>
-            <span>Gastos Generales</span>
+          </div>
+      </ul>
+      <h3>SECCIONES</h3>
+      <ul>
+        <li routerLink="gastos-generales" routerLinkActive="active">
+          <i class="fas fa-money-bill-wave custom-icon"></i>
+          <span>Gastos Generales</span>
+        </li>
+      </ul>
+      <ul>
+        <li routerLink="db-flota" routerLinkActive="active">
+          <i class="fas fa-ship custom-icon"></i>
+          <span>Flota</span>
+        </li>
+      </ul>
+      <ul>
+          <li routerLink="ss" routerLinkActive="active">
+              <i class="fas fa-fish custom-icon"></i>
+              <span>Seguimiento de Pesca</span>
           </li>
-        </ul>
-        <ul>
-          <li routerLink="db-flota" routerLinkActive="active">
-            <i class="fas fa-ship custom-icon"></i>
-            <span>Flota</span>
-          </li>
-        </ul>
-        <ul>
-            <li routerLink="ss" routerLinkActive="active">
-                <i class="fas fa-fish custom-icon"></i>
-                <span>Seguimiento de Pesca</span>
-            </li>
-        </ul>
-        <ul>
-          <li routerLink="estadistica-sp" routerLinkActive="active">
-            <i class="fas fa-chart-bar custom-icon"></i>
-              <span>Estadística SP</span>
-          </li>
-        </ul>
-    </div>
-    <button class="logout-btn" routerLink="/login">
-        <i class="fas fa-sign-out-alt"></i> <!-- Icono de cerrar sesión -->
-        <span>Cerrar sesión</span>
-    </button>
+      </ul>
+      <ul>
+        <li routerLink="estadistica-sp" routerLinkActive="active">
+          <i class="fas fa-chart-bar custom-icon"></i>
+            <span>Estadística SP</span>
+        </li>
+      </ul>
+  </div>
+  <button class="logout-btn" routerLink="/login">
+      <i class="fas fa-sign-out-alt"></i> <!-- Icono de cerrar sesión -->
+      <span>Cerrar sesión</span>
+  </button>
 </nav>
 
 <!-- Asegúrate de incluir jQuery en tu página -->

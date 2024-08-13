@@ -7,14 +7,29 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink, NgClass],
   templateUrl: './side-bar.component.html',
-  styleUrl: './side-bar.component.css'
+  styleUrls: ['./side-bar.component.css'] // Corregido a 'styleUrls'
 })
 export class SideBarComponent implements OnInit {
   isSidebarOpen = false;
+  imagen_usuario: string = '';
+  apel_nomb: string = '';
+  defaultImage: string = 'imgUsuario.png'; // Ruta de la imagen por defecto
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (typeof sessionStorage !== 'undefined') {
+      this.apel_nomb = sessionStorage.getItem('nombrey_apellido') || '';
+      this.imagen_usuario = sessionStorage.getItem('imagen_usuario') || '';
+    }
+  }
+  getUserImage(): string {
+    // Verifica si imagen_usuario es nula, indefinida o una cadena vacía
+    if (!this.imagen_usuario || this.imagen_usuario === 'null') {
+      return this.defaultImage;
+    }
+    return this.imagen_usuario;
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -35,5 +50,4 @@ export class SideBarComponent implements OnInit {
       console.error('Elemento .layout-container no encontrado en el DOM.');
     }
   }
-  
 }
