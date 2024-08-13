@@ -82,80 +82,17 @@
       </ng-container>
 
       <!-- Columna Merluza -->
-      <ng-container matColumnDef="merluza">
-        <th mat-header-cell *matHeaderCellDef class="merluza-column"> Merluza (kg) </th>
-        <td mat-cell *matCellDef="let row" class="merluza-column">
-          <ng-container *ngIf="row.merluza !== null && row.merluza !== undefined && row.merluza !== ''">
-            {{ row.merluza }} kg
+      <ng-container matColumnDef="especies">
+        <th mat-header-cell *matHeaderCellDef> Especies </th>
+        <td mat-cell *matCellDef="let row">
+          <ng-container *ngFor="let especie of row.especie">
+            <div>
+              {{ especie.nombre }}: {{ especie.cantidad }} kg
+            </div>
           </ng-container>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="precio_merluza">
-        <th mat-header-cell *matHeaderCellDef class="precio-merluza-column"> Precio Merluza </th>
-        <td mat-cell *matCellDef="let row" class="precio-merluza-column">
-          <ng-container *ngIf="row.precio_merluza !== null && row.precio_merluza !== undefined && row.precio_merluza !== ''">
-            S/.{{ row.precio_merluza }}
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <!-- Columna Bereche -->
-      <ng-container matColumnDef="bereche">
-        <th mat-header-cell *matHeaderCellDef class="bereche-column"> Bereche (kg) </th>
-        <td mat-cell *matCellDef="let row" class="bereche-column">
-          <ng-container *ngIf="row.bereche !== null && row.bereche !== undefined && row.bereche !== ''">
-            {{ row.bereche }} kg
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="precio_bereche">
-        <th mat-header-cell *matHeaderCellDef class="bereche-column"> Precio Bereche </th>
-        <td mat-cell *matCellDef="let row" class="bereche-column">
-          <ng-container *ngIf="row.precio_bereche !== null && row.precio_bereche !== undefined && row.precio_bereche !== ''">
-            S/.{{ row.precio_bereche }}
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <!-- Columna Volador -->
-      <ng-container matColumnDef="volador">
-        <th mat-header-cell *matHeaderCellDef class="volador-column"> Volador (kg) </th>
-        <td mat-cell *matCellDef="let row" class="volador-column">
-          <ng-container *ngIf="row.volador !== null && row.volador !== undefined && row.volador !== ''">
-            {{ row.volador }} kg
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="precio_volador">
-        <th mat-header-cell *matHeaderCellDef class="volador-column"> Precio Volador </th>
-        <td mat-cell *matCellDef="let row" class="volador-column">
-          <ng-container *ngIf="row.precio_volador !== null && row.precio_volador !== undefined && row.precio_volador !== ''">
-            S/.{{ row.precio_volador }}
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <!-- Columna Merluza Descarte -->
-      <ng-container matColumnDef="merluza_descarte">
-        <th mat-header-cell *matHeaderCellDef class="merluzaNP-column"> Merluza NP (kg) </th>
-        <td mat-cell *matCellDef="let row" class="merluzaNP-column">
-          <ng-container *ngIf="row.merluza_descarte !== null && row.merluza_descarte !== undefined && row.merluza_descarte !== ''">
-            {{ row.merluza_descarte }} kg
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="precio_merluzaNP">
-        <th mat-header-cell *matHeaderCellDef class="merluzaNP-column"> Precio Merluza NP </th>
-        <td mat-cell *matCellDef="let row" class="merluzaNP-column">
-          <ng-container *ngIf="row.precio_merluzaNP !== null && row.precio_merluzaNP !== undefined && row.precio_merluzaNP !== ''">
-            S/.{{ row.precio_merluzaNP }}
-          </ng-container>
-        </td>
-      </ng-container>
 
 
       <!-- Columna Otro -->

@@ -8,14 +8,11 @@ export interface FlotaDP {
   zona_pesca: number;
   horas_faena: string;
   kilos_declarados: number;
-  merluza?: number | null;
-  precio_merluza?: number | null;
-  bereche?: number | null;
-  precio_bereche?: number | null;
-  volador?: number | null;
-  precio_volador?: number | null;
-  merluza_descarte?: number | null;
-  precio_merluzaNP?: number | null;
+  especie: {
+    nombre: string;
+    cantidad: number;
+    precio: number;
+  }[];
   otro?: string  | null;
   kilo_otro?: number | null;
   precio_otro?: number  | null;

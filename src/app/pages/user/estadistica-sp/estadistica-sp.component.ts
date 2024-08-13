@@ -14,8 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
-import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
 import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
+import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -29,8 +29,8 @@ import { EstadisticaMaterializacionComponent } from "../estadistica-materializac
     MatButtonModule,
     MatSelectModule,
     FormsModule,
-    EstadisticaPastelComponent,
-    EstadisticaMaterializacionComponent
+    EstadisticaMaterializacionComponent,
+    EstadisticaPastelComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrl: './estadistica-sp.component.css'
@@ -63,11 +63,11 @@ export class EstadisticaSPComponent implements OnInit{
 
         this.serviceFlota.getFlotasLances().subscribe((flotas: FlotaDP[]) => {
           this.flota = flotas;
-          this.createChart();
         });
       });
     });
   }
+
 
   createChart() {
     this.data = {
@@ -192,7 +192,7 @@ export class EstadisticaSPComponent implements OnInit{
 
     if (!this.chart) {
       this.chart = new Chart("chart", {
-        type: 'line',
+        type: 'bar',
         data: this.data
       });
     } else {

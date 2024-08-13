@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,11 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Embarcaciones } from 'app/core/models/embarcacion';
+import { Especies } from 'app/core/models/especie.model';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { CostoXGalonService } from 'app/core/services/costo-x-galon.service';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { EspeciesService } from 'app/core/services/especies.service';
 import { FlotaService } from 'app/core/services/flota.service';
 
 @Component({
@@ -36,6 +38,7 @@ export class EditFlotaComponent implements OnInit {
   embarcaciones: Embarcaciones[] = [];
   embarcacionSeleccionada: Embarcaciones | undefined;
   zona: ZonaPescaI[] = [];
+  especies: Especies[] = [];
   costoDia?: MecanismoI;
   derechoPescaCosto?: number;
   bonificacionSeleccionada?: number;
@@ -52,6 +55,7 @@ export class EditFlotaComponent implements OnInit {
     private serviceFlota: FlotaService,
     private embarcacionService: EmbarcacionesService,
     private costoXGalonService: CostoXGalonService,
+    private serviceEspecies: EspeciesService,
     public dialogRef: MatDialogRef<EditFlotaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: FlotaDP
   ){}
@@ -64,14 +68,7 @@ export class EditFlotaComponent implements OnInit {
     zona_pesca: ['', Validators.required],
     horas_faena: ['', Validators.required],
     kilos_declarados: ['', Validators.required],
-    merluza: [0],
-    precio_merluza: [0],
-    bereche: [0],
-    precio_bereche: [0],
-    volador: [0],
-    precio_volador: [0],
-    merluza_descarte: [0],
-    precio_merluzaNP: [0],
+    especiesArray: this.formBuilder.array([]),
     otro: [''],
     kilo_otro: [0],
     precio_otro: [0],
@@ -129,6 +126,15 @@ export class EditFlotaComponent implements OnInit {
     this.loadSCTRSAL();
     this.loadSCTRPEN();
     this.loadPoliSeguro();
+
+    this.data.especie.forEach(especie => {
+      this.especiesFormArray.push(this.formBuilder.group({
+        nombre: [especie.nombre],
+        cantidad: [especie.cantidad],
+        precio: [especie.precio]
+      }));
+    });
+
   }
 
   // CARGAR EMBARCACION
@@ -178,34 +184,65 @@ export class EditFlotaComponent implements OnInit {
     });
   }
 
+  get especiesFormArray(): FormArray {
+    return this.firstFormGroup.get('especiesArray') as FormArray;
+  }
+
+
   //COSTO X ESPECIES
-  editCostoBasico(): void {
-    const precio_merluza = Number(this.firstFormGroup.get('precio_merluza')?.value) || 0;
-    const precio_bereche = Number(this.firstFormGroup.get('precio_bereche')?.value) || 0;
-    const precio_volador = Number(this.firstFormGroup.get('precio_volador')?.value) || 0;
-    const precio_merluzaNP = Number(this.firstFormGroup.get('precio_merluzaNP')?.value) || 0;
-    const precio_otro = Number(this.firstFormGroup.get('precio_otro')?.value) || 0;
+  editCostoBasicoEspecie(): void {
+    let costoBasico = 0;
 
-    const costoEspecies = precio_merluza + precio_bereche + precio_volador + precio_merluzaNP + precio_otro
+    this.especiesFormArray.controls.forEach((especieGroup: AbstractControl) => {
+      const cantidad = Number(especieGroup.get('cantidad')?.value) || 0;
+      const precio = Number(especieGroup.get('precio')?.value) || 0;
+      // Sumar el precio si la cantidad es mayor a cero
+      if (cantidad > 0) {
+        costoBasico += precio;
+      }
+    });
 
-    const redondeo = parseFloat(costoEspecies.toFixed(2))
+    // Lógica para "otro"
+    const cantidadOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
+    const precioOtro = Number(this.firstFormGroup.get('precio_otro')?.value) || 0;
+    if (cantidadOtro > 0) {
+      costoBasico += precioOtro;
+    }
 
-    this.firstFormGroup.patchValue({costo_basico: redondeo})
+    this.firstFormGroup.patchValue({ costo_basico: parseFloat(costoBasico.toFixed(2)) });
   }
 
   //EDIT TONELADAS
   editToneladas(): void {
-    const totalMerluza = Number(this.firstFormGroup.get('merluza')?.value) || 0;
-    const totalBereche = Number(this.firstFormGroup.get('bereche')?.value) || 0;
-    const totalVolador = Number(this.firstFormGroup.get('volador')?.value) || 0;
-    const totalMerluzaDescarte = Number(this.firstFormGroup.get('merluza_descarte')?.value) || 0;
+    let totalKilos = 0;
+    let totalDescarte = 0;
+
+    // Recorrer el FormArray de especies
+    this.especiesFormArray.controls.forEach((especieGroup: AbstractControl) => {
+        const cantidad = Number(especieGroup.get('cantidad')?.value) || 0;
+        const nombreEspecie = especieGroup.get('nombre')?.value;
+
+        // Sumar cantidades de especies que no son descarte
+        if (nombreEspecie !== 'Merluza NP') {
+            totalKilos += cantidad;
+        } else {
+            // Si la especie es "Merluza NP", sumar al total de descarte
+            totalDescarte += cantidad;
+        }
+    });
+
+    // Obtener el valor de "kilo_otro" y sumarlo a las toneladas procesadas
     const totalKiloOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
 
-    const toneladasProcesadas = Number(((totalMerluza + totalBereche + totalVolador + totalKiloOtro) / 1000).toFixed(2));
-    const toneladasRecibidas = Number(( toneladasProcesadas + (totalMerluzaDescarte / 1000)).toFixed(2));
+    // Calcular las toneladas procesadas (solo especies no descarte + kilo_otro)
+    const toneladasProcesadas = Number(((totalKilos + totalKiloOtro) / 1000).toFixed(2));
 
-    this.firstFormGroup.patchValue({ toneladas_procesadas: toneladasProcesadas, toneladas_recibidas: toneladasRecibidas})
-  }
+    // Calcular las toneladas recibidas (toneladas procesadas + especies de descarte)
+    const toneladasRecibidas = Number(((totalKilos + totalKiloOtro + totalDescarte) / 1000).toFixed(2));
+
+    // Actualizar los valores en el formulario
+    this.firstFormGroup.patchValue({ toneladas_procesadas: toneladasProcesadas, toneladas_recibidas: toneladasRecibidas });
+}
 
   //PARTICIPACIÓN
   editParticipacion():void{
@@ -544,7 +581,7 @@ export class EditFlotaComponent implements OnInit {
   }
 
   save(): void {
-    this.editCostoBasico()
+    this.editCostoBasicoEspecie()
     this.editToneladas()
     this.editParticipacion()
     this.calculateBonificacion()
@@ -571,6 +608,14 @@ export class EditFlotaComponent implements OnInit {
     // Obtener los valores de ambos formularios
     const formData = Object.assign({}, this.firstFormGroup.value, this.secondFormGroup.value);
 
+    const especiesData = this.especiesFormArray.controls.map(control => {
+      return {
+        nombre: control.get('nombre')?.value,
+        cantidad: Number(control.get('cantidad')?.value),
+        precio: Number(control.get('precio')?.value)
+      };
+    });
+
     // Combinar los datos del formulario con los datos originales
     const updateData: FlotaDP = {
       fecha: formData.fecha || '',
@@ -579,14 +624,7 @@ export class EditFlotaComponent implements OnInit {
         zona_pesca: Number(formData.zona_pesca),
         horas_faena: formData.horas_faena || '',
         kilos_declarados: Number(formData.kilos_declarados),
-        merluza: formData.merluza && Number(formData.merluza),
-        precio_merluza: formData.precio_merluza && Number(formData.precio_merluza),
-        bereche: formData.bereche && Number(formData.bereche),
-        precio_bereche: formData.precio_bereche && Number(formData.precio_bereche),
-        volador: formData.volador && Number(formData.volador),
-        precio_volador: formData.precio_volador && Number(formData.precio_volador),
-        merluza_descarte: formData.merluza_descarte && Number(formData.merluza_descarte),
-        precio_merluzaNP: formData.precio_merluzaNP && Number(formData.precio_merluzaNP),
+        especie: especiesData,
         otro: formData.otro || undefined,
         kilo_otro: formData.kilo_otro && Number(formData.kilo_otro),
         precio_otro: formData.precio_otro && Number(formData.precio_otro),
@@ -639,6 +677,5 @@ export class EditFlotaComponent implements OnInit {
       }
     });
 }
-
 
 }

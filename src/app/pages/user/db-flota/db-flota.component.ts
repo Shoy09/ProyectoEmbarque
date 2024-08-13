@@ -19,9 +19,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { EditFlotaComponent } from './edit-flota/edit-flota.component';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { EditFlotaComponent } from './edit-flota/edit-flota.component';
 
 @Component({
   selector: 'app-db-flota',
@@ -53,8 +53,7 @@ export class DbFlotaComponent {
 
   displayedColumns: string[] = [
     'fecha', 'embarcacion', 'zona_pesca', 'horas_faena'
-    , 'kilos_declarados', 'merluza', 'precio_merluza', 'bereche', 'precio_bereche',
-    'volador', 'precio_volador','merluza_descarte', 'precio_merluzaNP','otro', 'kilo_otro',
+    , 'kilos_declarados', 'especies',  'otro', 'kilo_otro',
     'precio_otro', 'precio_basico', 'toneladas_procesadas',
     'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina','costo_gasolina', 'galon_hora',
     'total_gasolina', 'consumo_hielo', 'costo_hilo', 'total_hielo',
@@ -88,6 +87,7 @@ export class DbFlotaComponent {
       this.flotaDPId = +params['flotaDPId'];
       this.loadFlotaData();
     });
+
   }
 
   verLances(flotaId: number) {

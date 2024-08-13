@@ -42,25 +42,19 @@
             <input matInput formControlName="kilos_declarados" placeholder="Kilos Declarados" required>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Merluza (kg)</mat-label>
-            <input matInput type="number" formControlName="merluza" placeholder="Merluza" min="0">
-          </mat-form-field>
+          <div formArrayName="especiesArray">
+            <div *ngFor="let especieGroup of especiesFormArray.controls; let i = index" [formGroupName]="i">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>{{ especieGroup.get('nombre')?.value }}</mat-label>
+                <input matInput formControlName="cantidad" type="number" placeholder="Kilos">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Precio</mat-label>
+                <input matInput formControlName="precio" type="number" placeholder="Precio" readonly>
+              </mat-form-field>
+            </div>
+          </div>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Bereche (kg)</mat-label>
-            <input matInput type="number" formControlName="bereche" placeholder="Bereche" min="0">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Volador (kg)</mat-label>
-            <input matInput type="number" formControlName="volador" placeholder="Volador" min="0">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Merluza NP (kg)</mat-label>
-            <input matInput type="number" formControlName="merluza_descarte" placeholder="Merluza NP" min="0">
-          </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Especie Adicional</mat-label>

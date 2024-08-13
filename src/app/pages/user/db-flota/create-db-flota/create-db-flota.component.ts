@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -13,6 +13,7 @@ import { CostoGalonGasoI } from 'app/core/models/costoGG.model';
 import { CostoTMHielo } from 'app/core/models/costoGH.model';
 import { CostoM3Agua } from 'app/core/models/costoMA.model';
 import { Embarcaciones } from 'app/core/models/embarcacion';
+import { Especies } from 'app/core/models/especie.model';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MecanismoI } from 'app/core/models/mecanismoI.models';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
@@ -44,6 +45,7 @@ export class CreateDbFlotaComponent {
 
   embarcaciones: Embarcaciones[] = [];
   zona_pesca: ZonaPescaI[] = [];
+  especies: Especies[] = [];
   toneladasProcesadas: number = 0;
   toneladasRecibidas: number = 0;
   precio_merluza?:number; //
@@ -75,15 +77,8 @@ export class CreateDbFlotaComponent {
     zona_pesca: ['', Validators.required],
     horas_faena: ['', Validators.required],
     kilos_declarados: ['', Validators.required],
-    merluza: [''],
-    precio_merluza:[{ value: 0, disabled: true }, Validators.required],
-    bereche: [''],
-    precio_bereche:[{ value: 0, disabled: true }, Validators.required],
-    volador: [''],
-    precio_volador:[{ value: 0, disabled: true }, Validators.required],
-    merluza_descarte: [''],
-    precio_merluzaNP:[{ value: 0, disabled: true }, Validators.required],
-    otro: [''],
+    especiesArray: this._formBuilder.array([]),
+    otro:[''],
     kilo_otro: [''],
     precio_otro: [ ],
     costo_basico:  [{ value: 0, disabled: true }, Validators.required],
@@ -197,58 +192,59 @@ export class CreateDbFlotaComponent {
     });
   }
 
+  get especiesFormArray() {
+    return this.firstFormGroup.get('especiesArray') as FormArray;
+  }
+
   loadPreciosEspecies(): void {
-    const especies = [
-      { nombre: 'merluza', propiedad: 'precio_merluza', campo: 'merluza' },
-      { nombre: 'bereche', propiedad: 'precio_bereche', campo: 'bereche' },
-      { nombre: 'volador', propiedad: 'precio_volador', campo: 'volador' },
-      { nombre: 'merluza%20np', propiedad: 'precio_merluzaNP', campo: 'merluza_descarte' },
-    ];
+    this.serviceEspecies.getDiarioPesca().subscribe(
+      especies => {
+        this.especies = especies;
 
-    especies.forEach(especie => {
-      this.serviceEspecies.getPrecioPorNombre(especie.nombre).subscribe(costo => {
-        (this as any)[especie.propiedad] = costo;
+        // Crear controles para cada especie
+        this.especies.forEach(especie => {
+          this.especiesFormArray.push(this._formBuilder.group({
+            nombre: [especie.nombre],
+            cantidad: [''],
+            precio: [especie.precio]
+          }));
+        });
 
-        // Solo actualiza el precio en el formulario si hay un valor para la especie
-        const cantidadEspecie = this.firstFormGroup.get(especie.campo)?.value;
-        if (cantidadEspecie) {
-          this.firstFormGroup.patchValue({ [especie.propiedad]: costo });
-        }
+        // Agregar listeners para recalcular el costo básico
+        this.especiesFormArray.valueChanges.subscribe(() => {
+          this.calculateCostoBasico();
+        });
 
         this.calculateCostoBasico();
-      });
-    });
+      },
+      error => {
+        console.error('Error al obtener especies:', error);
+      }
+    );
   }
 
   calculateCostoBasico(): void {
-    const merluza = this.firstFormGroup.get('merluza')?.value;
-    const bereche = this.firstFormGroup.get('bereche')?.value;
-    const volador = this.firstFormGroup.get('volador')?.value;
-    const merluzaNPro = this.firstFormGroup.get('merluza_descarte')?.value;
-    const precioOtro = this.firstFormGroup.get('precio_otro')?.value;
-
     let costoBasico = 0;
 
-    if (merluza) {
-      costoBasico += this.precio_merluza || 0;
-      this.firstFormGroup.patchValue({ precio_merluza: this.precio_merluza });
+    this.especiesFormArray.controls.forEach((especieGroup: AbstractControl) => {
+      const cantidad = Number(especieGroup.get('cantidad')?.value) || 0;
+      const precio = Number(especieGroup.get('precio')?.value) || 0;
+      // Solo sumar el precio si la cantidad es mayor a cero
+      if (cantidad > 0) {
+        costoBasico += precio;
+      }
+    });
+
+    // Añadir lógica para "otro"
+    const cantidadOtro = Number(this.firstFormGroup.get('otro')?.value) || 0;
+    const precioOtro = Number(this.firstFormGroup.get('precio_otro')?.value) || 0;
+    if (cantidadOtro > 0) {
+      costoBasico += precioOtro;
     }
-    if (bereche) {
-      costoBasico += this.precio_bereche || 0;
-      this.firstFormGroup.patchValue({ precio_bereche: this.precio_bereche });
-    }
-    if (volador) {
-      costoBasico += this.precio_volador || 0;
-      this.firstFormGroup.patchValue({ precio_volador: this.precio_volador });
-    }
-    if (merluzaNPro) {
-      costoBasico += this.precio_merluzaNP || 0;
-      this.firstFormGroup.patchValue({ precio_merluzaNP: this.precio_merluzaNP });
-    }
-    if (precioOtro) costoBasico += precioOtro;
 
     this.firstFormGroup.patchValue({ costo_basico: parseFloat(costoBasico.toFixed(2)) });
   }
+
 
   //COMBUSTIBLE
   loadLastCosto() {
@@ -385,19 +381,30 @@ export class CreateDbFlotaComponent {
 
   //TONELADAS
   calculateToneladas(): void {
-    const totalMerluza = Number(this.firstFormGroup.get('merluza')?.value) || 0;
-    const totalBereche = Number(this.firstFormGroup.get('bereche')?.value) || 0;
-    const totalVolador = Number(this.firstFormGroup.get('volador')?.value) || 0;
-    const totalMerluzaDescarte = Number(this.firstFormGroup.get('merluza_descarte')?.value) || 0;
-    const totalKiloOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
+    let totalKilos = 0;
+    let totalDescarte = 0;
 
-    console.log("Valores de toneladas:", totalMerluza, totalBereche, totalVolador, totalMerluzaDescarte, totalKiloOtro);
+    this.especiesFormArray.controls.forEach((especieGroup: AbstractControl) => {
+        const cantidad = Number(especieGroup.get('cantidad')?.value) || 0;
+        const nombre = especieGroup.get('nombre')?.value;
 
-    this.toneladasProcesadas = Number(((totalMerluza + totalBereche + totalVolador + totalKiloOtro) / 1000).toFixed(2));
-    this.toneladasRecibidas = Number((this.toneladasProcesadas + (totalMerluzaDescarte / 1000)).toFixed(2));
+        // Asumiendo que si el nombre es "Descarte" o similar, se trata de descarte
+        if (nombre === 'Merluza NP') {
+            totalDescarte += cantidad;
+        } else {
+            totalKilos += cantidad;
+        }
+    });
+
+    // Obtener valor de "kilo_otro" si es necesario
+    const kiloOtro = Number(this.firstFormGroup.get('kilo_otro')?.value) || 0;
+
+    // Cálculo de toneladas
+    this.toneladasProcesadas = Number(((totalKilos + kiloOtro) / 1000).toFixed(2));
+    this.toneladasRecibidas = Number(((this.toneladasProcesadas + (totalDescarte / 1000))).toFixed(2));
 
     console.log("Toneladas Procesadas:", this.toneladasProcesadas, "Toneladas Recibidas:", this.toneladasRecibidas);
-  }
+}
 
   //TOTAL COSTOS
   calculateTotalCost(): void {
@@ -693,6 +700,13 @@ export class CreateDbFlotaComponent {
         ...this.secondFormGroup.getRawValue()
       };
 
+      const especiesData = this.especiesFormArray.controls.map(control => ({
+        nombre: control.get('nombre')?.value,
+        cantidad: Number(control.get('cantidad')?.value) || 0,
+        precio: Number(control.get('precio')?.value) || 0
+      }));
+
+
       // Convierte los valores a tipos apropiados si es necesario
       const flotaData: FlotaDP = {
         fecha: formData.fecha || '',
@@ -701,14 +715,7 @@ export class CreateDbFlotaComponent {
         zona_pesca: Number(formData.zona_pesca),
         horas_faena: formData.horas_faena || '',
         kilos_declarados: Number(formData.kilos_declarados),
-        merluza: formData.merluza ? Number(formData.merluza) : undefined,
-        precio_merluza: formData.precio_merluza ? Number(formData.precio_merluza) : undefined,
-        bereche: formData.bereche ? Number(formData.bereche) : undefined,
-        precio_bereche: formData.precio_bereche ? Number(formData.precio_bereche) : undefined,
-        volador: formData.volador ? Number(formData.volador) : undefined,
-        precio_volador: formData.precio_volador ? Number(formData.precio_volador) : undefined,
-        merluza_descarte: formData.merluza_descarte ? Number(formData.merluza_descarte) : undefined,
-        precio_merluzaNP: formData.precio_merluzaNP ? Number(formData.precio_merluzaNP) : undefined,
+        especie: especiesData,
         otro: formData.otro || undefined,
         kilo_otro: formData.kilo_otro ? Number(formData.kilo_otro) : undefined,
         precio_otro: formData.precio_otro ? Number(formData.precio_otro) : undefined,

@@ -46,45 +46,19 @@
             <input matInput formControlName="kilos_declarados" type="number">
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Merluza (kg)</mat-label>
-            <input matInput formControlName="merluza" type="number">
-          </mat-form-field>
+          <div formArrayName="especiesArray">
+            <div *ngFor="let especieGroup of especiesFormArray.controls; let i = index" [formGroupName]="i">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>{{ especieGroup.get('nombre')?.value }}</mat-label>
+                <input matInput formControlName="cantidad" type="number" placeholder="Kilos">
+              </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Precio Merluza</mat-label>
-            <input matInput formControlName="precio_merluza" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Bereche (kg)</mat-label>
-            <input matInput formControlName="bereche" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Precio Bereche</mat-label>
-            <input matInput formControlName="precio_bereche" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Volador (kg)</mat-label>
-            <input matInput formControlName="volador" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Precio Volador</mat-label>
-            <input matInput formControlName="precio_volador" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Merluza NP (kg)</mat-label>
-            <input matInput formControlName="merluza_descarte" type="number">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label> Precio Merluza NP</mat-label>
-            <input matInput formControlName="precio_merluzaNP" type="number">
-          </mat-form-field>
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Precio</mat-label>
+                <input matInput formControlName="precio" type="number" placeholder="Precio">
+              </mat-form-field>
+            </div>
+          </div>
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label> Especie A </mat-label>

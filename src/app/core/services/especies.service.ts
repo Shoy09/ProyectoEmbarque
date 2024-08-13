@@ -21,7 +21,6 @@ export class EspeciesService {
 
   getDiarioPesca(): Observable<Especies[]> {
     if (this.especiesCache) {
-      // Si ya tenemos los datos en caché, retornamos un observable de esos datos
       return new Observable(observer => {
         observer.next(this.especiesCache!); // Emitimos los datos almacenados
         observer.complete();

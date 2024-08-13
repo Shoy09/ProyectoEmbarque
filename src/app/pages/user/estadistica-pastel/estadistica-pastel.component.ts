@@ -15,6 +15,8 @@ import { FlotaService } from 'app/core/services/flota.service';
 import { ChartConfiguration } from 'chart.js';
 import { Chart } from 'chart.js';
 import { Utils } from './utils';
+import { Especies } from 'app/core/models/especie.model';
+import { EspeciesService } from 'app/core/services/especies.service';
 
 @Component({
   selector: 'app-estadistica-pastel',
@@ -42,11 +44,14 @@ export class EstadisticaPastelComponent implements OnInit{
   isDateFiltered = false;
   selectedEmbarcaciones: Set<number> = new Set();
   selectedZona: Set<number> = new Set();
+  especies: string[] = [];
+  especie :Especies[] = [];
   data: any;
 
   constructor(
     private serviceFlota: FlotaService,
     private serviceEmbarcaciones: EmbarcacionesService,
+    private serviceEspecie : EspeciesService,
   ){}
 
   public chart!: Chart<'pie'>;
@@ -60,128 +65,153 @@ export class EstadisticaPastelComponent implements OnInit{
 
         this.serviceFlota.getFlotasLances().subscribe((flotas: FlotaDP[]) => {
           this.flota = flotas;
-          this.filterPastel(); // Cambié a filterPastel aquí
+          this.extractEspecies();
+          this.filterPastel();
         });
       });
     });
+
+    this.serviceEspecie.getDiarioPesca().subscribe(especies => {
+      this.especie = especies;
+      console.log('Especies obtenidas:', this.especie);
+    });
   }
 
+  extractEspecies() {
+    const especiesSet = new Set<string>();
+
+    this.flota.forEach(flota => {
+      if (flota.especie && Array.isArray(flota.especie)) {
+        flota.especie.forEach(especie => {
+          if (especie && especie.nombre) {
+            especiesSet.add(especie.nombre);
+          }
+        });
+      }
+    });
+
+    especiesSet.add('Otra Especie');
+
+    this.especies = Array.from(especiesSet);
+    console.log('Especies extraídas:', this.especies);
+  }
 
   filterPastel() {
+    console.log('Flota inicial:', this.flota.length);
     let filteredRecords = this.flota;
 
     if (!this.startDate || !this.endDate) {
-        this.data = {
-            labels: [],
-            datasets: []
-        };
-        if (this.chart) {
-            this.chart.data = this.data;
-            this.chart.update();
-        }
-        return;
+      console.log('Fechas no seleccionadas');
+      this.data = { labels: [], datasets: [] };
+      if (this.chart) {
+        this.chart.data = this.data;
+        this.chart.update();
+      }
+      return;
     }
 
-    // Filtrado por fechas
-    filteredRecords = filteredRecords.filter(flota =>
-        new Date(flota.fecha) >= new Date(this.startDate) &&
-        new Date(flota.fecha) <= new Date(this.endDate)
-    );
+    console.log('Fechas seleccionadas:', this.startDate, this.endDate);
 
-    // Filtrado por zonas de pesca
+    filteredRecords = filteredRecords.filter(flota => {
+      const flotaDate = new Date(flota.fecha);
+      return flotaDate >= new Date(this.startDate) && flotaDate <= new Date(this.endDate);
+    });
+
+    console.log('Registros después del filtro de fechas:', filteredRecords.length);
+
     if (this.selectedZona.size > 0) {
-        filteredRecords = filteredRecords.filter(flota =>
-            this.selectedZona.has(flota.zona_pesca)
-        );
+      filteredRecords = filteredRecords.filter(flota => this.selectedZona.has(flota.zona_pesca));
+      console.log('Registros después del filtro de zona:', filteredRecords.length);
     }
 
-    // Filtrar las embarcaciones que están dentro de los registros filtrados
     const availableEmbarcaciones = new Set<number>(filteredRecords.map(flota => flota.embarcacion));
 
-    // Si no hay embarcaciones seleccionadas, selecciona solo las que están disponibles
     if (this.selectedEmbarcaciones.size === 0) {
-        this.selectedEmbarcaciones = availableEmbarcaciones;
+      this.selectedEmbarcaciones = availableEmbarcaciones;
     }
 
-    // Agrega las etiquetas para los datos del gráfico
-    const labels = [
-        'Merluza (kg)',
-        'Bereche (kg)',
-        'Volador (kg)',
-        'Merluza NP (kg)',
-        'Otra Especie (kg)'
-    ];
+    console.log('Embarcaciones seleccionadas:', this.selectedEmbarcaciones.size);
 
-    // Objeto para almacenar los datos por embarcación
-    const embarcacionesData: { [key: number]: number[] } = {};
+    const embarcacionesData: { [key: number]: { [key: string]: number } } = {};
 
-    // Calcula los totales para cada tipo y embarcación
     this.selectedEmbarcaciones.forEach(embarcacionId => {
-        const embarcacionRecords = filteredRecords.filter(flota => flota.embarcacion === embarcacionId);
-        embarcacionesData[embarcacionId] = [
-            embarcacionRecords.reduce((sum, flota) => sum + flota.merluza!, 0),
-            embarcacionRecords.reduce((sum, flota) => sum + flota.bereche!, 0),
-            embarcacionRecords.reduce((sum, flota) => sum + flota.volador!, 0),
-            embarcacionRecords.reduce((sum, flota) => sum + flota.merluza_descarte!, 0),
-            embarcacionRecords.reduce((sum, flota) => sum + flota.kilo_otro!, 0)
-        ];
+      const embarcacionRecords = filteredRecords.filter(flota => flota.embarcacion === embarcacionId);
+      embarcacionesData[embarcacionId] = {};
+
+      this.especies.forEach(especie => {
+        if (especie === 'Otra Especie') {
+          embarcacionesData[embarcacionId][especie] = embarcacionRecords.reduce((sum, flota) =>
+            sum + (flota.kilo_otro ? Number(flota.kilo_otro) : 0), 0);
+        } else {
+          embarcacionesData[embarcacionId][especie] = embarcacionRecords.reduce((sum, flota) => {
+            if (flota.especie && Array.isArray(flota.especie)) {
+              const especieData = flota.especie.find(e => e.nombre === especie);
+              return sum + (especieData ? especieData.cantidad : 0);
+            }
+            return sum;
+          }, 0);
+        }
+      });
     });
 
-    // Crear datasets para cada embarcación
+    console.log('Datos procesados por embarcación:', embarcacionesData);
+
     const datasets = Array.from(this.selectedEmbarcaciones).map((embarcacionId, index) => {
-        const embarcacion = this.embarcaciones.find(e => e.id === embarcacionId);
-        return {
-            label: embarcacion ? embarcacion.nombre : `Embarcación ${embarcacionId}`,
-            data: embarcacionesData[embarcacionId],
-            backgroundColor: Utils.generateColors(5, index),
-            borderColor: Utils.generateBorderColors(5, index)
-        };
+      const embarcacion = this.embarcaciones.find(e => e.id === embarcacionId);
+      return {
+        label: embarcacion ? embarcacion.nombre : `Embarcación ${embarcacionId}`,
+        data: this.especies.map(especie => embarcacionesData[embarcacionId][especie] || 0),
+        backgroundColor: Utils.generateColors(this.especies.length, index),
+        borderColor: Utils.generateBorderColors(this.especies.length, index)
+      };
     });
 
-    // Datos para el gráfico
     this.data = {
-        labels: labels,
-        datasets: datasets
+      labels: this.especies,
+      datasets: datasets
     };
 
+    console.log('Datos finales para el gráfico:', this.data);
+
     this.createPastel();
-}
+  }
 
-
-createPastel() {
+  createPastel() {
     const ctx = document.getElementById('myChart') as HTMLCanvasElement;
 
     const config: ChartConfiguration<'pie'> = {
-        type: 'pie',
-        data: this.data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const label = context.dataset.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(2);
-                            return `${label}: ${value} kg (${percentage}%)`;
-                        }
-                    }
-                }
+      type: 'pie',
+      data: this.data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const label = context.dataset.label || '';
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(2);
+                return `${label}: ${value} kg (${percentage}%)`;
+              }
             }
+          }
         }
+      }
     };
 
+    console.log('Configuración final del gráfico:', config);
+
     if (this.chart) {
-        this.chart.destroy();
+      this.chart.destroy();
     }
 
     this.chart = new Chart(ctx, config);
-}
-
+    console.log('Gráfico creado:', this.chart);
+  }
 
   toggleEmbarcacion(embarcacionId: number) {
     if (this.selectedEmbarcaciones.has(embarcacionId)) {
@@ -200,6 +230,5 @@ createPastel() {
     }
     this.filterPastel();
   }
-
 
 }
