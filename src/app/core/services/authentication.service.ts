@@ -11,7 +11,12 @@ export class AuthenticationService {
   private apiUrl = 'http://127.0.0.1:8000/api';
   private tokenSubject = new BehaviorSubject<string | null>(null);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      this.tokenSubject.next(token);
+    }
+  }
 
   login(dni: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/token/`, { dni, password }).pipe(
@@ -44,8 +49,12 @@ export class AuthenticationService {
     );
   }
 
-  // Método para obtener el token actual desde el BehaviorSubject
   getToken(): Observable<string | null> {
     return this.tokenSubject.asObservable();
+  }
+
+  isAuthenticated(): boolean {
+    const token = sessionStorage.getItem('token');
+    return !!token; // Retorna true si hay un token, false de lo contrario
   }
 }

@@ -14,31 +14,31 @@
           </div>
       </ul>
       <h3>SECCIONES</h3>
-      <ul>
+      <ul *ngIf="tipo_usuario === 'ADMIN' || tipo_usuario === 'Embarcaciones'">
         <li routerLink="gastos-generales" routerLinkActive="active">
           <i class="fas fa-money-bill-wave custom-icon"></i>
           <span>Gastos Generales</span>
         </li>
       </ul>
-      <ul>
+      <ul *ngIf="tipo_usuario === 'ADMIN' || tipo_usuario === 'Embarcaciones'">
         <li routerLink="db-flota" routerLinkActive="active">
           <i class="fas fa-ship custom-icon"></i>
           <span>Flota</span>
         </li>
       </ul>
-      <ul>
-          <li routerLink="ss" routerLinkActive="active">
+      <ul *ngIf="tipo_usuario === 'ADMIN' || tipo_usuario === 'Embarcaciones'">
+        <li routerLink="ss" routerLinkActive="active">
               <i class="fas fa-fish custom-icon"></i>
               <span>Seguimiento de Pesca</span>
           </li>
       </ul>
-      <ul>
+      <ul *ngIf="tipo_usuario === 'ADMIN' || tipo_usuario === 'Embarcaciones'">
         <li routerLink="estadistica-sp" routerLinkActive="active">
           <i class="fas fa-chart-bar custom-icon"></i>
             <span>Estadística SP</span>
         </li>
       </ul>
-      <ul>
+      <ul *ngIf="tipo_usuario === 'ADMIN' || tipo_usuario === 'Proceso'">
         <li routerLink="produccion" routerLinkActive="active">
           <i class="fas fa-cogs icon-center"></i>
             <span>Producción</span>

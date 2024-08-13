@@ -7,21 +7,23 @@ import { GastosGeneralesComponent } from '@pages/user/gastos-generales/gastos-ge
 import { DbFlotaComponent } from '@pages/user/db-flota/db-flota.component';
 import { EstadisticaMaterializacionComponent } from '@pages/user/estadistica-materializacion/estadistica-materializacion.component';
 import { ProduccionToneladasComponent } from '@pages/user/produccion-toneladas/produccion-toneladas.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     {
       path: '',
-      component: UserComponent, // Componente principal que contiene la barra lateral y el contenido principal
+      component: UserComponent,
+      canActivate: [AuthGuard], // Protege las rutas con el AuthGuard
       children: [
-        {path: 'ss', component: SeguimientoPescaComponent },
-        {path: 'ss/:flotaDPId', component: SeguimientoPescaComponent },
-        {path: 'estadistica-sp', component: EstadisticaSPComponent},
-        {path: 'gastos-generales', component: GastosGeneralesComponent},
-        {path: 'db-flota', component: DbFlotaComponent},
-        {path: 'db-flota/:flotaDPId', component: DbFlotaComponent },
-        {path: 'materializacion', component: EstadisticaMaterializacionComponent},
-        {path: 'produccion', component: ProduccionToneladasComponent}
+        { path: 'ss', component: SeguimientoPescaComponent },
+        { path: 'ss/:flotaDPId', component: SeguimientoPescaComponent },
+        { path: 'estadistica-sp', component: EstadisticaSPComponent },
+        { path: 'gastos-generales', component: GastosGeneralesComponent },
+        { path: 'db-flota', component: DbFlotaComponent },
+        { path: 'db-flota/:flotaDPId', component: DbFlotaComponent },
+        { path: 'materializacion', component: EstadisticaMaterializacionComponent },
+        { path: 'produccion', component: ProduccionToneladasComponent }
       ]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
