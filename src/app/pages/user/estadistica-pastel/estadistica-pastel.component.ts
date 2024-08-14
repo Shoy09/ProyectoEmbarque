@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, registerables } from 'chart.js';
-import { ChartConfiguration } from 'chart.js';
 import { Utilss } from './utils'; // Asegúrate de tener esta utilidad para colores
 
 @Component({
@@ -74,7 +73,6 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
       }
     }, 0);
   }
-
 
   getChartData() {
     if (!this.data || this.data.length === 0) {
