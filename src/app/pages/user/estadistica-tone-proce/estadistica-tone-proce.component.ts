@@ -1,8 +1,11 @@
 import { Utils } from './../estadistica-tone-proce/util';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 Chart.register(...registerables);
+Chart.register(ChartDataLabels);
+
 
 @Component({
   selector: 'app-estadistica-tone-proce',
@@ -43,6 +46,11 @@ export class EstadisticaToneProceComponent {
               display: true,
               text: 'Estadísticas de Toneladas Procesadas'
             },
+            datalabels: {
+              color: '#fff',
+              display: true,
+              formatter: (value) => `${value}%`, // Mostrar el símbolo '%' en las etiquetas de datos
+            }
           },
           responsive: true,
           maintainAspectRatio: false,
@@ -53,7 +61,7 @@ export class EstadisticaToneProceComponent {
             y: {
               stacked: true,
               ticks: {
-                callback: (value) => `${value}%`
+                callback: (value) => `${value}%` // Mostrar el símbolo '%' en el eje y
               }
             }
           }
@@ -92,8 +100,8 @@ export class EstadisticaToneProceComponent {
 
     // Calcular el total de cada flota y los porcentajes
     const total_toneladas = toneladas_procesadas.map((tp, i) => tp + toneladas_np[i]);
-    const porcentaje_procesadas = toneladas_procesadas.map((tp, i) => (total_toneladas[i] ? (tp / total_toneladas[i]) * 100 : 0));
-    const porcentaje_np = toneladas_np.map((tnp, i) => (total_toneladas[i] ? (tnp / total_toneladas[i]) * 100 : 0));
+    const porcentaje_procesadas = toneladas_procesadas.map((tp, i) => total_toneladas[i] ? +( (tp / total_toneladas[i]) * 100 ).toFixed(2) : 0);
+    const porcentaje_np = toneladas_np.map((tnp, i) => total_toneladas[i] ? +( (tnp / total_toneladas[i]) * 100 ).toFixed(2) : 0);
 
     return {
       labels: labels,
