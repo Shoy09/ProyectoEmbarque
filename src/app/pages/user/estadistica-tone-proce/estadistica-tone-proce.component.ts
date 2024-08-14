@@ -1,5 +1,7 @@
+import { Embarcaciones } from 'app/core/models/embarcacion';
 import { Utils } from './../estadistica-tone-proce/util';
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -16,12 +18,20 @@ Chart.register(ChartDataLabels);
 })
 export class EstadisticaToneProceComponent {
 
+  embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [] //datos de estadistica-sp
+
+  constructor(
+    private serviceEmbarcaciones: EmbarcacionesService,
+  ){}
 
   public chart!: Chart;
 
   ngOnInit(): void {
-    this.createChart();
+    this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
+      this.embarcaciones = embarcaciones;
+          this.createChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -94,7 +104,10 @@ export class EstadisticaToneProceComponent {
       };
     }
 
-    const labels = this.data.map(flota => `${flota.embarcacion || 'Desconocido'} - ${new Date(flota.fecha).toLocaleDateString()}`);
+    const labels = this.data.map(flota => {
+      const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
+      return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
+    });
     const toneladas_procesadas = this.data.map(flota => flota.toneladas_procesadas_produccion || 0);
     const toneladas_np = this.data.map(flota => flota.toneladas_NP || 0);
 
