@@ -1,57 +1,63 @@
-<h3>Consumo de Embarcación</h3>
 <div class="chart-container">
   <!-- Contenedor para los filtros de fechas -->
   <div class="filters-and-selection">
-    <div class="fecha">
-     <mat-form-field appearance="outline" class="filter-item">
-      <mat-label>Fecha Inicio</mat-label>
-      <input matInput [matDatepicker]="startDatePicker" placeholder="Seleccione Fecha Inicio" [(ngModel)]="startDate">
-      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
+    <!-- Filtros de Fecha -->
+     <div class="filtros">
+      <div class="fecha">
+        <mat-form-field appearance="outline" class="filter-item">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="startDatePicker" placeholder="Seleccione Fecha Inicio" [(ngModel)]="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" class="filter-item">
-      <mat-label>Fecha Fin</mat-label>
-      <input matInput [matDatepicker]="endDatePicker" placeholder="Seleccione Fecha Fin" [(ngModel)]="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
-    </mat-form-field>
-    <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyFilters()">Aplicar Filtros</button>
-    <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button" (click)="clearFilter()">Quitar Filtro</button>
-    </div>
+        <mat-form-field appearance="outline" class="filter-item">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [matDatepicker]="endDatePicker" placeholder="Seleccione Fecha Fin" [(ngModel)]="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
 
+        <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyFilters()">Aplicar Filtros</button>
+        <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button" (click)="clearFilter()">Quitar Filtro</button>
+      </div>
 
+      <!-- Seleccionables -->
+      <div class="selectors">
+        <mat-form-field appearance="outline" class="selector-item">
+          <mat-label>Especies</mat-label>
+          <mat-select [(ngModel)]="selectedEspecie">
+            <mat-option *ngFor="let especie of especies" [value]="especie.nombre">
+              {{ especie.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+          <mat-form-field appearance="outline" class="selector-item">
+            <mat-label>Embarcación</mat-label>
+            <mat-select [(ngModel)]="selectedEmbarcacion">
+              <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.nombre">
+                {{ embarcacion.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="selector-item">
+            <mat-label>Zona de Pesca</mat-label>
+            <mat-select [(ngModel)]="selectedZonaPesca">
+              <mat-option *ngFor="let zona of ZonaPesca" [value]="zona.id">
+                {{ zona.nombre }} <!-- Adjust based on your ZonaPescaI structure -->
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+     </div>
     <!-- Gráfico -->
-    <canvas id="chart" class="chart"></canvas>
+    <app-grafico-barras [data]="filteredData" style="width: 50%;"></app-grafico-barras>
+    <app-estadistica-pastel [data]="filteredData" style="width: 50%;"></app-estadistica-pastel>
+
   </div>
-
-  <!-- Contenedor para los filtros de embarcaciones y zonas de pesca -->
-  <div class="filters-container">
-    <h4>Seleccionar Embarcaciones</h4>
-    <div class="button-group">
-      <button
-          class="custom-checkbox"
-          *ngFor="let embarcacion of embarcaciones"
-          [class.checked]="selectedEmbarcaciones.has(embarcacion.id)"
-          (click)="toggleEmbarcacion(embarcacion.id)">
-          {{ embarcacion.nombre }}
-      </button>
-
-    </div>
-
-    <h4>Selecciona Zona Pesca</h4>
-    <div class="button-group">
-      <button
-          class="custom-checkbox"
-          *ngFor="let zona of zona_p"
-          [class.checked]="selectedZona.has(zona.id)"
-          (click)="togleZonaPesca(zona.id)">
-          {{ zona.nombre }}
-      </button>
-  </div>
-</div>
 
 </div>
 
-<app-estadistica-pastel></app-estadistica-pastel>
+
 

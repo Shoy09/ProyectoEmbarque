@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart} from 'chart.js/auto'
+import { Chart } from 'chart.js/auto';
 import { Utils } from './util';
 import { FlotaService } from 'app/core/services/flota.service';
 import { FlotaDP } from 'app/core/models/flota.model';
@@ -16,6 +16,7 @@ import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
 import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
+import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -30,202 +31,126 @@ import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pa
     MatSelectModule,
     FormsModule,
     EstadisticaMaterializacionComponent,
-    EstadisticaPastelComponent
-],
+    EstadisticaPastelComponent,
+    GraficoBarrasComponent
+  ],
   templateUrl: './estadistica-sp.component.html',
-  styleUrl: './estadistica-sp.component.css'
+  styleUrls: ['./estadistica-sp.component.css']
 })
-export class EstadisticaSPComponent implements OnInit{
-
+export class EstadisticaSPComponent implements OnInit {
   flota: FlotaDP[] = [];
   zona_p: ZonaPescaI[] = [];
   embarcaciones: Embarcaciones[] = [];
   startDate!: Date;
   endDate!: Date;
   isDateFiltered = false;
-  selectedEmbarcaciones: Set<number> = new Set();
-  selectedZona: Set<number> = new Set();
+  selectedEmbarcacion: string | undefined;
+  selectedZonaPesca: number | undefined;
+  selectedEspecie: string | undefined;
   data: any;
+  ZonaPesca: ZonaPescaI[] = [];
+  especies: { nombre: string; cantidad: number; precio: number }[] = [];
+  public chart!: Chart;
+
+  filteredData: any[] = []; // Define filteredData aquí
 
   constructor(
     private serviceFlota: FlotaService,
     private serviceEmbarcaciones: EmbarcacionesService,
-  ){}
-
-  public chart!: Chart;
+  ) {}
 
   ngOnInit(): void {
-    this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
-      this.embarcaciones = embarcaciones;
-
-      this.serviceEmbarcaciones.getZonaPesca().subscribe(zonasPesca => {
-        this.zona_p = zonasPesca;
-
-        this.serviceFlota.getFlotasLances().subscribe((flotas: FlotaDP[]) => {
-          this.flota = flotas;
-        });
-      });
-    });
+    this.loadFlotasLances();
+    this.loadEmbarcaciones();
+    this.loadZonas();
   }
 
+  private loadFlotasLances(): void {
+    this.serviceFlota.getFlotasLances().subscribe(
+      (data: FlotaDP[]) => {
+        this.flota = data;
+        this.extractEspecies();
+      },
+      error => {
+        console.error('Error loading flotas lances', error);
+      }
+    );
+  }
 
-  createChart() {
-    this.data = {
-      labels: [],
-      datasets: [
-        {
-          label: 'Dataset',
-          data: [],
-          borderColor: Utils.CHART_COLORS.red,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-        }
-      ]
-    };
+  private loadEmbarcaciones(): void {
+    this.serviceEmbarcaciones.getEmbarcaciones().subscribe(
+      (data: Embarcaciones[]) => {
+        this.embarcaciones = data;
+      },
+      error => {
+        console.error('Error loading embarcaciones', error);
+      }
+    );
+  }
 
-    this.chart = new Chart("chart", {
-      type: 'bar',
-      data: this.data
+  private loadZonas(): void {
+    this.serviceEmbarcaciones.getZonaPesca().subscribe(
+      (data: ZonaPescaI[]) => {
+        this.ZonaPesca = data;
+      },
+      error => {
+        console.error('Error loading zonas de pesca', error);
+      }
+    );
+  }
+
+  private extractEspecies(): void {
+    const especiesSet = new Set<string>();
+
+    this.flota.forEach(flotas => {
+      if (Array.isArray(flotas.especie)) {
+        flotas.especie.forEach(e => {
+          especiesSet.add(e.nombre);
+        });
+      }
     });
+
+    this.especies = Array.from(especiesSet).map(name => ({ nombre: name, cantidad: 0, precio: 0 }));
   }
 
   clearFilter() {
-    // Restablecer los controles de fecha y los conjuntos de selección
     this.startDate = null!;
     this.endDate = null!;
-    this.selectedEmbarcaciones.clear();
-    this.selectedZona.clear();
     this.isDateFiltered = false;
   }
 
   applyFilters() {
-    //se debe poner fecha para ejecutar el filtrado
     if (!this.startDate || !this.endDate) {
-      this.data = {
-        labels: [],
-        datasets: []
-      };
-      if (this.chart) {
-        this.chart.data = this.data;
-        this.chart.update();
-      }
+      // Si no hay fechas definidas, no se muestran datos
+      this.filteredData = [];
+      console.log('No hay fechas definidas. Data filtrada vacía:', this.filteredData);
       return;
     }
 
-    let filteredRecords = this.flota;
-
-    // Filtrar por fechas
-    if (this.startDate && this.endDate) {
-      filteredRecords = filteredRecords.filter(flota => {
-        const fecha = new Date(flota.fecha);
-        return fecha >= this.startDate && fecha <= this.endDate;
-      });
-    }
-
-    // Filtrar por embarcaciones seleccionadas
-    if (this.selectedEmbarcaciones.size > 0) {
-      filteredRecords = filteredRecords.filter(flota =>
-        this.selectedEmbarcaciones.has(flota.embarcacion)
-      );
-    }
-
-    if (this.selectedZona.size > 0) {
-      filteredRecords = filteredRecords.filter(flota =>
-        this.selectedZona.has(flota.zona_pesca)
-      );
-    }
-
-    console.log('Filtered records by date and embarcaciones:', filteredRecords);
-
-    const labels = filteredRecords.map(flota => {
-      const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
-      return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
+    // Muestra las fechas de inicio y fin para depuración
+    console.log('Fechas de filtrado:', {
+      startDate: this.startDate,
+      endDate: this.endDate
     });
 
-    const datasetDataGaso = filteredRecords.map(flota => flota.consumo_gasolina);
-    const toneladasProcesadas = filteredRecords.map(flota => flota.toneladas_procesadas);
-    const toneladasRecibidas = filteredRecords.map(flota => flota.toneladas_recibidas);
-    const galonGasoHora = filteredRecords.map(flota => flota.galon_hora);
-    const consumoHielo = filteredRecords.map(flota => flota.consumo_hielo);
-    const consumoAgua = filteredRecords.map(flota => flota.consumo_agua);
+    // Filtra los registros por fecha
+    this.filteredData = this.flota.filter(flota => {
+      const fecha = new Date(flota.fecha);
+      const isInRange = fecha >= this.startDate && fecha <= this.endDate;
+      if (isInRange) {
+        console.log('Registro incluido:', flota);
+      } else {
+        console.log('Registro excluido:', flota);
+      }
+      return isInRange;
+    });
 
-    this.data = {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Toneladas Procesadas',
-          data: toneladasProcesadas,
-          borderColor: Utils.CHART_COLORS.blue,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-        },
-        {
-          label: 'Toneladas Recibidas',
-          data: toneladasRecibidas,
-          borderColor: Utils.CHART_COLORS.naranja,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
-        },
-        {
-          label: 'Consumo Gasolina (gal)',
-          data: datasetDataGaso,
-          borderColor: Utils.CHART_COLORS.red,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-        },
-        {
-          label: 'Gasolina x Hora (gal)',
-          data: galonGasoHora,
-          borderColor: Utils.CHART_COLORS.verde,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
-        },
-        {
-          label: 'Consumo Hielo (gal)',
-          data: consumoHielo,
-          borderColor: Utils.CHART_COLORS.morado,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
-        },
-        {
-          label: 'Consumo Agua (L)',
-          data: consumoAgua,
-          borderColor: Utils.CHART_COLORS.azulClaro,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azulClaro, 0.5),
-        },
-      ]
-    };
+    // Muestra los datos filtrados
+    console.log('Datos filtrados:', this.filteredData);
 
-    if (!this.chart) {
-      this.chart = new Chart("chart", {
-        type: 'bar',
-        data: this.data
-      });
-    } else {
-      this.chart.data = this.data;
-      this.chart.update();
-    }
-
-    console.log('Chart updated with filtered data');
-
-    // Actualizar el estado de filtrado
-    this.isDateFiltered = true; // Asegúrate de que esto sea apropiado para tu lógica de negocio
+    // Actualiza el estado de los datos filtrados
+    this.isDateFiltered = true;
   }
 
-
-  toggleEmbarcacion(embarcacionId: number) {
-    if (this.selectedEmbarcaciones.has(embarcacionId)) {
-      this.selectedEmbarcaciones.delete(embarcacionId);
-    } else {
-      this.selectedEmbarcaciones.add(embarcacionId);
-    }
-    this.applyFilters();
-  }
-
-  togleZonaPesca(id: number){
-    if(this.selectedZona.has(id)){
-      this.selectedZona.delete(id);
-    }else {
-      this.selectedZona.add(id)
-    }
-    this.applyFilters();
-  }
 
 }
-
-
-
