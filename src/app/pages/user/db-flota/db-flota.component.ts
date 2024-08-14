@@ -56,8 +56,7 @@ export class DbFlotaComponent {
 
   displayedColumns: string[] = [
     'fecha', 'embarcacion', 'zona_pesca', 'horas_faena'
-    , 'kilos_declarados',  'otro', 'kilo_otro',
-    'precio_otro', 'precio_basico', 'toneladas_procesadas',
+    , 'kilos_declarados',  'otro', 'precio_basico', 'toneladas_procesadas',
     'toneladas_recibidas', 'total_tripulacion', 'tipo_cambio','consumo_gasolina','costo_gasolina', 'galon_hora',
     'total_gasolina', 'consumo_hielo', 'costo_hilo', 'total_hielo',
     'consumo_agua', 'costo_agua' , 'total_agua', 'consumo_viveres', 'total_vivieres',
@@ -160,36 +159,40 @@ export class DbFlotaComponent {
           });
         });
 
-        // Crear columnas para cada especie
-        this.especiesColumns = Array.from(allEspecies).map(esp => `especie_${esp}`);
+         // Reiniciar las columnas de especies y las columnas mostradas antes de actualizar
+      this.especiesColumns = [];
+      this.displayedColumns = this.displayedColumns.filter(col => !col.startsWith('especie_'));
 
-        // Actualizar displayedColumns
-        const otroIndex = this.displayedColumns.indexOf('otro');
-        this.displayedColumns = [
-          ...this.displayedColumns.slice(0, otroIndex),
-          ...this.especiesColumns,
-          ...this.displayedColumns.slice(otroIndex)
-        ];
+      // Crear columnas para cada especie
+      this.especiesColumns = Array.from(allEspecies).map(esp => `especie_${esp}`);
 
-        // Agregar datos de especies a cada fila
-        const flotasConEspecies = reversedData.map(flota => {
-          const flotaConEspecies: any = { ...flota };
-          allEspecies.forEach(esp => {
-            const especie = flota.especie.find(e => e.nombre === esp);
-            flotaConEspecies[`especie_${esp}_cantidad`] = especie ? especie.cantidad : 0;
-            flotaConEspecies[`especie_${esp}_precio`] = especie ? especie.precio : 0;
-          });
-          return flotaConEspecies;
+      // Actualizar displayedColumns
+      const otroIndex = this.displayedColumns.indexOf('otro');
+      this.displayedColumns = [
+        ...this.displayedColumns.slice(0, otroIndex),
+        ...this.especiesColumns,
+        ...this.displayedColumns.slice(otroIndex)
+      ];
+
+      // Agregar datos de especies a cada fila
+      const flotasConEspecies = reversedData.map(flota => {
+        const flotaConEspecies: any = { ...flota };
+        allEspecies.forEach(esp => {
+          const especie = flota.especie.find(e => e.nombre === esp);
+          flotaConEspecies[`especie_${esp}_cantidad`] = especie ? especie.cantidad : 0;
+          flotaConEspecies[`especie_${esp}_precio`] = especie ? especie.precio : 0;
         });
+        return flotaConEspecies;
+      });
 
-        this.flotas = flotasConEspecies;
-        this.dataSource = new MatTableDataSource(this.flotas);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      error => {
-        console.error('Error al obtener registros de flota:', error);
-      }
+      this.flotas = flotasConEspecies;
+      this.dataSource = new MatTableDataSource(this.flotas);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    },
+    error => {
+      console.error('Error al obtener registros de flota:', error);
+    }
     );
   }
 

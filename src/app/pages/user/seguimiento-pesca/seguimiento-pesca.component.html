@@ -1,104 +1,3 @@
-<style>
-  .agregar-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.agregar-container h3 {
-  margin-right: 10px;
-  color: #0A4F81;
-  line-height: 1;
-}
-
-.btn-celeste {
-  background-color: #0A4F81;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-}
-
-.btn-celeste:hover {
-  background-color: #0056b3;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-td, th {
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-.mat-elevation-z8 {
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.dd{
-  background-color: white;
-}
-body {
-  background-color: white;
-}
-
-.filter-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.filter-item {
-  flex: 0 1 auto;
-  min-width: 150px;
-}
-
-button.filter-item {
-  flex: 0 0 auto;
-  height: 40px;
-  line-height: 1.5;
-  padding: 0 20px;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline {
-  border-color: #3f51b5; /* Color del borde */
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-thickness {
-  border-width: 1px;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-radius: 4px;
-}
-
-.mat-datepicker-toggle .mat-icon-button {
-  color: #3f51b5;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-label {
-  color: #3f51b5;
-}
-
-.hover-cell {
-  cursor: pointer; /
-}
-
-</style>
 <div class="dd">
 <div class="hero-section">
   <h1>Bienvenido a Diario de Pesca</h1>
@@ -107,6 +6,7 @@ button.filter-item {
 <div class="container" style="display: flex; justify-content: center; margin-top: 35px;">
   <h3>Registro Diario de Pesca</h3>
 </div>
+
 <div class="filter-container">
 <mat-form-field appearance="outline" class="filter-item">
   <mat-label>Filtra por Embarcación o Especia</mat-label>
@@ -129,21 +29,14 @@ button.filter-item {
     <mat-datepicker #endDatePicker></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" class="filter-item filter-button" (click)="applyDateFilter()">Aplicar</button>
-  <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-item filter-button" (click)="clearDateFilter()">Quitar Filtro</button>
+  <div class="button-container">
+    <button mat-raised-button color="primary" class="filter-button primary" (click)="applyDateFilter()" style="margin: 5px;">Aplicar</button>
+    <button *ngIf="isDateFiltered" mat-raised-button color="warn" class="filter-button warn" (click)="clearDateFilter()"style="margin: 5px;">Quitar Filtro</button>
+  </div>
 </div>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>
-
-    <!-- ID Column -->
-
-    <ng-container matColumnDef="flotaDP_id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Flota </th>
-      <td mat-cell *matCellDef="let row" (click)="navigateToFlotaDP(row.flotaDP_id)" class="hover-cell">
-        {{row.flotaDP_id}}
-      </td>
-    </ng-container>
 
     <!-- Embarcación Column -->
     <ng-container matColumnDef="embarcacion">
@@ -244,12 +137,13 @@ button.filter-item {
 
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
-      <td mat-cell *matCellDef="let row; columns: displayedColumns;">
+      <td mat-cell *matCellDef="let row">
         <span>No data matching the filter "{{input.value}}" </span>
       </td>
     </tr>
   </table>
-
+</div>
+<div class="paginator-container">
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
 </div>

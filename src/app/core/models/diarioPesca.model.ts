@@ -7,7 +7,7 @@ export interface IDiarioPesca{
     zona_pesca: String,
     estrato: String,
     profundidad: number,
-    tiempo_efectivo: TimeRanges,
+    tiempo_efectivo: number,
     rango_talla_inicial: number,
     rango_talla_final: number,
     moda: number,

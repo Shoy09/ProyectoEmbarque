@@ -35,21 +35,8 @@ export class SideBarComponent implements OnInit {
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
-    this.updateLayoutClass();
+ 
   }
 
-  updateLayoutClass() {
-    const mainContainer = document.querySelector('.layout-container');
-    if (mainContainer) { // Verificar si mainContainer no es null
-      if (this.isSidebarOpen) {
-        mainContainer.classList.add('sidebar-open');
-        mainContainer.classList.remove('sidebar-closed');
-      } else {
-        mainContainer.classList.add('sidebar-closed');
-        mainContainer.classList.remove('sidebar-open');
-      }
-    } else {
-      console.error('Elemento .layout-container no encontrado en el DOM.');
-    }
-  }
+
 }

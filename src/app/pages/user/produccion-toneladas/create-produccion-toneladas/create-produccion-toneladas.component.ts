@@ -88,31 +88,49 @@ export class CreateProduccionToneladasComponent implements OnInit{
   }
 
   updateFlota() {
+    // Obtiene los valores del formulario
+    const toneladas_procesables = Number(this.formCPT.get('toneladas_procesadas')?.value) || 0;
+    const toneladas_procesadas = Number(this.formCPT.get('toneladas_procesadas_produccion')?.value) || 0;
+
+    // Validación para asegurar que toneladas_procesadas_produccion no sea mayor que toneladas_procesadas
+    if (toneladas_procesadas > toneladas_procesables) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Error en los datos',
+        text: 'La cantidad procesada no puede ser mayor que la cantidad procesable.',
+        customClass: {
+          popup: 'swal2-centered'
+        }
+      });
+      return; // Salir de la función sin realizar la operación
+    }
+
     // Calcula las toneladas no procesadas antes de enviar el formulario
     this.calculateToneladasNP();
 
     // Habilita temporalmente el campo toneladas_NP
     this.formCPT.get('toneladas_NP')?.enable();
 
-    // Obtiene los valores del formulario
-    const formValue = this.formCPT.value;
-
     // Filtra los campos que queremos actualizar
     const updatedFields = {
-      toneladas_procesadas_produccion: formValue.toneladas_procesadas_produccion,
-      toneladas_NP: formValue.toneladas_NP
+      toneladas_procesadas_produccion: toneladas_procesadas,
+      toneladas_NP: this.formCPT.get('toneladas_NP')?.value
     };
 
     if (this.formCPT.valid && this.idFlota) {
       this.serviceFlota.updateFlotaToneladas(updatedFields, this.idFlota).subscribe(
         res => {
-          console.log("Flota actualizada: ", res);
+          console.log("Registro guardado: ", res);
           Swal.fire({
-            position: 'top-end',
+            position: 'center',
             icon: 'success',
-            title: '¡Flota Actualizada!',
+            title: '¡Registro guardado!',
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+            customClass: {
+              popup: 'swal2-centered'
+            }
           });
           this.formCPT.reset();
           this.dialogRef.close(res);
@@ -124,7 +142,10 @@ export class CreateProduccionToneladasComponent implements OnInit{
             icon: 'error',
             title: 'Oops...',
             text: 'Hubo un error al actualizar la flota.',
-            footer: '<a href="">Haz clic aquí para volver</a>'
+            footer: '<a href="">Haz clic aquí para volver</a>',
+            customClass: {
+              popup: 'swal2-centered'
+            }
           });
           this.dataSaved.emit(false); // Emitir evento de error
         }
@@ -134,7 +155,6 @@ export class CreateProduccionToneladasComponent implements OnInit{
     // Vuelve a deshabilitar el campo toneladas_NP
     this.formCPT.get('toneladas_NP')?.disable();
   }
-
 
   getEmbarcaciones() {
     this.embarcacionesService.getEmbarcaciones().subscribe(
