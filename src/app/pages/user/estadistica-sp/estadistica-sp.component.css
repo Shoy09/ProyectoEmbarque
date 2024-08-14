@@ -29,3 +29,27 @@
 .selector-item {
   margin-right: 10px;
 }
+
+/* Contenedor para todos los gráficos */
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacio entre los gráficos */
+  justify-content: space-between;
+}
+
+/* Estilo para los gráficos */
+.chart {
+  flex: 1 1 48%; /* Toma el 48% del ancho del contenedor, dejando espacio para el otro gráfico */
+  min-width: 300px; /* Ajusta según sea necesario */
+  max-width: 600px; /* Ajusta según sea necesario */
+  box-sizing: border-box;
+}
+
+/* Estilo para el gráfico de pastel */
+.pie-chart {
+  flex: 1 1 100%; /* Ocupa todo el ancho del contenedor */
+  max-width: 400px; /* Ajusta según sea necesario */
+  min-width: 200px; /* Ajusta según sea necesario */
+  box-sizing: border-box;
+}

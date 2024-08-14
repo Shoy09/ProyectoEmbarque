@@ -57,9 +57,21 @@
       </div>
      </div>
     <!-- Gráfico -->
-    <app-grafico-barras [data]="filteredData" style="width: 100%;"></app-grafico-barras>
-    <app-estadistica-pastel [data]="filteredData" style="width: 100%;"></app-estadistica-pastel>
-    <app-estadistica-tone-proce [data]="filteredData" style="width: 100%;"></app-estadistica-tone-proce>
+ <!-- Contenedor principal para los gráficos -->
+<div class="charts-container">
+  <!-- Gráfico de barras y gráfico de estadísticas -->
+  <div class="chart">
+    <app-grafico-barras [data]="filteredData"></app-grafico-barras>
+  </div>
+  <div class="chart">
+    <app-estadistica-tone-proce [data]="filteredData"></app-estadistica-tone-proce>
+  </div>
+
+  <!-- Gráfico de pastel -->
+  <div class="pie-chart">
+    <app-estadistica-pastel [data]="filteredData"></app-estadistica-pastel>
+  </div>
+</div>
 
   </div>
 
