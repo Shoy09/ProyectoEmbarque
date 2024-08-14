@@ -17,6 +17,8 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
 import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
 import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.component";
+import { MatIconModule } from '@angular/material/icon';
+import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadistica-tone-proce.component';
 
 @Component({
   selector: 'app-estadistica-sp',
