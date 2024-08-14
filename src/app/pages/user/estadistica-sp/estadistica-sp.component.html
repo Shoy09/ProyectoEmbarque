@@ -24,37 +24,41 @@
 
       <!-- Seleccionables -->
       <div class="selectors">
-        <mat-form-field appearance="outline" class="selector-item">
-          <mat-label>Especies</mat-label>
-          <mat-select [(ngModel)]="selectedEspecie">
-            <mat-option *ngFor="let especie of especies" [value]="especie.nombre">
-              {{ especie.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div *ngFor="let selector of seleccionadoresEmbarcacion; let i = index">
           <mat-form-field appearance="outline" class="selector-item">
             <mat-label>Embarcación</mat-label>
-            <mat-select [(ngModel)]="selectedEmbarcacion">
-              <mat-option *ngFor="let embarcacion of embarcaciones" [value]="embarcacion.nombre">
+            <mat-select [(ngModel)]="selector.selectedEmbarcacion">
+              <mat-option *ngFor="let embarcacion of getFilteredEmbarcaciones(i)" [value]="embarcacion.id">
                 {{ embarcacion.nombre }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <button mat-icon-button (click)="removeSelector('embarcacion', i)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+        <button mat-raised-button color="primary" (click)="addSelector('embarcacion')">+</button>
 
+        <div *ngFor="let selector of seleccionadoresZonaPesca; let i = index">
           <mat-form-field appearance="outline" class="selector-item">
             <mat-label>Zona de Pesca</mat-label>
-            <mat-select [(ngModel)]="selectedZonaPesca">
-              <mat-option *ngFor="let zona of ZonaPesca" [value]="zona.id">
-                {{ zona.nombre }} <!-- Adjust based on your ZonaPescaI structure -->
+            <mat-select [(ngModel)]="selector.selectedZonaPesca">
+              <mat-option *ngFor="let zona of getFilteredZonaPesca(i)" [value]="zona.id">
+                {{ zona.nombre }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <button mat-icon-button (click)="removeSelector('zonaPesca', i)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+        <button mat-raised-button color="primary" (click)="addSelector('zonaPesca')">+</button>
+
       </div>
      </div>
     <!-- Gráfico -->
     <app-grafico-barras [data]="filteredData" style="width: 50%;"></app-grafico-barras>
     <app-estadistica-pastel [data]="filteredData" style="width: 50%;"></app-estadistica-pastel>
-    <app-estadistica-tone-proce [data]="filteredData" style="width: 100%;"></app-estadistica-tone-proce>
 
   </div>
 

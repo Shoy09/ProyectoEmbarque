@@ -40,6 +40,14 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true
+            },
+            y: {
+              stacked: true
+            }
+          }
         },
       });
     } else {
@@ -47,12 +55,14 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
     }
   }
 
+
   updateChartData() {
     if (this.chart) {
       this.chart.data = this.getChartData(); // Actualiza los datos del gráfico
       this.chart.update();
     }
   }
+
 
   getChartData() {
     if (!this.data || this.data.length === 0) {
@@ -70,54 +80,78 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
       };
     }
 
-    const labels = this.data.map(flota => `${flota.embarcacion || 'Desconocido'} - ${new Date(flota.fecha).toLocaleDateString()}`);
-    const datasetDataGaso = this.data.map(flota => flota.consumo_gasolina);
-    const toneladasProcesadas = this.data.map(flota => flota.toneladas_procesadas);
-    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas);
-    const galonGasoHora = this.data.map(flota => flota.galon_hora);
-    const consumoHielo = this.data.map(flota => flota.consumo_hielo);
-    const consumoAgua = this.data.map(flota => flota.consumo_agua);
+    // Crear un mapa para acumular datos por fecha y embarcación
+    const dataMap = new Map<string, any>();
+
+    this.data.forEach(flota => {
+      const key = `${flota.embarcacion || 'Desconocido'} - ${new Date(flota.fecha).toLocaleDateString()}`;
+
+      if (!dataMap.has(key)) {
+        dataMap.set(key, {
+          toneladas_procesadas: 0,
+          toneladas_recibidas: 0,
+          consumo_gasolina: 0,
+          galon_hora: 0,
+          consumo_hielo: 0,
+          consumo_agua: 0
+        });
+      }
+
+      const currentData = dataMap.get(key);
+      dataMap.set(key, {
+        toneladas_procesadas: currentData.toneladas_procesadas + (flota.toneladas_procesadas || 0),
+        toneladas_recibidas: currentData.toneladas_recibidas + (flota.toneladas_recibidas || 0),
+        consumo_gasolina: currentData.consumo_gasolina + (flota.consumo_gasolina || 0),
+        galon_hora: currentData.galon_hora + (flota.galon_hora || 0),
+        consumo_hielo: currentData.consumo_hielo + (flota.consumo_hielo || 0),
+        consumo_agua: currentData.consumo_agua + (flota.consumo_agua || 0)
+      });
+    });
+
+    const labels = Array.from(dataMap.keys());
+    const dataValues = Array.from(dataMap.values());
 
     return {
       labels: labels,
       datasets: [
         {
           label: 'Toneladas Procesadas',
-          data: toneladasProcesadas,
+          data: dataValues.map(d => d.toneladas_procesadas),
           borderColor: Utils.CHART_COLORS.blue,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
         },
         {
           label: 'Toneladas Recibidas',
-          data: toneladasRecibidas,
+          data: dataValues.map(d => d.toneladas_recibidas),
           borderColor: Utils.CHART_COLORS.naranja,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
         },
         {
           label: 'Consumo Gasolina (gal)',
-          data: datasetDataGaso,
+          data: dataValues.map(d => d.consumo_gasolina),
           borderColor: Utils.CHART_COLORS.red,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
         },
         {
           label: 'Gasolina x Hora (gal)',
-          data: galonGasoHora,
+          data: dataValues.map(d => d.galon_hora),
           borderColor: Utils.CHART_COLORS.verde,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
         },
         {
           label: 'Consumo Hielo (gal)',
-          data: consumoHielo,
+          data: dataValues.map(d => d.consumo_hielo),
           borderColor: Utils.CHART_COLORS.morado,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
         },
         {
           label: 'Consumo Agua (L)',
-          data: consumoAgua,
+          data: dataValues.map(d => d.consumo_agua),
           borderColor: Utils.CHART_COLORS.azulClaro,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azulClaro, 0.5),
         },
       ]
     };
   }
+
 }
