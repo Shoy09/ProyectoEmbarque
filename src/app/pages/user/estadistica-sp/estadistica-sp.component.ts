@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';
-import { Utils } from './util';
 import { FlotaService } from 'app/core/services/flota.service';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
