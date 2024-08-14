@@ -17,6 +17,7 @@ import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
 import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
 import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.component";
+import { EstadisticaToneProceComponent } from "../estadistica-tone-proce/estadistica-tone-proce.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -32,8 +33,9 @@ import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.compone
     FormsModule,
     EstadisticaMaterializacionComponent,
     EstadisticaPastelComponent,
-    GraficoBarrasComponent
-  ],
+    GraficoBarrasComponent,
+    EstadisticaToneProceComponent
+],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']
 })
