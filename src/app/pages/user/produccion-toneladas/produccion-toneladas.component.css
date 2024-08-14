@@ -2,7 +2,7 @@
 .hero-section {
   position: relative;
   width: 100%;
-  height: 200px; /* Ajusta la altura según tus necesidades */
+  height: 200px;
   background-image: url(../../../../../public/produccion.jpg);
   background-size: cover;
   background-position: center;
@@ -48,25 +48,25 @@
 .table-container {
   margin-top: 25px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto; /* Permite scroll si la tabla es demasiado ancha */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .mat-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px; /* Asegura un mínimo de ancho */
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 12px;
+  text-align: left;
 }
 
 .mat-header-cell {
   background-color: #2196F3;
   color: white;
   font-weight: bold;
-  text-align: left;
-}
-
-.mat-cell {
-  padding: 12px;
-  text-align: left;
 }
 
 .mat-row:nth-child(even) {
@@ -84,4 +84,58 @@
 .mat-paginator {
   margin-top: 10px;
   border-top: 1px solid #ddd;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 100px;
+  }
+
+  .hero-section h1 {
+    display: none;
+  }
+
+  .hero-section::after {
+    content: "Bienvenido";
+    position: absolute;
+    z-index: 1;
+    color: hsl(0, 100%, 100%);
+    padding: 10px 20px;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .mat-table {
+    min-width: 100%; /* Permite que la tabla sea más flexible */
+  }
+
+  .mat-header-cell, .mat-cell {
+    padding: 8px; /* Reduce el padding en pantallas pequeñas */
+    font-size: 12px; /* Reduce el tamaño de la fuente */
+  }
+
+  .mat-header-row, .mat-row {
+    display: block; /* Hace que cada fila sea un bloque */
+  }
+
+  .mat-cell {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .mat-header-cell {
+    display: none; /* Oculta los encabezados en pantallas pequeñas */
+  }
+
+  h3{
+    text-align: center;
+  }
 }
