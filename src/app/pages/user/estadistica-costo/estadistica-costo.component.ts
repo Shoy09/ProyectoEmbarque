@@ -1,33 +1,31 @@
+import { Utils } from './util';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
-import { Chart, registerables } from 'chart.js';
-import { Utils } from './util';
-
+import { Chart, ChartData, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-estadistica-toneladas',
+  selector: 'app-estadistica-costo',
   standalone: true,
   imports: [],
-  templateUrl: './estadistica-toneladas.component.html',
-  styleUrl: './estadistica-toneladas.component.css'
+  templateUrl: './estadistica-costo.component.html',
+  styleUrl: './estadistica-costo.component.css'
 })
-export class EstadisticaToneladasComponent {
-
+export class EstadisticaCostoComponent {
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
 
   constructor(
     private serviceEmbarcaciones: EmbarcacionesService,
-  ){}
+  ) {}
 
-  public chart!: Chart;
+  public chart!: Chart<'line'>;
 
   ngOnInit(): void {
     this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
       this.embarcaciones = embarcaciones;
-          this.createChart();
+      this.createChart();
     });
   }
 
@@ -43,21 +41,44 @@ export class EstadisticaToneladasComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('tone-embarcacion');
-    if (chartContainer) {
-      chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
-    }
 
     if (this.chart) {
       this.chart.destroy();
     }
+
     if (this.data && this.data.length) {
-      this.chart = new Chart("tone-embarcacion", {
-        type: 'bar',
-        data: this.getChartData(), // Usa el método getChartData() para obtener los datos
+      this.chart = new Chart<'line'>("costo", {
+        type: 'line',
+        data: this.getChartData(),
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Costo de Captura (S/.)'
+            },
+          },
+          interaction: {
+            intersect: false,
+          },
+          scales: {
+            x: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Fecha y Embarcación'
+              }
+            },
+            y: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Valor'
+              },
+              suggestedMin: -10,
+              suggestedMax: 200
+            }
+          }
         },
       });
     } else {
@@ -67,12 +88,12 @@ export class EstadisticaToneladasComponent {
 
   updateChartData() {
     if (this.chart) {
-      this.chart.data = this.getChartData(); // Actualiza los datos del gráfico
+      this.chart.data = this.getChartData();
       this.chart.update();
     }
   }
 
-  getChartData() {
+  getChartData(): ChartData<'line'> {
     if (!this.data || this.data.length === 0) {
       console.error('Datos no están disponibles');
       return {
@@ -82,7 +103,7 @@ export class EstadisticaToneladasComponent {
             label: 'Sin datos',
             data: [],
             borderColor: Utils.CHART_COLORS.red,
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+            fill: false,
           }
         ]
       };
@@ -92,25 +113,30 @@ export class EstadisticaToneladasComponent {
       const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
       return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
     });
-    const toneRecibidas = this.data.map(flota => flota.toneladas_recibidas);
-    const toneProcesadas = this.data.map(flota => flota.toneladas_procesadas);
+    const costoCaptura = this.data.map(flota => flota.costo_tm_captura);
+    const costoCapturaProcesado = this.data.map(flota => flota.csot);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: 'Toneladas Recibidas (t)',
-          data: toneRecibidas,
+          label: 'Costo Captura (S/.)',
+          data: costoCaptura,
           borderColor: Utils.CHART_COLORS.red,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
+          fill: false,
+          cubicInterpolationMode: 'monotone',
+          tension: 0.4
         },
         {
-          label: 'Toneladas Procesables (t)',
-          data: toneProcesadas,
+          label: 'Costo Captura Procesable (S/.)',
+          data: costoCapturaProcesado,
           borderColor: Utils.CHART_COLORS.verde,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
+          fill: false,
+          tension: 0.4
         }
       ]
     };
   }
+
+
 }

@@ -1,4 +1,4 @@
-export const Utilss = {
+export const Utils = {
   months(config: { count: number }) {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
     return monthNames.slice(0, config.count);
@@ -11,7 +11,6 @@ export const Utilss = {
   },
 
   CHART_COLORS: {
-    red: 'rgba(255, 99, 132, 1)',
     blue: 'rgba(54, 162, 235, 1)',
     naranja: 'rgba(255, 165, 0, 1)',
     verde: 'rgba(76, 175, 80, 1)',
@@ -25,11 +24,14 @@ export const Utilss = {
     return color.replace('1)', `${alpha})`);
   },
 
-  generateColors(count: number, index: number = 0): string[] {
-    const hue = (index * 137.508) % 360;
-    return Array(count).fill(0).map((_, i) =>
-      `hsla(${hue}, ${50 + i * 10}%, ${50 + i * 5}%, 0.7)`
-    );
+  // Ejemplo de cómo generar colores únicos
+  generateColors(count: number): string[] {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+      colors.push(color);
+    }
+    return colors;
   },
 
   generateBorderColors(count: number, index: number = 0): string[] {

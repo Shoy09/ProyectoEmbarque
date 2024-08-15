@@ -31,6 +31,7 @@
   <div class="botones-tablas">
     <button mat-raised-button color="accent" (click)="showChart('bar')">Consumo de Embarcación</button>
     <button mat-raised-button color="accent" (click)="showChart('bar-2')">Toneladas Captura</button>
+    <button mat-raised-button color="accent" (click)="showChart('line-2')">Costo Captura</button>
     <button mat-raised-button color="accent" (click)="showChart('line')">Toneladas Procesadas Producción</button>
     <button mat-raised-button color="accent" (click)="showChart('pie')">Captura de especies</button>
   </div>
@@ -76,6 +77,9 @@
     </div>
     <div *ngIf="currentChart === 'bar-2'" class="chart">
       <app-estadistica-toneladas [data]="filteredData"></app-estadistica-toneladas>
+    </div>
+    <div *ngIf="currentChart === 'line-2'" class="chart">
+      <app-estadistica-costo [data]="filteredData"></app-estadistica-costo>
     </div>
   </div>
 </div>

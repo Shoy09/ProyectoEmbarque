@@ -94,9 +94,7 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
       return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
     });
     const datasetDataGaso = this.data.map(flota => flota.consumo_gasolina);
-    const galonGasoHora = this.data.map(flota => flota.galon_hora);
-    const consumoHielo = this.data.map(flota => flota.consumo_hielo);
-    const consumoAgua = this.data.map(flota => flota.consumo_agua);
+    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas)
 
     return {
       labels: labels,
@@ -108,20 +106,8 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
         },
         {
-          label: 'Combustible x Hora (gal)',
-          data: galonGasoHora,
-          borderColor: Utils.CHART_COLORS.verde,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
-        },
-        {
-          label: 'Consumo Hielo (t)',
-          data: consumoHielo,
-          borderColor: Utils.CHART_COLORS.morado,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
-        },
-        {
-          label: 'Consumo Agua (m3)',
-          data: consumoAgua,
+          label: 'Toneladas',
+          data: toneladasRecibidas,
           borderColor: Utils.CHART_COLORS.azulClaro,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azulClaro, 0.5),
         },

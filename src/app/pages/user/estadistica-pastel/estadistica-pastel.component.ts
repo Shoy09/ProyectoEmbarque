@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, registerables } from 'chart.js';
-import { Utilss } from './utils'; // Asegúrate de tener esta utilidad para colores
+import { Utils } from './utils'; // Asegúrate de tener esta utilidad para colores
+import { FlotaDP } from 'app/core/models/flota.model';
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 
 @Component({
   selector: 'app-estadistica-pastel',
@@ -16,12 +18,19 @@ import { Utilss } from './utils'; // Asegúrate de tener esta utilidad para colo
   styleUrls: ['./estadistica-pastel.component.css']
 })
 export class EstadisticaPastelComponent implements OnInit, OnChanges {
-  @Input() data: any[] = []; // Datos recibidos desde el componente padre
+  @Input() data: FlotaDP[] = []; // Datos recibidos desde el componente padre
 
   public chart!: Chart<'pie'>;
+  private embarcacionesMap: Map<number, string> = new Map(); // Mapa para almacenar los nombres de las embarcaciones
+
+  constructor(private embarcacionesService: EmbarcacionesService) {}
 
   ngOnInit(): void {
     Chart.register(...registerables); // Registra los módulos necesarios
+    this.embarcacionesService.getEmbarcaciones().subscribe(embarcaciones => {
+      this.embarcacionesMap = new Map(embarcaciones.map(e => [e.id, e.nombre]));
+      this.createChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -32,13 +41,11 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
 
   createChart() {
     const chartContainer = document.getElementById('chartpastel');
-  if (chartContainer) {
-    chartContainer.style.height = '200px';  // Ajusta la altura a tu preferencia
-  }
 
     if (this.chart) {
       this.chart.destroy();
     }
+
     setTimeout(() => {
       const chartData = this.getChartData();
       const ctx = document.getElementById('chartpastel') as HTMLCanvasElement;
@@ -46,10 +53,6 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
       if (!ctx) {
         console.error('No se pudo encontrar el canvas');
         return;
-      }
-
-      if (this.chart) {
-        this.chart.destroy();
       }
 
       if (chartData.labels.length) {
@@ -66,7 +69,7 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
                 callbacks: {
                   label: function (context) {
                     const label = context.dataset.label || '';
-                    const value = context.parsed;
+                    const value = context.parsed as number;
                     const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
                     const percentage = ((value / total) * 100).toFixed(2);
                     return `${label}: ${value} kg (${percentage}%)`;
@@ -88,30 +91,33 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
       return { labels: [], datasets: [] };
     }
 
-    const especieMap = new Map<string, number>();
+    const especieMap = new Map<string, number>(); // Usamos solo valores numéricos
 
-    // Sumar las cantidades por especie
+    // Sumar las cantidades por especie y embarcación
     this.data.forEach(record => {
       if (record.especie && Array.isArray(record.especie)) {
         record.especie.forEach((item: { nombre: string; cantidad: number; }) => {
           if (item && item.nombre) {
-            especieMap.set(item.nombre, (especieMap.get(item.nombre) || 0) + item.cantidad);
+            const embarcacionNombre = this.embarcacionesMap.get(record.embarcacion) || 'Desconocido';
+            const key = `${item.nombre} - ${embarcacionNombre}`;
+            especieMap.set(key, (especieMap.get(key) || 0) + item.cantidad);
           }
         });
       }
     });
 
     const labels = Array.from(especieMap.keys());
-    const data = Array.from(especieMap.values());
+    const data = Array.from(especieMap.values()); // Usamos un array de números
+    const datasets = [{
+      label: 'Cantidad',
+      data: data,
+      backgroundColor: Utils.generateColors(labels.length),
+      borderColor: Utils.generateBorderColors(labels.length)
+    }];
 
     return {
       labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: Utilss.generateColors(labels.length),
-        borderColor: Utilss.generateBorderColors(labels.length),
-        label: 'Cantidad de Especies'
-      }]
+      datasets: datasets
     };
   }
 }

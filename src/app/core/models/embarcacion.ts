@@ -1,6 +1,6 @@
 export interface Embarcaciones{
   id: number,
-  nombre: String,
+  nombre: string,
   costo_zarpe: number,
   fecha: Date,
   bonificacion: number,

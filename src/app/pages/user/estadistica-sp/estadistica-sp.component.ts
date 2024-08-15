@@ -19,6 +19,7 @@ import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.compone
 import { MatIconModule } from '@angular/material/icon';
 import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadistica-tone-proce.component';
 import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadistica-toneladas.component";
+import { EstadisticaCostoComponent } from "../estadistica-costo/estadistica-costo.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -37,7 +38,8 @@ import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadist
     EstadisticaPastelComponent,
     GraficoBarrasComponent,
     EstadisticaToneProceComponent,
-    EstadisticaToneladasComponent
+    EstadisticaToneladasComponent,
+    EstadisticaCostoComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']
@@ -75,7 +77,6 @@ export class EstadisticaSPComponent implements OnInit {
     this.serviceFlota.getFlotasLances().subscribe(
       (data: FlotaDP[]) => {
         this.flota = data;
-        this.extractEspecies();
       },
       error => {
         console.error('Error loading flotas lances', error);
@@ -110,21 +111,6 @@ export class EstadisticaSPComponent implements OnInit {
       this.currentChart = chartType;
       // Aquí podrías limpiar el gráfico anterior si es necesario
     }
-  }
-
-
-  private extractEspecies(): void {
-    const especiesSet = new Set<string>();
-
-    this.flota.forEach(flotas => {
-      if (Array.isArray(flotas.especie)) {
-        flotas.especie.forEach(e => {
-          especiesSet.add(e.nombre);
-        });
-      }
-    });
-
-    this.especies = Array.from(especiesSet).map(name => ({ nombre: name, cantidad: 0, precio: 0 }));
   }
 
   clearFilter() {
@@ -168,7 +154,6 @@ export class EstadisticaSPComponent implements OnInit {
 
     this.isDateFiltered = true;
   }
-
 
   toggleEmbarcacion(embarcacionId: number) {
     if (this.selectedEmbarcaciones.has(embarcacionId)) {
