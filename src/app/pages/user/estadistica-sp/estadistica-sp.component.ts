@@ -18,6 +18,7 @@ import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pa
 import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.component";
 import { MatIconModule } from '@angular/material/icon';
 import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadistica-tone-proce.component';
+import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadistica-toneladas.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -35,7 +36,8 @@ import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadis
     EstadisticaMaterializacionComponent,
     EstadisticaPastelComponent,
     GraficoBarrasComponent,
-    EstadisticaToneProceComponent
+    EstadisticaToneProceComponent,
+    EstadisticaToneladasComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']
