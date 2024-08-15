@@ -31,6 +31,14 @@ export class EstadisticaPastelComponent implements OnInit, OnChanges {
   }
 
   createChart() {
+    const chartContainer = document.getElementById('chartpastel');
+  if (chartContainer) {
+    chartContainer.style.height = '200px';  // Ajusta la altura a tu preferencia
+  }
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
     setTimeout(() => {
       const chartData = this.getChartData();
       const ctx = document.getElementById('chartpastel') as HTMLCanvasElement;

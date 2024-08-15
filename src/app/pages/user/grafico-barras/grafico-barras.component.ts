@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { Utils } from './util'; // Asegúrate de que Utils está correctamente importado
+import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
+import { Embarcaciones } from 'app/core/models/embarcacion';
 
 // Registra todos los módulos necesarios
 Chart.register(...registerables);
@@ -13,12 +15,21 @@ Chart.register(...registerables);
   styleUrls: ['./grafico-barras.component.css']
 })
 export class GraficoBarrasComponent implements OnInit, OnChanges {
-  @Input() data: any[] = []; // Datos sin procesar
+
+  embarcaciones: Embarcaciones[] = [];
+  @Input() data: any[] = [];
+
+  constructor(
+    private serviceEmbarcaciones: EmbarcacionesService,
+  ){}
 
   public chart!: Chart;
 
   ngOnInit(): void {
-    this.createChart();
+    this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
+      this.embarcaciones = embarcaciones;
+          this.createChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -33,6 +44,14 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
   }
 
   createChart() {
+    const chartContainer = document.getElementById('chart');
+    if (chartContainer) {
+      chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
+    }
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
     if (this.data && this.data.length) {
       this.chart = new Chart("chart", {
         type: 'bar',
@@ -70,7 +89,10 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
       };
     }
 
-    const labels = this.data.map(flota => `${flota.embarcacion || 'Desconocido'} - ${new Date(flota.fecha).toLocaleDateString()}`);
+    const labels = this.data.map(flota => {
+      const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
+      return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
+    });
     const datasetDataGaso = this.data.map(flota => flota.consumo_gasolina);
     const galonGasoHora = this.data.map(flota => flota.galon_hora);
     const consumoHielo = this.data.map(flota => flota.consumo_hielo);
@@ -80,25 +102,25 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
       labels: labels,
       datasets: [
         {
-          label: 'Consumo Gasolina (gal)',
+          label: 'Consumo Combustible (gal)',
           data: datasetDataGaso,
           borderColor: Utils.CHART_COLORS.red,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
         },
         {
-          label: 'Gasolina x Hora (gal)',
+          label: 'Combustible x Hora (gal)',
           data: galonGasoHora,
           borderColor: Utils.CHART_COLORS.verde,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
         },
         {
-          label: 'Consumo Hielo (gal)',
+          label: 'Consumo Hielo (t)',
           data: consumoHielo,
           borderColor: Utils.CHART_COLORS.morado,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
         },
         {
-          label: 'Consumo Agua (L)',
+          label: 'Consumo Agua (m3)',
           data: consumoAgua,
           borderColor: Utils.CHART_COLORS.azulClaro,
           backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azulClaro, 0.5),

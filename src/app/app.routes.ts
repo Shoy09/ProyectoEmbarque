@@ -8,6 +8,7 @@ import { DbFlotaComponent } from '@pages/user/db-flota/db-flota.component';
 import { EstadisticaMaterializacionComponent } from '@pages/user/estadistica-materializacion/estadistica-materializacion.component';
 import { ProduccionToneladasComponent } from '@pages/user/produccion-toneladas/produccion-toneladas.component';
 import { AuthGuard } from './guards/auth.guard';
+import { EstadisticaToneProceComponent } from '@pages/user/estadistica-tone-proce/estadistica-tone-proce.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -23,7 +24,7 @@ export const routes: Routes = [
         { path: 'db-flota', component: DbFlotaComponent },
         { path: 'db-flota/:flotaDPId', component: DbFlotaComponent },
         { path: 'materializacion', component: EstadisticaMaterializacionComponent },
-        { path: 'produccion', component: ProduccionToneladasComponent }
+        { path: 'produccion', component: ProduccionToneladasComponent },
       ]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },

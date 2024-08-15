@@ -1,55 +1,115 @@
-.filters-and-selection {
+.barra-derecha {
+  width: 300px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: white; /* Asegura que la barra lateral tenga un fondo */
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* Añade una sombra para mejor visibilidad */
+}
+
+h4 {
+  font-size: 22px; /* Ajusta el tamaño a tu preferencia */
+  line-height: 1.2; /* Opcional: Ajusta la altura de la línea para el espaciado */
+  margin: 5px ;
+}
+
+.chart-container {
+  width: calc(100% - 300px); /* Resta el ancho de la barra lateral */
+  height: 90vh; /* Ocupa casi toda la altura de la ventana */
+  margin-left: 0; /* Asegura que no haya margen adicional */
+  padding: 10px; /* Espacio alrededor de la gráfica */
+}
+
+
+
+.barra-derecha .filter-item {
+  display: flex;
+  text-align: center;
+}
+
+.titulo {
+  text-align: center;
+  margin: 10px;
+}
+
+.barra-derecha .botones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px;
+}
+
+.barra-derecha .botones-tablas {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.fecha {
-  display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
-.filter-item {
-  margin-right: 10px;
-}
-
-.filter-button {
-  margin-left: 10px;
-}
-
-.selectors {
+.filters-container {
+  padding: 10px;
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  flex-direction: row; /* Alinea los elementos horizontalmente */
+  align-items: center; /* Asegura que los elementos estén alineados verticalmente */
 }
 
-.selector-item {
-  margin-right: 10px;
+.filters-container h4 {
+  margin-bottom: 10px;
+  color: #333;
+  min-width: 150px; /* Asegura que los títulos tengan un ancho mínimo */
 }
 
-/* Contenedor para todos los gráficos */
-.charts-container {
+.button-group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* Espacio entre los gráficos */
-  justify-content: space-between;
+  gap: 5px;
 }
 
-/* Estilo para los gráficos */
-.chart {
-  flex: 1 1 48%; /* Toma el 48% del ancho del contenedor, dejando espacio para el otro gráfico */
-  min-width: 300px; /* Ajusta según sea necesario */
-  max-width: 600px; /* Ajusta según sea necesario */
-  box-sizing: border-box;
+.custom-checkbox {
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #00796b;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 14px;
+  text-align: center;
 }
 
-/* Estilo para el gráfico de pastel */
-.pie-chart {
-  flex: 1 1 100%; /* Ocupa todo el ancho del contenedor */
-  max-width: 400px; /* Ajusta según sea necesario */
-  min-width: 200px; /* Ajusta según sea necesario */
-  box-sizing: border-box;
+.custom-checkbox:hover {
+  background-color: #b2ebf2;
+}
+
+.custom-checkbox.checked {
+  background-color: #0288d1;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .barra-derecha {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .chart-container {
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
 }

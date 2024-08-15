@@ -46,6 +46,14 @@ export class EstadisticaToneProceComponent {
   }
 
   createChart() {
+    const chartContainer = document.getElementById('chartTone');
+    if (chartContainer) {
+      chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
+    }
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
     if (this.data && this.data.length) {
       this.chart = new Chart("chartTone", {
         type: 'bar',
@@ -54,7 +62,7 @@ export class EstadisticaToneProceComponent {
           plugins: {
             title: {
               display: true,
-              text: 'Estadísticas de Toneladas Procesadas'
+              text: 'Estadísticas de Toneladas Procesadas Producción'
             },
             datalabels: {
               color: '#fff',

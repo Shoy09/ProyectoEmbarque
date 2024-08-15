@@ -47,18 +47,16 @@ export class EstadisticaSPComponent implements OnInit {
   startDate!: Date;
   endDate!: Date;
   isDateFiltered = false;
-  selectedEmbarcacion: string | undefined;
-  selectedZonaPesca: number | undefined;
+  selectedEmbarcaciones: Set<number> = new Set();
+  selectedZona: Set<number> = new Set();
   selectedEspecie: string | undefined;
+  currentChart: string = 'bar';
   data: any;
-  ZonaPesca: ZonaPescaI[] = [];
+
   especies: { nombre: string; cantidad: number; precio: number }[] = [];
   public chart!: Chart;
 
   filteredData: any[] = []; // Define filteredData aquí
-
-  seleccionadoresEmbarcacion: { selectedEmbarcacion: number | null }[] = [];
-  seleccionadoresZonaPesca: { selectedZonaPesca: number | null }[] = [];
 
   constructor(
     private serviceFlota: FlotaService,
@@ -97,13 +95,21 @@ export class EstadisticaSPComponent implements OnInit {
   private loadZonas(): void {
     this.serviceEmbarcaciones.getZonaPesca().subscribe(
       (data: ZonaPescaI[]) => {
-        this.ZonaPesca = data;
+        this.zona_p = data;
       },
       error => {
         console.error('Error loading zonas de pesca', error);
       }
     );
   }
+
+  showChart(chartType: string) {
+    if (this.currentChart !== chartType) {
+      this.currentChart = chartType;
+      // Aquí podrías limpiar el gráfico anterior si es necesario
+    }
+  }
+
 
   private extractEspecies(): void {
     const especiesSet = new Set<string>();
@@ -127,82 +133,59 @@ export class EstadisticaSPComponent implements OnInit {
 
   applyFilters() {
     if (!this.startDate || !this.endDate) {
-      // Si no hay fechas definidas, no se muestran datos
       this.filteredData = [];
       console.log('No hay fechas definidas. Data filtrada vacía:', this.filteredData);
       return;
     }
 
-    // Muestra las fechas de inicio y fin para depuración
-    console.log('Fechas de filtrado:', {
-      startDate: this.startDate,
-      endDate: this.endDate
+    let filteredRecords = this.flota;
+
+    // Filtrar por embarcaciones seleccionadas
+    if (this.selectedEmbarcaciones.size > 0) {
+      filteredRecords = filteredRecords.filter(flota =>
+        this.selectedEmbarcaciones.has(flota.embarcacion)
+      );
+    }
+
+    // Filtrar por zonas de pesca seleccionadas
+    if (this.selectedZona.size > 0) {
+      filteredRecords = filteredRecords.filter(flota =>
+        this.selectedZona.has(flota.zona_pesca)
+      );
+    }
+
+    // Filtrar por fechas
+    filteredRecords = filteredRecords.filter(flota => {
+      const flotaDate = new Date(flota.fecha);
+      return flotaDate >= this.startDate && flotaDate <= this.endDate;
     });
 
-    // Filtra los registros por fecha, embarcación, y zona de pesca
-    this.filteredData = this.flota.filter(flota => {
-        const fecha = new Date(flota.fecha);
-        const isInRange = fecha >= this.startDate && fecha <= this.endDate;
-
-        // Convierte los valores seleccionados a número antes de comparar
-        const selectedZonaPescaNumber = Number(this.selectedZonaPesca);
-        const selectedEmbarcacionNumber = Number(this.selectedEmbarcacion);
-
-        const matchesZonaPesca = flota.zona_pesca === selectedZonaPescaNumber || !this.selectedZonaPesca;
-        const matchesEmbarcacion = flota.embarcacion === selectedEmbarcacionNumber || !this.selectedEmbarcacion;
-
-        const isIncluded = isInRange && matchesZonaPesca && matchesEmbarcacion;
-
-        if (isIncluded) {
-            console.log('Registro incluido:', flota);
-        } else {
-            console.log('Registro excluido:', flota);
-        }
-
-        return isIncluded;
-    });
-
-    // Muestra los datos filtrados
+    // Actualiza los datos filtrados
+    this.filteredData = filteredRecords;
     console.log('Datos filtrados:', this.filteredData);
 
-    // Actualiza el estado de los datos filtrados
     this.isDateFiltered = true;
-}
-addSelector(tipo: 'embarcacion' | 'zonaPesca') {
-    if (tipo === 'embarcacion') {
-      this.seleccionadoresEmbarcacion.push({ selectedEmbarcacion: null });
-    } else if (tipo === 'zonaPesca') {
-      this.seleccionadoresZonaPesca.push({ selectedZonaPesca: null });
+  }
+
+
+  toggleEmbarcacion(embarcacionId: number) {
+    if (this.selectedEmbarcaciones.has(embarcacionId)) {
+      this.selectedEmbarcaciones.delete(embarcacionId);
+    } else {
+      this.selectedEmbarcaciones.add(embarcacionId);
     }
+    this.applyFilters();
   }
 
-  removeSelector(tipo: 'embarcacion' | 'zonaPesca', index: number) {
-    if (tipo === 'embarcacion') {
-      this.seleccionadoresEmbarcacion.splice(index, 1);
-    } else if (tipo === 'zonaPesca') {
-      this.seleccionadoresZonaPesca.splice(index, 1);
+  togleZonaPesca(id: number){
+    if(this.selectedZona.has(id)){
+      this.selectedZona.delete(id);
+    }else {
+      this.selectedZona.add(id)
     }
+    this.applyFilters();
   }
 
-  getFilteredEmbarcaciones(index: number): Embarcaciones[] {
-    // Obtén los IDs seleccionados, asegurándote de filtrar los valores null
-    const selectedIds = this.seleccionadoresEmbarcacion
-      .filter((_, i) => i !== index)
-      .map(selector => selector.selectedEmbarcacion)
-      .filter(id => id !== null) as number[]; // Asegúrate de que solo queden números
-
-    return this.embarcaciones.filter(embarcacion => !selectedIds.includes(embarcacion.id));
-  }
-
-  getFilteredZonaPesca(index: number): ZonaPescaI[] {
-    // Obtén los IDs seleccionados, asegurándote de filtrar los valores null
-    const selectedIds = this.seleccionadoresZonaPesca
-      .filter((_, i) => i !== index)
-      .map(selector => selector.selectedZonaPesca)
-      .filter(id => id !== null) as number[]; // Asegúrate de que solo queden números
-
-    return this.ZonaPesca.filter(zona => !selectedIds.includes(zona.id));
-  }
 
 
 }
