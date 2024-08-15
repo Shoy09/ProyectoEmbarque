@@ -13,7 +13,7 @@ export const Utils = {
   CHART_COLORS: {
     red: 'rgba(255, 99, 132, 1)',
     blue: 'rgba(54, 162, 235, 1)',
-    naranja: 'rgba(255, 165, 0, 1)',
+    naranja: 'rgba(255, 165, 0, 0.5)',
     verde: 'rgba(76, 175, 80, 1)',
     morado: 'rgba(128, 0, 128, 1)',
     azulClaro: 'rgba(102, 204, 0, 1)',

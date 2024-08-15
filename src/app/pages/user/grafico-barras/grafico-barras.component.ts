@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables,ChartDataset, ChartConfiguration } from 'chart.js';
 import { Utils } from './util'; // Asegúrate de que Utils está correctamente importado
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 // Registra todos los módulos necesarios
-Chart.register(...registerables);
+Chart.register(...registerables, ChartDataLabels);
 
 @Component({
   selector: 'app-grafico-barras',
@@ -15,7 +16,6 @@ Chart.register(...registerables);
   styleUrls: ['./grafico-barras.component.css']
 })
 export class GraficoBarrasComponent implements OnInit, OnChanges {
-
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
 
@@ -28,7 +28,7 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
       this.embarcaciones = embarcaciones;
-          this.createChart();
+      this.createChart();
     });
   }
 
@@ -46,21 +46,39 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
   createChart() {
     const chartContainer = document.getElementById('chart');
     if (chartContainer) {
-      chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
+      chartContainer.style.height = '500px';
     }
 
     if (this.chart) {
       this.chart.destroy();
     }
+
     if (this.data && this.data.length) {
-      this.chart = new Chart("chart", {
+      const chartData = this.getChartData();
+      const config: ChartConfiguration = {
         type: 'bar',
-        data: this.getChartData(), // Usa el método getChartData() para obtener los datos
+        data: chartData,
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Consumo Combustible x Toneladas Recibidas'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
         },
-      });
+      };
+
+      this.chart = new Chart("chart", config);
     } else {
       console.error('No hay datos disponibles para crear el gráfico');
     }
@@ -68,18 +86,20 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
 
   updateChartData() {
     if (this.chart) {
-      this.chart.data = this.getChartData(); // Actualiza los datos del gráfico
+      const chartData = this.getChartData();
+      this.chart.data = chartData;
       this.chart.update();
     }
   }
 
-  getChartData() {
+  getChartData(): ChartConfiguration['data'] {
     if (!this.data || this.data.length === 0) {
       console.error('Datos no están disponibles');
       return {
         labels: [],
         datasets: [
           {
+            type: 'bar',
             label: 'Sin datos',
             data: [],
             borderColor: Utils.CHART_COLORS.red,
@@ -91,27 +111,68 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
 
     const labels = this.data.map(flota => {
       const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
-      return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
+      const [year, month, day] = flota.fecha.split('-');
+      const formattedDate = `${day}/${month}/${year}`;
+      return `${embarcacion} - ${formattedDate}`;
     });
-    const datasetDataGaso = this.data.map(flota => flota.consumo_gasolina);
-    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas)
 
+    const datasetDataGaso = this.data.map(flota => {
+      if (flota.tipo_cambio && flota.toneladas_recibidas) {
+        const value = flota.total_gasolina / flota.tipo_cambio / flota.toneladas_recibidas;
+        return parseFloat(value.toFixed(2));
+      } else {
+        return 0;
+      }
+    });
+
+    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas || 0);
+
+    const datasets: ChartDataset[] = [
+      {
+        type: 'bar' as const,
+        label: 'Toneladas Recibidas',
+        data: toneladasRecibidas,
+        backgroundColor: Utils.CHART_COLORS.naranja,
+        borderColor: Utils.CHART_COLORS.naranja,
+        order: 1,
+        datalabels: {
+          color: '#333333', // Negro oscuro
+          font: {
+            weight: 'bold' // Negrita
+          },
+        }
+      },
+      {
+        type: 'line' as const,
+        label: 'Consumo de Gasolina ($)',
+        data: datasetDataGaso,
+        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
+        borderColor: Utils.CHART_COLORS.verde,
+        order: 2,
+        fill: false,
+        tension: 0.4,
+        datalabels: {
+          color: '#ffffff',
+          display: true,
+          formatter: (value: number) => value.toLocaleString('es-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2
+          }),
+          anchor: 'end',
+          align: 'top',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          borderRadius: 3,
+          padding: 4
+        }
+      }
+    ];
     return {
       labels: labels,
-      datasets: [
-        {
-          label: 'Consumo Combustible (gal)',
-          data: datasetDataGaso,
-          borderColor: Utils.CHART_COLORS.red,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-        },
-        {
-          label: 'Toneladas',
-          data: toneladasRecibidas,
-          borderColor: Utils.CHART_COLORS.azulClaro,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azulClaro, 0.5),
-        },
-      ]
+      datasets: datasets
     };
   }
+
+
+
 }
