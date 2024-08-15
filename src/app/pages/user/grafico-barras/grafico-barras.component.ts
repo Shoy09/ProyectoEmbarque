@@ -72,8 +72,6 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
 
     const labels = this.data.map(flota => `${flota.embarcacion || 'Desconocido'} - ${new Date(flota.fecha).toLocaleDateString()}`);
     const datasetDataGaso = this.data.map(flota => flota.consumo_gasolina);
-    const toneladasProcesadas = this.data.map(flota => flota.toneladas_procesadas);
-    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas);
     const galonGasoHora = this.data.map(flota => flota.galon_hora);
     const consumoHielo = this.data.map(flota => flota.consumo_hielo);
     const consumoAgua = this.data.map(flota => flota.consumo_agua);
@@ -81,18 +79,6 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
     return {
       labels: labels,
       datasets: [
-        {
-          label: 'Toneladas Procesadas',
-          data: toneladasProcesadas,
-          borderColor: Utils.CHART_COLORS.blue,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-        },
-        {
-          label: 'Toneladas Recibidas',
-          data: toneladasRecibidas,
-          borderColor: Utils.CHART_COLORS.naranja,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
-        },
         {
           label: 'Consumo Gasolina (gal)',
           data: datasetDataGaso,
