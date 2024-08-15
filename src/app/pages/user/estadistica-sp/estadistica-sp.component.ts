@@ -20,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadistica-tone-proce.component';
 import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadistica-toneladas.component";
 import { EstadisticaCostoComponent } from "../estadistica-costo/estadistica-costo.component";
+import { CombustibleProcesablesComponent } from "./graficas/combustible-procesables/combustible-procesables.component";
+import { HieloRecibidasComponent } from "./graficas/hielo-recibidas/hielo-recibidas.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -39,7 +41,9 @@ import { EstadisticaCostoComponent } from "../estadistica-costo/estadistica-cost
     GraficoBarrasComponent,
     EstadisticaToneProceComponent,
     EstadisticaToneladasComponent,
-    EstadisticaCostoComponent
+    EstadisticaCostoComponent,
+    CombustibleProcesablesComponent,
+    HieloRecibidasComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']

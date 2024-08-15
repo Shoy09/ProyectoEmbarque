@@ -15,9 +15,6 @@ export const Utils = {
     blue: 'rgba(54, 162, 235, 1)',
     naranja: 'rgba(255, 165, 0, 1)',
     verde: 'rgba(76, 175, 80, 1)',
-    morado: 'rgba(128, 0, 128, 1)',
-    azulClaro: 'rgba(102, 204, 0, 1)',
-    cian: 'rgba(0, 191, 255, 1)',
   },
   transparentize(color: string, opacity: number) {
     // Cambia la opacidad del color dado
