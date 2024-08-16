@@ -27,7 +27,7 @@ export class ToneladasEspeciesComponent {
   ngOnInit(): void {
     this.serviceEmbarcaciones.getEmbarcaciones().subscribe(embarcaciones => {
       this.embarcaciones = embarcaciones;
-          this.createChart();
+      this.createChart();
     });
   }
 
@@ -35,7 +35,7 @@ export class ToneladasEspeciesComponent {
     if (changes['data']) {
       console.log('Datos recibidos:', this.data);
       if (this.chart) {
-        this.updateTone();
+        this.updateChart();
       } else {
         this.createChart();
       }
@@ -43,28 +43,28 @@ export class ToneladasEspeciesComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('chartTone');
+    const chartContainer = document.getElementById('chartEspecies');
     if (chartContainer) {
-      chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
+      chartContainer.style.height = '500px';
     }
 
     if (this.chart) {
       this.chart.destroy();
     }
     if (this.data && this.data.length) {
-      this.chart = new Chart("chartTone", {
+      this.chart = new Chart("chartEspecies", {
         type: 'bar',
-        data: this.getChartTone(),
+        data: this.getChartData(),
         options: {
           plugins: {
             title: {
               display: true,
-              text: 'Toneladas de especies'
+              text: 'Cantidad de especies por embarcación'
             },
             datalabels: {
               color: '#fff',
               display: true,
-              formatter: (value) => `${value} t`, // Mostrar el símbolo '%' en las etiquetas de datos
+              formatter: (value) => `${value} kg`,
             }
           },
           responsive: true,
@@ -76,7 +76,7 @@ export class ToneladasEspeciesComponent {
             y: {
               stacked: true,
               ticks: {
-                callback: (value) => `${value} t` // Mostrar el símbolo '%' en el eje y
+                callback: (value) => `${value} kg`
               }
             }
           }
@@ -87,25 +87,19 @@ export class ToneladasEspeciesComponent {
     }
   }
 
-  updateTone(){
+  updateChart(){
     if(this.chart){
-      this.chart.data = this.getChartTone();
+      this.chart.data = this.getChartData();
       this.chart.update();
     }
   }
 
-  getChartTone() {
+  getChartData() {
     if (!this.data || this.data.length === 0) {
       console.error('Datos no están disponibles');
       return {
         labels: [],
-        datasets: [
-          {
-            label: 'Sin datos',
-            data: [],
-            backgroundColor: Utils.CHART_COLORS.azul,
-          }
-        ]
+        datasets: []
       };
     }
 
@@ -114,23 +108,29 @@ export class ToneladasEspeciesComponent {
       return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
     });
 
-    const porcentaje_procesadas = this.data.map(flota => flota.toneladas_procesadas_produccion);
-    const porcentaje_np = this.data.map(flota => flota.toneladas_NP);
+    // Obtener todas las especies únicas
+    const allSpecies = new Set<string>();
+    this.data.forEach(flota => {
+      flota.especie.forEach((esp: { nombre: string }) => {
+        allSpecies.add(esp.nombre);
+      });
+    });
+
+    // Crear datasets para cada especie
+    const datasets = Array.from(allSpecies).map((especie, index) => {
+      return {
+        label: especie,
+        data: this.data.map(flota => {
+          const esp = flota.especie.find((e: { nombre: string }) => e.nombre === especie);
+          return esp ? esp.cantidad : 0;
+        }),
+        backgroundColor: Utils.getColorForSpecies(index),
+      };
+    });
 
     return {
       labels: labels,
-      datasets: [
-        {
-          label: 'Toneladas Procesadas',
-          data: porcentaje_procesadas,
-          backgroundColor: Utils.CHART_COLORS.celeste,
-        },
-        {
-          label: 'Toneladas NP',
-          data: porcentaje_np,
-          backgroundColor: Utils.CHART_COLORS.azul_noche,
-        },
-      ]
+      datasets: datasets
     };
   }
 

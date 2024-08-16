@@ -40,7 +40,7 @@
     <button mat-raised-button color="accent" (click)="showChart('bar-2')">Toneladas Captura</button>
     <button mat-raised-button color="accent" (click)="showChart('line-2')">Costo Captura</button>
     <button mat-raised-button color="accent" (click)="showChart('line')">Toneladas Procesadas Producción</button>
-    <button mat-raised-button color="accent" (click)="showChart('pie')">Captura de especies</button>
+    <button mat-raised-button color="accent" (click)="showChart('especies')">Captura de especies</button>
   </div>
 </div>
 
@@ -108,6 +108,9 @@
     </div>
     <div *ngIf="currentChart === 'viveres'" class="chart">
       <app-consu-vive-r [data]="filteredData"></app-consu-vive-r>
+    </div>
+    <div *ngIf="currentChart === 'especies'" class="chart">
+      <app-toneladas-especies [data]="filteredData"></app-toneladas-especies>
     </div>
   </div>
 </div>

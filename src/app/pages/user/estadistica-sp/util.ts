@@ -9,5 +9,9 @@ export const Utils = {
   transparentize(color: string, opacity: number) {
     const alpha = opacity || 0.5;
     return color.replace('1)', `${alpha})`);
+  },
+  getColorForSpecies(index: number): string {
+    const colors = Object.values(Utils.CHART_COLORS);
+    return colors[index % colors.length];
   }
 };
