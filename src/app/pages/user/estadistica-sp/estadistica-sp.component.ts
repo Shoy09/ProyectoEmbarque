@@ -22,6 +22,8 @@ import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadist
 import { EstadisticaCostoComponent } from "../estadistica-costo/estadistica-costo.component";
 import { CombustibleProcesablesComponent } from "./graficas/combustible-procesables/combustible-procesables.component";
 import { HieloRecibidasComponent } from "./graficas/hielo-recibidas/hielo-recibidas.component";
+import { HieloProcesablesComponent } from "./graficas/hielo-procesables/hielo-procesables.component";
+import { AguaRecibidasComponent } from "./graficas/agua-recibidas/agua-recibidas.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -43,7 +45,9 @@ import { HieloRecibidasComponent } from "./graficas/hielo-recibidas/hielo-recibi
     EstadisticaToneladasComponent,
     EstadisticaCostoComponent,
     CombustibleProcesablesComponent,
-    HieloRecibidasComponent
+    HieloRecibidasComponent,
+    HieloProcesablesComponent,
+    AguaRecibidasComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']
@@ -176,7 +180,5 @@ export class EstadisticaSPComponent implements OnInit {
     }
     this.applyFilters();
   }
-
-
 
 }

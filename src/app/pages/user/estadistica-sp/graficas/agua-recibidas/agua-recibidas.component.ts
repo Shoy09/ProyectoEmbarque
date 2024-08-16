@@ -8,13 +8,13 @@ import { Utils } from '../combustible-procesables/util';
 Chart.register(...registerables, ChartDataLabels);
 
 @Component({
-  selector: 'app-hielo-recibidas',
+  selector: 'app-agua-recibidas',
   standalone: true,
   imports: [],
-  templateUrl: './hielo-recibidas.component.html',
-  styleUrl: './hielo-recibidas.component.css'
+  templateUrl: './agua-recibidas.component.html',
+  styleUrl: './agua-recibidas.component.css'
 })
-export class HieloRecibidasComponent {
+export class AguaRecibidasComponent {
 
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
@@ -44,7 +44,7 @@ export class HieloRecibidasComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('hielo-tone-recibidas');
+    const chartContainer = document.getElementById('agua-tone-recibidas');
     if (chartContainer) {
       chartContainer.style.height = '500px';
     }
@@ -67,7 +67,7 @@ export class HieloRecibidasComponent {
             },
             title: {
               display: true,
-              text: 'Consumo Hielo x Toneladas Recibidas'
+              text: 'Consumo Agua x Toneladas Recibidas'
             }
           },
           scales: {
@@ -78,7 +78,7 @@ export class HieloRecibidasComponent {
         },
       };
 
-      this.chart = new Chart("hielo-tone-recibidas", config);
+      this.chart = new Chart("agua-tone-recibidas", config);
     } else {
       console.error('No hay datos disponibles para crear el gráfico');
     }
@@ -118,7 +118,7 @@ export class HieloRecibidasComponent {
 
     const datasetDataGaso = this.data.map(flota => {
       if (flota.tipo_cambio && flota.toneladas_recibidas) {
-        const value = flota.total_hielo / flota.tipo_cambio / flota.toneladas_recibidas;
+        const value = flota.total_agua / flota.tipo_cambio / flota.toneladas_recibidas;
         return parseFloat(value.toFixed(2));
       } else {
         return 0;
@@ -132,8 +132,8 @@ export class HieloRecibidasComponent {
         type: 'bar' as const,
         label: 'Toneladas Recibidas',
         data: toneladasRecibidas,
-        backgroundColor: Utils.CHART_COLORS.celeste,
-        borderColor: Utils.CHART_COLORS.celeste,
+        backgroundColor: Utils.CHART_COLORS.azul,
+        borderColor: Utils.CHART_COLORS.azul,
         order: 1,
         datalabels: {
           color: '#333333', // Negro oscuro
@@ -144,7 +144,7 @@ export class HieloRecibidasComponent {
       },
       {
         type: 'line' as const,
-        label: 'Consumo de Hielo ($)',
+        label: 'Consumo de Agua ($)',
         data: datasetDataGaso,
         backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
         borderColor: Utils.CHART_COLORS.verde,

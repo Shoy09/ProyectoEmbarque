@@ -8,14 +8,13 @@ import { Utils } from '../combustible-procesables/util';
 Chart.register(...registerables, ChartDataLabels);
 
 @Component({
-  selector: 'app-hielo-recibidas',
+  selector: 'app-hielo-procesables',
   standalone: true,
   imports: [],
-  templateUrl: './hielo-recibidas.component.html',
-  styleUrl: './hielo-recibidas.component.css'
+  templateUrl: './hielo-procesables.component.html',
+  styleUrl: './hielo-procesables.component.css'
 })
-export class HieloRecibidasComponent {
-
+export class HieloProcesablesComponent {
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
 
@@ -44,7 +43,7 @@ export class HieloRecibidasComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('hielo-tone-recibidas');
+    const chartContainer = document.getElementById('hielo-tone-procesables');
     if (chartContainer) {
       chartContainer.style.height = '500px';
     }
@@ -67,7 +66,7 @@ export class HieloRecibidasComponent {
             },
             title: {
               display: true,
-              text: 'Consumo Hielo x Toneladas Recibidas'
+              text: 'Consumo Hielo x Toneladas Procesables'
             }
           },
           scales: {
@@ -78,7 +77,7 @@ export class HieloRecibidasComponent {
         },
       };
 
-      this.chart = new Chart("hielo-tone-recibidas", config);
+      this.chart = new Chart("hielo-tone-procesables", config);
     } else {
       console.error('No hay datos disponibles para crear el gráfico');
     }
@@ -117,20 +116,20 @@ export class HieloRecibidasComponent {
     });
 
     const datasetDataGaso = this.data.map(flota => {
-      if (flota.tipo_cambio && flota.toneladas_recibidas) {
-        const value = flota.total_hielo / flota.tipo_cambio / flota.toneladas_recibidas;
+      if (flota.tipo_cambio && flota.toneladas_procesadas) {
+        const value = flota.total_hielo / flota.tipo_cambio / flota.toneladas_procesadas;
         return parseFloat(value.toFixed(2));
       } else {
         return 0;
       }
     });
 
-    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas || 0);
+    const toneladasRecibidas = this.data.map(flota => flota.toneladas_procesadas || 0);
 
     const datasets: ChartDataset[] = [
       {
         type: 'bar' as const,
-        label: 'Toneladas Recibidas',
+        label: 'Toneladas Procesables',
         data: toneladasRecibidas,
         backgroundColor: Utils.CHART_COLORS.celeste,
         borderColor: Utils.CHART_COLORS.celeste,
@@ -172,4 +171,5 @@ export class HieloRecibidasComponent {
       datasets: datasets
     };
   }
+
 }
