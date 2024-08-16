@@ -41,6 +41,7 @@
     <button mat-raised-button color="accent" (click)="showChart('line-2')">Costo Captura</button>
     <button mat-raised-button color="accent" (click)="showChart('line')">Toneladas Procesadas Producción</button>
     <button mat-raised-button color="accent" (click)="showChart('especies')">Captura de especies</button>
+    <button mat-raised-button color="accent" (click)="showChart('lances')">Precio de Lance</button>
   </div>
 </div>
 
@@ -111,6 +112,9 @@
     </div>
     <div *ngIf="currentChart === 'especies'" class="chart">
       <app-toneladas-especies [data]="filteredData"></app-toneladas-especies>
+    </div>
+    <div *ngIf="currentChart === 'lances'" class="chart">
+      <app-lances [data]="filteredData"></app-lances>
     </div>
   </div>
 </div>

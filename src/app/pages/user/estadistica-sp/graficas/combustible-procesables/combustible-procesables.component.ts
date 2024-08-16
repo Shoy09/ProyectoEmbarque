@@ -136,7 +136,7 @@ export class CombustibleProcesablesComponent {
         borderColor: Utils.CHART_COLORS.azul,
         order: 1,
         datalabels: {
-          color: '#333333', // Negro oscuro
+          color: '#fff', // Negro oscuro
           font: {
             weight: 'bold' // Negrita
           },

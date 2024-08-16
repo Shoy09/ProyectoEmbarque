@@ -29,6 +29,7 @@ import { ConsuViveRComponent } from "./graficas/consu-vive-r/consu-vive-r.compon
 import { CombustibleXHoraComponent } from "./graficas/combustible-x-hora/combustible-x-hora.component";
 import { Utils } from './util';
 import { ToneladasEspeciesComponent } from "./graficas/toneladas-especies/toneladas-especies.component";
+import { LancesComponent } from "./graficas/lances/lances.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -56,7 +57,8 @@ import { ToneladasEspeciesComponent } from "./graficas/toneladas-especies/tonela
     AguaProcesablesComponent,
     ConsuViveRComponent,
     CombustibleXHoraComponent,
-    ToneladasEspeciesComponent
+    ToneladasEspeciesComponent,
+    LancesComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']

@@ -1,9 +1,9 @@
 export const Utils = {
   CHART_COLORS: {
+    gris: 'rgba(89, 89, 89, 1)',
     celeste: 'rgba(174, 185, 196, 1)',
     azul: 'rgba(21, 96, 130, 1)',
     azul_noche: 'rgba(21, 61, 99, 1)',
-    gris: 'rgba(89, 89, 89, 1)',
     verde: 'rgba(76, 175, 80, 1)',
   },
   transparentize(color: string, opacity: number) {
