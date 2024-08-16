@@ -10,8 +10,10 @@
   flex-direction: column;
   align-items: stretch;
   background-color: white; /* Asegura que la barra lateral tenga un fondo */
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* Añade una sombra para mejor visibilidad */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Añade una sombra para mejor visibilidad */
+  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es demasiado largo */
 }
+
 
 h4 {
   font-size: 22px; /* Ajusta el tamaño a tu preferencia */

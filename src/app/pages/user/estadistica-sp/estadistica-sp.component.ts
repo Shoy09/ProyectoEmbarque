@@ -24,6 +24,8 @@ import { CombustibleProcesablesComponent } from "./graficas/combustible-procesab
 import { HieloRecibidasComponent } from "./graficas/hielo-recibidas/hielo-recibidas.component";
 import { HieloProcesablesComponent } from "./graficas/hielo-procesables/hielo-procesables.component";
 import { AguaRecibidasComponent } from "./graficas/agua-recibidas/agua-recibidas.component";
+import { AguaProcesablesComponent } from "./graficas/agua-procesables/agua-procesables.component";
+import { ConsuViveRComponent } from "./graficas/consu-vive-r/consu-vive-r.component";
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -47,7 +49,9 @@ import { AguaRecibidasComponent } from "./graficas/agua-recibidas/agua-recibidas
     CombustibleProcesablesComponent,
     HieloRecibidasComponent,
     HieloProcesablesComponent,
-    AguaRecibidasComponent
+    AguaRecibidasComponent,
+    AguaProcesablesComponent,
+    ConsuViveRComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']

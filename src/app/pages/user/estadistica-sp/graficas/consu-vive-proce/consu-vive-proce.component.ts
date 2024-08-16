@@ -4,16 +4,17 @@ import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Utils } from '../combustible-procesables/util';
+
 Chart.register(...registerables, ChartDataLabels);
 
 @Component({
-  selector: 'app-agua-procesables',
+  selector: 'app-consu-vive-proce',
   standalone: true,
   imports: [],
-  templateUrl: './agua-procesables.component.html',
-  styleUrl: './agua-procesables.component.css'
+  templateUrl: './consu-vive-proce.component.html',
+  styleUrl: './consu-vive-proce.component.css'
 })
-export class AguaProcesablesComponent {
+export class ConsuViveProceComponent {
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
 
@@ -42,7 +43,7 @@ export class AguaProcesablesComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('agua-tone-procesables');
+    const chartContainer = document.getElementById('viveres-tone-recibidas');
     if (chartContainer) {
       chartContainer.style.height = '500px';
     }
@@ -65,7 +66,7 @@ export class AguaProcesablesComponent {
             },
             title: {
               display: true,
-              text: 'Consumo Agua x Toneladas Procesables'
+              text: 'Consumo Viveres x Toneladas Procesables'
             }
           },
           scales: {
@@ -76,7 +77,7 @@ export class AguaProcesablesComponent {
         },
       };
 
-      this.chart = new Chart("agua-tone-procesables", config);
+      this.chart = new Chart("viveres-tone-proce", config);
     } else {
       console.error('No hay datos disponibles para crear el gráfico');
     }
@@ -116,7 +117,7 @@ export class AguaProcesablesComponent {
 
     const datasetDataGaso = this.data.map(flota => {
       if (flota.tipo_cambio && flota.toneladas_procesadas) {
-        const value = flota.total_agua / flota.tipo_cambio / flota.toneladas_procesadas;
+        const value = flota.total_vivieres / flota.tipo_cambio / flota.toneladas_procesadas;
         return parseFloat(value.toFixed(2));
       } else {
         return 0;
@@ -130,8 +131,8 @@ export class AguaProcesablesComponent {
         type: 'bar' as const,
         label: 'Toneladas Procesables',
         data: toneladasRecibidas,
-        backgroundColor: Utils.CHART_COLORS.grisBonito,
-        borderColor: Utils.CHART_COLORS.grisBonito,
+        backgroundColor: Utils.CHART_COLORS.amarilloBonito,
+        borderColor: Utils.CHART_COLORS.amarilloBonito,
         order: 1,
         datalabels: {
           color: '#333333', // Negro oscuro
@@ -142,7 +143,7 @@ export class AguaProcesablesComponent {
       },
       {
         type: 'line' as const,
-        label: 'Consumo de Agua ($)',
+        label: 'Consumo de Viveres ($)',
         data: datasetDataGaso,
         backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
         borderColor: Utils.CHART_COLORS.verde,
