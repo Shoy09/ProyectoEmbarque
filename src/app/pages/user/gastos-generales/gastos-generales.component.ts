@@ -36,6 +36,9 @@ import { FormsModule } from '@angular/forms';
 import { TarifaCostoI } from 'app/core/models/tarifaCosto.model';
 import { EditGastTripuComponent } from './edit-gast-tripu/edit-gast-tripu.component';
 import Swal from 'sweetalert2';
+import { ZonaPescaI } from 'app/core/models/zonaPesca';
+import { CreateZonaComponent } from './create-zona/create-zona.component';
+import { EditZonaComponent } from './edit-zona/edit-zona.component';
 
 @Component({
   selector: 'app-gastos-generales',
@@ -97,6 +100,10 @@ export class GastosGeneralesComponent {
   displayedColumnsEspecies: string[] = ['fecha', 'nombre', 'precio', 'acciones']
   dataSourceEspecies!: MatTableDataSource<Especies>
 
+  //zona pesca
+  displayedColumnsZonaPesca: string[] = ['nombre', 'acciones'];
+  dataSourceZona!: MatTableDataSource<ZonaPescaI>
+
   //Tarifas
   displayedColumnsTarifas: string[] = ['nombre_t', 'tarifa', 'acciones']
   dataSourceTarifas!: MatTableDataSource<TarifaCostoI>
@@ -121,6 +128,7 @@ export class GastosGeneralesComponent {
     this.dataSourceDerechoP = new MatTableDataSource();
     this.dataSourceEspecies = new MatTableDataSource();
     this.dataSourceTarifas = new MatTableDataSource();
+    this.dataSourceZona = new MatTableDataSource();
     this.getEmbarcaciones();
 
     //combustible
@@ -186,6 +194,11 @@ export class GastosGeneralesComponent {
     //tarifas
     this.costoGalonGasolina.getTarifas().subscribe((data) => {
       this.dataSourceTarifas.data = data
+    })
+
+    //zona
+    this.embarcacionesService.getZonaPesca().subscribe((data) => {
+      this.dataSourceZona.data = data
     })
   }
 
@@ -277,6 +290,13 @@ export class GastosGeneralesComponent {
     })
   }
 
+  loadZonaPesca(){
+    this.embarcacionesService.getZonaPesca().subscribe((data) => {
+      const reversedData = data.reverse();
+      this.dataSourceZona.data = reversedData;
+    });
+  }
+
   //FORMULARIOS
 
   openCreateFormVE(): void {
@@ -342,6 +362,13 @@ export class GastosGeneralesComponent {
     });
   }
 
+  openFormZona():void{
+    const dialogRef = this.dialog.open(CreateZonaComponent)
+    dialogRef.componentInstance.dataSaved.subscribe(() => {
+      this.loadZonaPesca(); // Actualiza la tabla cuando se recibe el evento
+    });
+  }
+
   openPutEspecie(PutEspecie: Especies): void {
     const dialogRef = this.dialog.open(PutEspecieComponent, {
       data: PutEspecie
@@ -349,6 +376,16 @@ export class GastosGeneralesComponent {
 
     dialogRef.afterClosed().subscribe(() => {
       this.loadDataEspecie(); // Actualiza la tabla después de cerrar el diálogo
+    });
+  }
+
+  openPutZona(PutZona: ZonaPescaI): void {
+    const dialogRef = this.dialog.open(EditZonaComponent, {
+      data: PutZona
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loadZonaPesca(); // Actualiza la tabla después de cerrar el diálogo
     });
   }
 
@@ -406,6 +443,28 @@ export class GastosGeneralesComponent {
     });
   }
 
+  deleteZona(id: number){
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar esta Zona?',
+      text: "Una vez eliminado, no podrás recuperarlo.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.embarcacionesService.deleteZona(id).subscribe(
+          () => {
+            console.log('Zona eliminada correctamente');
+            this.loadZonaPesca();          },
+          error => {
+            console.error('Error al eliminar el sondeo:', error);
+          }
+        );
+      }
+    });
+  }
+
   openPutGastTri(PutGT: TarifaCostoI): void{
     const dialog = this.dialog.open(EditGastTripuComponent, {
       data: PutGT
@@ -427,15 +486,18 @@ export class GastosGeneralesComponent {
           this.dataSourceViveresEmbarcacion.paginator = paginator;
           break;
         case 2:
-          this.dataSource.paginator = paginator;
+          this.dataSourceZona.paginator = paginator;
           break;
         case 3:
-          this.dataSourceTMHielo.paginator = paginator;
+          this.dataSource.paginator = paginator;
           break;
         case 4:
-          this.dataSourceT3Agua.paginator = paginator;
+          this.dataSourceTMHielo.paginator = paginator;
           break;
         case 5:
+          this.dataSourceT3Agua.paginator = paginator;
+          break;
+        case 6:
           this.dataSourceTipoCambio.paginator = paginator;
           break;
       }

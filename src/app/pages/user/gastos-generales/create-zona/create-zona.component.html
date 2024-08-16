@@ -1,0 +1,15 @@
+<div class="dialog-content">
+  <div class="form-container">
+    <h4>Especies</h4>
+    <form [formGroup]="formCreateZona" (ngSubmit)="save()">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" formControlName="nombre" id="nombre" name="nombre" required>
+      </div>
+      <div class="button-group">
+        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formCreateZona.valid">Guardar</button>
+        <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

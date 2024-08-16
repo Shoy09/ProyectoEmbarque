@@ -51,20 +51,27 @@ export class EmbarcacionesService {
     this._refresh$.next();
   }
 
-  updateZonaPesca(zona: ZonaPescaI[]) {
-    this.zonaPescaCache = zona;
-    this._refresh$.next();
-  }
-
   postEmbarcaciones(embarcaciones: Embarcaciones): Observable<Embarcaciones>{
     return this.http.post<Embarcaciones>(this.url, embarcaciones)
+  }
+
+  postZona(zona: ZonaPescaI): Observable<ZonaPescaI>{
+    return this.http.post<ZonaPescaI>(this.url_zona_pesca, zona)
   }
 
   updateEmbarcaciones(embarcaciones: Embarcaciones, id:any): Observable<Embarcaciones>{
     return this.http.put<Embarcaciones>(`${this.url}${id}/`, embarcaciones);
   }
 
+  updateZonaPesca(zona: ZonaPescaI, id:any): Observable<ZonaPescaI>{
+    return this.http.put<ZonaPescaI>(`${this.url}${id}/`, zona);
+  }
+
   deleteEmbarcacion(id: number): Observable<void>{
     return this.http.delete<void>(`${this.url}${id}/`);
+  }
+
+  deleteZona(id: number): Observable<void>{
+    return this.http.delete<void>(`${this.url_zona_pesca}${id}/`);
   }
 }

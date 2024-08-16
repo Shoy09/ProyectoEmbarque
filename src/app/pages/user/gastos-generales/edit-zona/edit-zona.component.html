@@ -1,0 +1,16 @@
+<div class="dialog-content">
+  <div class="form-container">
+    <form [formGroup]="formPutZona" (ngSubmit)="save()">
+
+      <div class="form-group">
+        <label class="mb-1 d-block text-xs font-weight-semibold">Nombre</label>
+          <input type="text" placeholder="Nombre" class="form-control custom-focus-ring" formControlName="nombre">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="submit-button" cdkFocusInitial [disabled]="!formPutZona.valid">Guardar</button>
+        <button type="button" class="cancel-button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
