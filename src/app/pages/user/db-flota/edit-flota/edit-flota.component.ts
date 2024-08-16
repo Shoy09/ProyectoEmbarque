@@ -108,6 +108,7 @@ export class EditFlotaComponent implements OnInit {
     total_costo: [0],
     costo_tm_captura: [0],
     csot: [0],
+    costo_cap_x_dolar: [0]
   })
 
   ngOnInit(): void {
@@ -555,6 +556,17 @@ export class EditFlotaComponent implements OnInit {
     this.secondFormGroup.patchValue({ costo_tm_captura: costoPorCapturaRedondeado });
   }
 
+  calculateCostoDolar(): void{
+    const totalCosto = Number(this.secondFormGroup.get('costo_tm_captura')?.value) || 0;
+    const valor_dolar = Number(this.secondFormGroup.get('tipo_cambio')?.value) || 0;
+
+    const capturaDolares = totalCosto * valor_dolar;
+
+    const redondeo = parseFloat(capturaDolares.toFixed(2));
+
+    this.secondFormGroup.patchValue({ costo_cap_x_dolar: redondeo})
+  }
+
   //COSTO X CAPTURA PROCESADA
   editCostoTP(): void {
     const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
@@ -603,6 +615,7 @@ export class EditFlotaComponent implements OnInit {
     this.editTotalInspeccion()
     this.editDerechoPesca()
     this.editCost()
+    this.calculateCostoDolar()
     this.editCostoCaptura()
     this.editCostoTP()
     // Obtener los valores de ambos formularios
@@ -662,6 +675,7 @@ export class EditFlotaComponent implements OnInit {
         total_costo: Number(formData.total_costo),
         costo_tm_captura: Number(formData.costo_tm_captura),
         csot: Number(formData.csot),
+        costo_cap_x_dolar: Number(formData.costo_cap_x_dolar)
     }
 
     console.log('updateData:', updateData);

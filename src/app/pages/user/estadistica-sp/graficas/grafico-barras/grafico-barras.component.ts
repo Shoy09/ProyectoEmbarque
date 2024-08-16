@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Chart, registerables,ChartDataset, ChartConfiguration } from 'chart.js';
-import { Utils } from './util'; // Asegúrate de que Utils está correctamente importado
+import { Utils } from './../../../estadistica-sp/util';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -102,8 +102,8 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
             type: 'bar',
             label: 'Sin datos',
             data: [],
-            borderColor: Utils.CHART_COLORS.red,
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+            borderColor: Utils.CHART_COLORS.azul,
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azul, 0.5),
           }
         ]
       };
@@ -132,8 +132,8 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
         type: 'bar' as const,
         label: 'Toneladas Recibidas',
         data: toneladasRecibidas,
-        backgroundColor: Utils.CHART_COLORS.naranja,
-        borderColor: Utils.CHART_COLORS.naranja,
+        backgroundColor: Utils.CHART_COLORS.celeste,
+        borderColor: Utils.CHART_COLORS.celeste,
         order: 1,
         datalabels: {
           color: '#333333', // Negro oscuro

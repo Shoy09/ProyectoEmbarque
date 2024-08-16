@@ -51,6 +51,9 @@ export class EditDiarioComponent{
       ar: ['', [Validators.required]],
       numero: ['', [Validators.required]],
       flotaDP_id: [0, Validators.required],
+      p_flota_dolares: ['', [Validators.required]],
+      t_flota: ['', [Validators.required]],
+      precio_lances: ['', [Validators.required]],
     })
   }
 
@@ -108,7 +111,7 @@ export class EditDiarioComponent{
   getZonaPesca() {
     this.embarcacionService.getZonaPesca().subscribe(
       (zonas: ZonaPescaI[]) => {
-        console.log('Zonas obtenidas:', zonas); 
+        console.log('Zonas obtenidas:', zonas);
         this.zona = zonas;
         if (this.data && this.data.zona_pesca) {
           this.formEDP.controls['zona_pesca'].setValue(this.data.zona_pesca);
@@ -120,8 +123,20 @@ export class EditDiarioComponent{
     )
   }
 
+  calculatePrecioLance():void{
+    const p_flota = Number(this.formEDP.get('p_flota_dolares')?.value) || 0;
+    const t_flota = Number(this.formEDP.get('t_flota')?.value) || 0;
+    const precio_t = p_flota/t_flota
+    const tonelada_captura_lance = Number(this.formEDP.get('numero')?.value) || 0;
+    const precio_x_lance = precio_t * tonelada_captura_lance
+
+    const redondeo = parseFloat(precio_x_lance.toFixed(2))
+    this.formEDP.patchValue({precio_lances: redondeo})
+  }
+
   save(): void {
     if (this.formEDP.valid) {
+      this.calculatePrecioLance();
       const diario: IDiarioPesca = this.formEDP.value;
 
       this.diarioPE.putDiarioPesca(diario, this.data.id).subscribe(

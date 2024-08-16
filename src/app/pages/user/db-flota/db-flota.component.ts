@@ -256,7 +256,9 @@ export class DbFlotaComponent {
         flotaDP_id: flotaDP.id,
         fecha: flotaDP.fecha,
         embarcacion: flotaDP.embarcacion,
-        zona_pesca: flotaDP.zona_pesca
+        zona_pesca: flotaDP.zona_pesca,
+        p_flota_dolares: flotaDP.costo_cap_x_dolar,
+        t_flota: flotaDP.toneladas_recibidas,
       },
     });
   }

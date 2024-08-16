@@ -2,21 +2,21 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, registerables } from 'chart.js';
-import { Utils } from './util';
+import { Utils } from './../../../estadistica-sp/util';
 
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-estadistica-toneladas',
+  selector: 'app-toneladas-especies',
   standalone: true,
   imports: [],
-  templateUrl: './estadistica-toneladas.component.html',
-  styleUrl: './estadistica-toneladas.component.css'
+  templateUrl: './toneladas-especies.component.html',
+  styleUrl: './toneladas-especies.component.css'
 })
-export class EstadisticaToneladasComponent {
+export class ToneladasEspeciesComponent {
 
   embarcaciones: Embarcaciones[] = [];
-  @Input() data: any[] = [];
+  @Input() data: any[] = [] //datos de estadistica-sp
 
   constructor(
     private serviceEmbarcaciones: EmbarcacionesService,
@@ -35,7 +35,7 @@ export class EstadisticaToneladasComponent {
     if (changes['data']) {
       console.log('Datos recibidos:', this.data);
       if (this.chart) {
-        this.updateChartData();
+        this.updateTone();
       } else {
         this.createChart();
       }
@@ -43,7 +43,7 @@ export class EstadisticaToneladasComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('tone-embarcacion');
+    const chartContainer = document.getElementById('chartTone');
     if (chartContainer) {
       chartContainer.style.height = '500px';  // Ajusta la altura a tu preferencia
     }
@@ -52,12 +52,34 @@ export class EstadisticaToneladasComponent {
       this.chart.destroy();
     }
     if (this.data && this.data.length) {
-      this.chart = new Chart("tone-embarcacion", {
+      this.chart = new Chart("chartTone", {
         type: 'bar',
-        data: this.getChartData(), // Usa el método getChartData() para obtener los datos
+        data: this.getChartTone(),
         options: {
+          plugins: {
+            title: {
+              display: true,
+              text: 'Toneladas de especies'
+            },
+            datalabels: {
+              color: '#fff',
+              display: true,
+              formatter: (value) => `${value} t`, // Mostrar el símbolo '%' en las etiquetas de datos
+            }
+          },
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true,
+              ticks: {
+                callback: (value) => `${value} t` // Mostrar el símbolo '%' en el eje y
+              }
+            }
+          }
         },
       });
     } else {
@@ -65,14 +87,14 @@ export class EstadisticaToneladasComponent {
     }
   }
 
-  updateChartData() {
-    if (this.chart) {
-      this.chart.data = this.getChartData(); // Actualiza los datos del gráfico
+  updateTone(){
+    if(this.chart){
+      this.chart.data = this.getChartTone();
       this.chart.update();
     }
   }
 
-  getChartData() {
+  getChartTone() {
     if (!this.data || this.data.length === 0) {
       console.error('Datos no están disponibles');
       return {
@@ -81,8 +103,7 @@ export class EstadisticaToneladasComponent {
           {
             label: 'Sin datos',
             data: [],
-            borderColor: Utils.CHART_COLORS.red,
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+            backgroundColor: Utils.CHART_COLORS.azul,
           }
         ]
       };
@@ -92,25 +113,25 @@ export class EstadisticaToneladasComponent {
       const embarcacion = this.embarcaciones.find(e => e.id === flota.embarcacion)?.nombre || 'Desconocido';
       return `${embarcacion} - ${new Date(flota.fecha).toLocaleDateString()}`;
     });
-    const toneRecibidas = this.data.map(flota => flota.toneladas_recibidas);
-    const toneProcesadas = this.data.map(flota => flota.toneladas_procesadas);
+
+    const porcentaje_procesadas = this.data.map(flota => flota.toneladas_procesadas_produccion);
+    const porcentaje_np = this.data.map(flota => flota.toneladas_NP);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: 'Toneladas Recibidas (t)',
-          data: toneRecibidas,
-          borderColor: Utils.CHART_COLORS.red,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.morado, 0.5),
+          label: 'Toneladas Procesadas',
+          data: porcentaje_procesadas,
+          backgroundColor: Utils.CHART_COLORS.celeste,
         },
         {
-          label: 'Toneladas Procesables (t)',
-          data: toneProcesadas,
-          borderColor: Utils.CHART_COLORS.verde,
-          backgroundColor: Utils.transparentize(Utils.CHART_COLORS.naranja, 0.5),
-        }
+          label: 'Toneladas NP',
+          data: porcentaje_np,
+          backgroundColor: Utils.CHART_COLORS.azul_noche,
+        },
       ]
     };
   }
+
 }

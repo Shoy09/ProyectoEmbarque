@@ -111,7 +111,7 @@
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Tiempo Efectivo</label>
-            <input type="time" placeholder="Rango Inicial" class="form-control custom-focus-ring" formControlName="tiempo_efectivo">
+            <input type="number" placeholder="Rango Inicial" class="form-control custom-focus-ring" formControlName="tiempo_efectivo">
           </div>
           <div class="col-md-4 mb-2">
             <label class="mb-1 d-block text-xs font-weight-semibold">Rango de Talla I</label>
@@ -138,10 +138,10 @@
             <input type="number" placeholder="AR" class="form-control custom-focus-ring" formControlName="ar">
           </div>
           <div class="col-md-4 mb-2">
-            <label class="mb-1 d-block text-xs font-weight-semibold">Captura en kg</label>
+            <label class="mb-1 d-block text-xs font-weight-semibold">Captura (t)</label>
             <input type="number" class="form-control custom-focus-ring" formControlName="numero">
           </div>
-          
+
         </div>
         <div class="button-group">
           <button class="mb-2 w-100 btn btn-primary custom-focus-ring btn-contact" cdkFocusInitial [disabled]="!formEDP.valid">Enviar</button>

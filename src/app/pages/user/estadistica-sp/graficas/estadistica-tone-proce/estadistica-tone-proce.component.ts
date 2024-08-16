@@ -1,5 +1,5 @@
 import { Embarcaciones } from 'app/core/models/embarcacion';
-import { Utils } from './../estadistica-tone-proce/util';
+import { Utils } from './../../../estadistica-sp/util';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, registerables } from 'chart.js';
@@ -67,7 +67,7 @@ export class EstadisticaToneProceComponent {
             datalabels: {
               color: '#fff',
               display: true,
-              formatter: (value) => `${value}%`, // Mostrar el símbolo '%' en las etiquetas de datos
+              formatter: (value) => `${value}t`, // Mostrar el símbolo '%' en las etiquetas de datos
             }
           },
           responsive: true,
@@ -106,7 +106,7 @@ export class EstadisticaToneProceComponent {
           {
             label: 'Sin datos',
             data: [],
-            backgroundColor: Utils.CHART_COLORS.red,
+            backgroundColor: Utils.CHART_COLORS.azul_noche,
           }
         ]
       };
@@ -120,22 +120,21 @@ export class EstadisticaToneProceComponent {
     const toneladas_np = this.data.map(flota => flota.toneladas_NP || 0);
 
     // Calcular el total de cada flota y los porcentajes
-    const total_toneladas = toneladas_procesadas.map((tp, i) => tp + toneladas_np[i]);
-    const porcentaje_procesadas = toneladas_procesadas.map((tp, i) => total_toneladas[i] ? +( (tp / total_toneladas[i]) * 100 ).toFixed(2) : 0);
-    const porcentaje_np = toneladas_np.map((tnp, i) => total_toneladas[i] ? +( (tnp / total_toneladas[i]) * 100 ).toFixed(2) : 0);
+    const porcentaje_procesadas = this.data.map(flota => flota.toneladas_procesadas_produccion);
+    const porcentaje_np = this.data.map(flota => flota.toneladas_NP);
 
     return {
       labels: labels,
       datasets: [
         {
-          label: 'Toneladas Procesadas (%)',
+          label: 'Toneladas Procesadas',
           data: porcentaje_procesadas,
-          backgroundColor: Utils.CHART_COLORS.blue,
+          backgroundColor: Utils.CHART_COLORS.azul,
         },
         {
-          label: 'Toneladas NP (%)',
+          label: 'Toneladas NP',
           data: porcentaje_np,
-          backgroundColor: Utils.CHART_COLORS.red,
+          backgroundColor: Utils.CHART_COLORS.azul_noche,
         },
       ]
     };

@@ -115,6 +115,7 @@ export class CreateDbFlotaComponent {
     total_costo: [{ value: 0, disabled: true }, Validators.required],
     costo_tm_captura: [{ value: 0, disabled: true }, Validators.required],
     csot: [{ value: 0, disabled: true }, Validators.required],
+    costo_cap_x_dolar: [{ value: 0, disabled: true }, Validators.required],
   });
 
   isEditable = false;
@@ -441,6 +442,18 @@ export class CreateDbFlotaComponent {
 
   }
 
+  //COSTO CAPTURA X DOLAR
+  calculateCostoDolar(): void{
+    const totalCosto = Number(this.secondFormGroup.get('costo_tm_captura')?.value) || 0;
+    const valor_dolar = Number(this.secondFormGroup.get('tipo_cambio')?.value) || 0;
+
+    const capturaDolares = totalCosto * valor_dolar;
+
+    const redondeo = parseFloat(capturaDolares.toFixed(2));
+
+    this.secondFormGroup.patchValue({ costo_cap_x_dolar: redondeo})
+  }
+
   //csot
   calcularCSOT():void{
     const totalCosto = Number(this.secondFormGroup.get('total_costo')?.value) || 0;
@@ -692,6 +705,7 @@ export class CreateDbFlotaComponent {
       this.calculateTotalDerechoPesca();
       this.calculateTotalCost(); // Asegúrate de calcular el total_costo
       this.calculateCostoTMCaptura();
+      this.calculateCostoDolar()
       this.calcularCSOT();
 
       // Obtén los valores de ambos formularios
@@ -753,6 +767,7 @@ export class CreateDbFlotaComponent {
         total_costo: Number(formData.total_costo),
         costo_tm_captura: Number(formData.costo_tm_captura),
         csot: Number(formData.csot),
+        costo_cap_x_dolar: Number(formData.costo_cap_x_dolar)
       };
 
       // Envía los datos al servicio para crear la flota

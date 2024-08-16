@@ -3,7 +3,7 @@ import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Utils } from '../combustible-procesables/util';
+import { Utils } from './../../../estadistica-sp/util';
 
 Chart.register(...registerables, ChartDataLabels);
 
@@ -102,8 +102,8 @@ export class ConsuViveRComponent {
             type: 'bar',
             label: 'Sin datos',
             data: [],
-            borderColor: Utils.CHART_COLORS.mostaza,
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.mostaza, 0.5),
+            borderColor: Utils.CHART_COLORS.azul,
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azul, 0.5),
           }
         ]
       };
@@ -132,8 +132,8 @@ export class ConsuViveRComponent {
         type: 'bar' as const,
         label: 'Toneladas Recibidas',
         data: toneladasRecibidas,
-        backgroundColor: Utils.CHART_COLORS.amarilloBonito,
-        borderColor: Utils.CHART_COLORS.amarilloBonito,
+        backgroundColor: Utils.CHART_COLORS.celeste,
+        borderColor: Utils.CHART_COLORS.celeste,
         order: 1,
         datalabels: {
           color: '#333333', // Negro oscuro

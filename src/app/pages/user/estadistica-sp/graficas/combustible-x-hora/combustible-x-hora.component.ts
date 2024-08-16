@@ -1,20 +1,21 @@
+import { Utils } from './../../../estadistica-sp/util';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Chart, ChartConfiguration, ChartDataset, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Utils } from './../../../estadistica-sp/util';
 
 Chart.register(...registerables, ChartDataLabels);
 
 @Component({
-  selector: 'app-consu-vive-proce',
+  selector: 'app-combustible-x-hora',
   standalone: true,
   imports: [],
-  templateUrl: './consu-vive-proce.component.html',
-  styleUrl: './consu-vive-proce.component.css'
+  templateUrl: './combustible-x-hora.component.html',
+  styleUrl: './combustible-x-hora.component.css'
 })
-export class ConsuViveProceComponent {
+export class CombustibleXHoraComponent {
+
   embarcaciones: Embarcaciones[] = [];
   @Input() data: any[] = [];
 
@@ -43,7 +44,7 @@ export class ConsuViveProceComponent {
   }
 
   createChart() {
-    const chartContainer = document.getElementById('viveres-tone-recibidas');
+    const chartContainer = document.getElementById('combus-hora');
     if (chartContainer) {
       chartContainer.style.height = '500px';
     }
@@ -66,7 +67,7 @@ export class ConsuViveProceComponent {
             },
             title: {
               display: true,
-              text: 'Consumo Viveres x Toneladas Procesables'
+              text: 'Combustible x Hora en Toneladas Recibidas'
             }
           },
           scales: {
@@ -77,7 +78,7 @@ export class ConsuViveProceComponent {
         },
       };
 
-      this.chart = new Chart("viveres-tone-proce", config);
+      this.chart = new Chart("combus-hora", config);
     } else {
       console.error('No hay datos disponibles para crear el gráfico');
     }
@@ -101,8 +102,8 @@ export class ConsuViveProceComponent {
             type: 'bar',
             label: 'Sin datos',
             data: [],
-            borderColor: Utils.CHART_COLORS.azul_noche,
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azul_noche, 0.5),
+            borderColor: Utils.CHART_COLORS.azul,
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.azul, 0.5),
           }
         ]
       };
@@ -115,21 +116,14 @@ export class ConsuViveProceComponent {
       return `${embarcacion} - ${formattedDate}`;
     });
 
-    const datasetDataGaso = this.data.map(flota => {
-      if (flota.tipo_cambio && flota.toneladas_procesadas) {
-        const value = flota.total_vivieres / flota.tipo_cambio / flota.toneladas_procesadas;
-        return parseFloat(value.toFixed(2));
-      } else {
-        return 0;
-      }
-    });
+    const combustiblexHora = this.data.map(flota => flota.galon_hora);
 
-    const toneladasRecibidas = this.data.map(flota => flota.toneladas_procesadas || 0);
+    const toneladasRecibidas = this.data.map(flota => flota.toneladas_recibidas || 0);
 
     const datasets: ChartDataset[] = [
       {
         type: 'bar' as const,
-        label: 'Toneladas Procesables',
+        label: 'Toneladas Recibidas',
         data: toneladasRecibidas,
         backgroundColor: Utils.CHART_COLORS.celeste,
         borderColor: Utils.CHART_COLORS.celeste,
@@ -143,8 +137,8 @@ export class ConsuViveProceComponent {
       },
       {
         type: 'line' as const,
-        label: 'Consumo de Viveres ($)',
-        data: datasetDataGaso,
+        label: 'Galon de Combustible x Hora',
+        data: combustiblexHora,
         backgroundColor: Utils.transparentize(Utils.CHART_COLORS.verde, 0.5),
         borderColor: Utils.CHART_COLORS.verde,
         order: 2,
@@ -153,11 +147,7 @@ export class ConsuViveProceComponent {
         datalabels: {
           color: '#ffffff',
           display: true,
-          formatter: (value: number) => value.toLocaleString('es-ES', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2
-          }),
+          formatter: (value) => `${value} (gal)`,
           anchor: 'end',
           align: 'top',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -171,4 +161,5 @@ export class ConsuViveProceComponent {
       datasets: datasets
     };
   }
+
 }

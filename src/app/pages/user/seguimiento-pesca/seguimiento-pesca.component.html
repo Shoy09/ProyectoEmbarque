@@ -114,8 +114,13 @@
     </ng-container>
 
     <ng-container matColumnDef="numero">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Captura (kg)</th>
-      <td mat-cell *matCellDef="let row"> {{row.numero}} kg</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Captura (t)</th>
+      <td mat-cell *matCellDef="let row"> {{row.numero}} t</td>
+    </ng-container>
+
+    <ng-container matColumnDef="costo_lance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Costo Lance $</th>
+      <td mat-cell *matCellDef="let row"> ${{row.precio_lances}}</td>
     </ng-container>
 
     <!-- Acciones Column -->

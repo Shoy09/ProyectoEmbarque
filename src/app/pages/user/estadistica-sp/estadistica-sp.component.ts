@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { FlotaService } from 'app/core/services/flota.service';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,18 +14,20 @@ import { EmbarcacionesService } from 'app/core/services/embarcaciones.service';
 import { Embarcaciones } from 'app/core/models/embarcacion';
 import { ZonaPescaI } from 'app/core/models/zonaPesca';
 import { EstadisticaMaterializacionComponent } from "../estadistica-materializacion/estadistica-materializacion.component";
-import { EstadisticaPastelComponent } from "../estadistica-pastel/estadistica-pastel.component";
-import { GraficoBarrasComponent } from "../grafico-barras/grafico-barras.component";
+import { EstadisticaPastelComponent } from "./graficas/estadistica-pastel/estadistica-pastel.component";
+import { GraficoBarrasComponent } from "./graficas/grafico-barras/grafico-barras.component";
 import { MatIconModule } from '@angular/material/icon';
-import { EstadisticaToneProceComponent } from '../estadistica-tone-proce/estadistica-tone-proce.component';
-import { EstadisticaToneladasComponent } from "../estadistica-toneladas/estadistica-toneladas.component";
-import { EstadisticaCostoComponent } from "../estadistica-costo/estadistica-costo.component";
+import { EstadisticaToneProceComponent } from './graficas/estadistica-tone-proce/estadistica-tone-proce.component';
+import { EstadisticaToneladasComponent } from "./graficas/estadistica-toneladas/estadistica-toneladas.component";
+import { EstadisticaCostoComponent } from "./graficas/estadistica-costo/estadistica-costo.component";
 import { CombustibleProcesablesComponent } from "./graficas/combustible-procesables/combustible-procesables.component";
 import { HieloRecibidasComponent } from "./graficas/hielo-recibidas/hielo-recibidas.component";
 import { HieloProcesablesComponent } from "./graficas/hielo-procesables/hielo-procesables.component";
 import { AguaRecibidasComponent } from "./graficas/agua-recibidas/agua-recibidas.component";
 import { AguaProcesablesComponent } from "./graficas/agua-procesables/agua-procesables.component";
 import { ConsuViveRComponent } from "./graficas/consu-vive-r/consu-vive-r.component";
+import { CombustibleXHoraComponent } from "./graficas/combustible-x-hora/combustible-x-hora.component";
+import { Utils } from './util';
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -51,7 +53,8 @@ import { ConsuViveRComponent } from "./graficas/consu-vive-r/consu-vive-r.compon
     HieloProcesablesComponent,
     AguaRecibidasComponent,
     AguaProcesablesComponent,
-    ConsuViveRComponent
+    ConsuViveRComponent,
+    CombustibleXHoraComponent
 ],
   templateUrl: './estadistica-sp.component.html',
   styleUrls: ['./estadistica-sp.component.css']
@@ -184,5 +187,4 @@ export class EstadisticaSPComponent implements OnInit {
     }
     this.applyFilters();
   }
-
 }

@@ -8,7 +8,7 @@ import { DbFlotaComponent } from '@pages/user/db-flota/db-flota.component';
 import { EstadisticaMaterializacionComponent } from '@pages/user/estadistica-materializacion/estadistica-materializacion.component';
 import { ProduccionToneladasComponent } from '@pages/user/produccion-toneladas/produccion-toneladas.component';
 import { AuthGuard } from './guards/auth.guard';
-import { EstadisticaToneProceComponent } from '@pages/user/estadistica-tone-proce/estadistica-tone-proce.component';
+import { EstadisticaToneProceComponent } from '@pages/user/estadistica-sp/graficas/estadistica-tone-proce/estadistica-tone-proce.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },

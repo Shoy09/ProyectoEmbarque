@@ -14,5 +14,8 @@ export interface IDiarioPesca{
     porcentaje: number,
     ar: number,
     numero: number,
-    flotaDP_id:number
+    flotaDP_id:number,
+    p_flota_dolares: number,
+    t_flota: number,
+    precio_lances: number
 }

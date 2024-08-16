@@ -40,6 +40,8 @@ export class CreateDiarioComponent implements OnInit{
       embarcacion: number,
       fecha: Date,
       zona_pesca:number,
+      p_flota_dolares: number,
+      t_flota: number
     },
     private matDialog: MatDialog
   ){
@@ -62,7 +64,10 @@ export class CreateDiarioComponent implements OnInit{
       porcentaje: ['', [Validators.required]],
       ar: ['', [Validators.required]],
       numero: ['', [Validators.required]],
-      flotaDP_id: [this.data.flotaDP_id, [Validators.required]]
+      flotaDP_id: [this.data.flotaDP_id, [Validators.required]],
+      p_flota_dolares: [this.data.p_flota_dolares, [Validators.required]],
+      t_flota: [this.data.t_flota, [Validators.required]],
+      precio_lances: [{ value: 0, disabled: true }, Validators.required],
     });
   }
 
@@ -75,8 +80,22 @@ export class CreateDiarioComponent implements OnInit{
     this.diarioPescaService.getDiarioPesca().subscribe(diario => this.diario = diario );
   }
 
+  calculatePrecioLance():void{
+    const p_flota = Number(this.formCDP.get('p_flota_dolares')?.value) || 0;
+    const t_flota = Number(this.formCDP.get('t_flota')?.value) || 0;
+    const precio_t = p_flota/t_flota
+    const tonelada_captura_lance = Number(this.formCDP.get('numero')?.value) || 0;
+    const precio_x_lance = precio_t * tonelada_captura_lance
+
+    const redondeo = parseFloat(precio_x_lance.toFixed(2))
+    this.formCDP.patchValue({precio_lances: redondeo})
+  }
+
   postDP() {
     if (this.formCDP.valid) {
+      this.calculatePrecioLance();
+      this.formCDP.get('precio_lances')?.enable(); // Habilita el campo antes de enviar
+
       const value = this.formCDP.value;
 
       this.diarioPescaService.postDiarioPesca(value).subscribe(
@@ -117,6 +136,7 @@ export class CreateDiarioComponent implements OnInit{
       );
     }
   }
+
 
   getEspecies() {
     this.especiesService.getDiarioPesca().subscribe(

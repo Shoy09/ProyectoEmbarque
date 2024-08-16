@@ -31,6 +31,7 @@
   <div class="botones-tablas">
     <button mat-raised-button color="accent" (click)="showChart('bar')">Combustible por Tonelada Recibidas</button>
     <button mat-raised-button color="accent" (click)="showChart('combustible-2')">Combustible por Tonelada Procesables</button>
+    <button mat-raised-button color="accent" (click)="showChart('combustible-3')">Galon de Combustible x Hora en Tonelada Recibidas</button>
     <button mat-raised-button color="accent" (click)="showChart('hielo-1')">Hielo por Tonelada Recibidas</button>
     <button mat-raised-button color="accent" (click)="showChart('hielo-2')">Hielo por Tonelada Procesables</button>
     <button mat-raised-button color="accent" (click)="showChart('agua-1')">Agua por Tonelada Recibidas</button>
@@ -89,6 +90,9 @@
     </div>
     <div *ngIf="currentChart === 'combustible-2'" class="chart">
       <app-combustible-procesables [data]="filteredData"></app-combustible-procesables>
+    </div>
+    <div *ngIf="currentChart === 'combustible-3'" class="chart">
+      <app-combustible-x-hora [data]="filteredData"></app-combustible-x-hora>
     </div>
     <div *ngIf="currentChart === 'hielo-1'" class="chart">
       <app-hielo-recibidas [data]="filteredData"></app-hielo-recibidas>

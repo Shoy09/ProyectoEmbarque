@@ -51,7 +51,7 @@ export class CreateProduccionToneladasComponent implements OnInit{
     this.formCPT = this.formBuilder.group({
       toneladas_procesadas: [this.data.toneladas_procesables, [Validators.required]],
       toneladas_procesadas_produccion: ['', [Validators.required]],
-      toneladas_NP: [{ value: 0, disabled: true }, Validators.required],
+      toneladas_NP: ['', [Validators.required]],
     });
   }
 
@@ -76,17 +76,6 @@ export class CreateProduccionToneladasComponent implements OnInit{
     this.serviceFlota.getFlotas().subscribe(tone => this.flota = tone);
   }
 
-  calculateToneladasNP(): void {
-    const toneladas_procesables = Number(this.formCPT.get('toneladas_procesadas')?.value) || 0;
-    const toneladas_procesadas = Number(this.formCPT.get('toneladas_procesadas_produccion')?.value) || 0;
-
-    const TNP = toneladas_procesables - toneladas_procesadas
-
-    const redondeo = parseFloat(TNP.toFixed(2))
-
-    this.formCPT.patchValue({toneladas_NP: redondeo})
-  }
-
   updateFlota() {
     // Obtiene los valores del formulario
     const toneladas_procesables = Number(this.formCPT.get('toneladas_procesadas')?.value) || 0;
@@ -105,12 +94,6 @@ export class CreateProduccionToneladasComponent implements OnInit{
       });
       return; // Salir de la función sin realizar la operación
     }
-
-    // Calcula las toneladas no procesadas antes de enviar el formulario
-    this.calculateToneladasNP();
-
-    // Habilita temporalmente el campo toneladas_NP
-    this.formCPT.get('toneladas_NP')?.enable();
 
     // Filtra los campos que queremos actualizar
     const updatedFields = {
@@ -152,8 +135,6 @@ export class CreateProduccionToneladasComponent implements OnInit{
       );
     }
 
-    // Vuelve a deshabilitar el campo toneladas_NP
-    this.formCPT.get('toneladas_NP')?.disable();
   }
 
   getEmbarcaciones() {
