@@ -173,6 +173,4 @@ export class GraficoBarrasComponent implements OnInit, OnChanges {
     };
   }
 
-
-
 }

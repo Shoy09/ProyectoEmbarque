@@ -125,8 +125,8 @@ export class CombustibleXHoraComponent {
         type: 'bar' as const,
         label: 'Toneladas Recibidas',
         data: toneladasRecibidas,
-        backgroundColor: Utils.CHART_COLORS.celeste,
-        borderColor: Utils.CHART_COLORS.celeste,
+        backgroundColor: 'rgba(174, 185, 196, 0.5)', // Azul celeste con 50% de opacidad
+        borderColor: 'rgba(174, 185, 196, 0.5)',     // Azul celeste con 50% de opacidad
         order: 1,
         datalabels: {
           color: '#333333', // Negro oscuro
@@ -134,7 +134,7 @@ export class CombustibleXHoraComponent {
             weight: 'bold' // Negrita
           },
         }
-      },
+    },
       {
         type: 'line' as const,
         label: 'Galon de Combustible x Hora',

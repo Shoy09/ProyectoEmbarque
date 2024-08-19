@@ -166,7 +166,6 @@ export class EstadisticaSPComponent implements OnInit {
     }
   }
 
-
   clearFilter() {
     this.startDate = null!;
     this.endDate = null!;
@@ -227,23 +226,4 @@ export class EstadisticaSPComponent implements OnInit {
     this.applyFilters();
   }
 
-  filterByMonth() {
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    this.startDate = firstDayOfMonth;
-    this.endDate = lastDayOfMonth;
-    this.applyFilters();
-  }
-
-  filterByWeeks() {
-    const today = new Date();
-    const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-    const lastDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-
-    this.startDate = firstDayOfWeek;
-    this.endDate = lastDayOfWeek;
-    this.applyFilters();
-  }
 }
