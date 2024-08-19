@@ -8,6 +8,9 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MY_DATE_FORMATS } from './pages/user/custom-locales';
+import 'pdfmake/build/vfs_fonts';
+
+
 
 export const appConfig: ApplicationConfig = {
   providers: [

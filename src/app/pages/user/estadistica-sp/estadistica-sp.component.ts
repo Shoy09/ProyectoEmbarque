@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart, ChartConfiguration } from 'chart.js/auto';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Chart } from 'chart.js/auto';
 import { FlotaService } from 'app/core/services/flota.service';
 import { FlotaDP } from 'app/core/models/flota.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,9 +27,15 @@ import { AguaRecibidasComponent } from "./graficas/agua-recibidas/agua-recibidas
 import { AguaProcesablesComponent } from "./graficas/agua-procesables/agua-procesables.component";
 import { ConsuViveRComponent } from "./graficas/consu-vive-r/consu-vive-r.component";
 import { CombustibleXHoraComponent } from "./graficas/combustible-x-hora/combustible-x-hora.component";
-import { Utils } from './util';
 import { ToneladasEspeciesComponent } from "./graficas/toneladas-especies/toneladas-especies.component";
 import { LancesComponent } from "./graficas/lances/lances.component";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 
 @Component({
   selector: 'app-estadistica-sp',
@@ -73,10 +79,13 @@ export class EstadisticaSPComponent implements OnInit {
   selectedEmbarcaciones: Set<number> = new Set();
   selectedZona: Set<number> = new Set();
   selectedEspecie: string | undefined;
-  currentChart: string = 'bar';
   data: any;
 
   especies: { nombre: string; cantidad: number; precio: number }[] = [];
+
+  @ViewChild('chartContainer', { static: false }) chartContainer: any;
+  currentChart: string = 'bar';
+
   public chart!: Chart;
 
   filteredData: any[] = []; // Define filteredData aquí
@@ -128,9 +137,35 @@ export class EstadisticaSPComponent implements OnInit {
   showChart(chartType: string) {
     if (this.currentChart !== chartType) {
       this.currentChart = chartType;
-      // Aquí podrías limpiar el gráfico anterior si es necesario
     }
   }
+
+  createPDF() {
+    const chartCanvases = this.chartContainer.nativeElement.querySelectorAll('canvas');
+
+    if (chartCanvases.length > 0) {
+      const images = Array.from(chartCanvases).map((canvas: HTMLCanvasElement) => {
+        return { image: canvas.toDataURL('image/png'), width: 500 };
+      });
+
+      const documentDefinition: TDocumentDefinitions = {
+        content: [
+          { text: 'Reporte de Gráficas', style: 'header' },
+          ...images // Agrega todas las imágenes capturadas al contenido
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          }
+        }
+      };
+
+      pdfMake.createPdf(documentDefinition).download('reporte.pdf');
+    }
+  }
+
 
   clearFilter() {
     this.startDate = null!;
@@ -189,6 +224,26 @@ export class EstadisticaSPComponent implements OnInit {
     }else {
       this.selectedZona.add(id)
     }
+    this.applyFilters();
+  }
+
+  filterByMonth() {
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    this.startDate = firstDayOfMonth;
+    this.endDate = lastDayOfMonth;
+    this.applyFilters();
+  }
+
+  filterByWeeks() {
+    const today = new Date();
+    const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    const lastDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+    this.startDate = firstDayOfWeek;
+    this.endDate = lastDayOfWeek;
     this.applyFilters();
   }
 }
